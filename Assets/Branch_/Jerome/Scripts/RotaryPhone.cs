@@ -1,109 +1,97 @@
-using System;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-public class RotaryDial : MonoBehaviour
+public class XRGrabRotaryDial : MonoBehaviour
 {
-    [Header("Dial Settings")]
-    public float MaxRotationAngle = 330f;  // How far dial can rotate
-    public float ReturnSpeed = 5f;          // Speed dial returns to start
+    public float maxRotationAngle = 330f;
+    public float springForce = 10f;
     
-    private float _currentRotation = 0f;
-    private bool _isPushing = false;
-    private Transform _fingerTransform;
-    private Transform _pivotParent;           // Reference to parent transform
-    private Quaternion _startLocalRotation;
-    private Vector3 _startLocalPosition;
+    private Transform parentPivot;
+    private XRGrabInteractable grabInteractable;
+    private Rigidbody rb;
+    private float currentAngle = 0f;
+    private Quaternion startLocalRot;
+    private Vector3 startLocalPos;
     
     void Start()
     {
-        _pivotParent = transform.parent;
+        parentPivot = transform.parent;
+        startLocalRot = transform.localRotation;
+        startLocalPos = transform.localPosition;
         
-        // Store initial local transform relative to parent
-        _startLocalRotation = transform.localRotation;
-        _startLocalPosition = transform.localPosition;
+        grabInteractable = GetComponent<XRGrabInteractable>();
+        rb = GetComponent<Rigidbody>();
+        
+        if (rb != null)
+        {
+            rb.useGravity = false;
+            rb.isKinematic = false;
+            rb.constraints = RigidbodyConstraints.FreezeRotationX | 
+                            RigidbodyConstraints.FreezeRotationZ;
+        }
+        
+        if (grabInteractable != null)
+        {
+            grabInteractable.selectExited.AddListener(OnRelease);
+        }
     }
     
-    void Update()
+    void FixedUpdate()
     {
-        if (_isPushing && _fingerTransform != null && _pivotParent != null)
+        if (grabInteractable != null && grabInteractable.isSelected)
         {
-            // Get finger position in parent's local space
-            Vector3 fingerPosLocal = _pivotParent.InverseTransformPoint(_fingerTransform.position);
-            Vector3 dialPosLocal = transform.localPosition;
+            // While grabbed, update angle based on position
+            Vector3 toInteractor = grabInteractable.interactorsSelecting[0].transform.position - parentPivot.position;
+            toInteractor.y = 0;
             
-            // Vector from parent center to finger (in local space)
-            Vector3 toFinger = fingerPosLocal - Vector3.zero; // Parent center is (0,0,0) locally
-            toFinger.y = 0; // Ignore vertical movement for rotation
+            float targetAngle = Vector3.SignedAngle(Vector3.forward, toInteractor, Vector3.up);
+            targetAngle = Mathf.Clamp(targetAngle, 0f, maxRotationAngle);
             
-            // Calculate angle from forward direction to finger
-            float targetAngle = Vector3.SignedAngle(Vector3.forward, toFinger, Vector3.up);
-            
-            // Constrain angle to dial range (assuming max rotation is clockwise)
-            targetAngle = Mathf.Clamp(targetAngle, 0f, MaxRotationAngle);
-            
-            // Smooth rotation to finger position
-            _currentRotation = Mathf.Lerp(_currentRotation, targetAngle, Time.deltaTime * 15f);
-            
-            // Apply rotation around parent's Y axis
-            ApplyRotation(_currentRotation);
-            
+            currentAngle = targetAngle;
+            ApplyRotation(currentAngle);
         }
-        else if (_currentRotation > 0f)
+        else if (currentAngle > 0f)
         {
-            // Return to start when not pushing
-            _currentRotation = Mathf.Lerp(_currentRotation, 0f, Time.deltaTime * ReturnSpeed);
+            // Spring back when released
+            currentAngle = Mathf.Lerp(currentAngle, 0f, Time.fixedDeltaTime * springForce);
             
-            if (_currentRotation < 0.5f)
+            if (currentAngle < 0.5f)
             {
-                _currentRotation = 0f;
+                currentAngle = 0f;
                 ResetTransform();
             }
             else
             {
-                ApplyRotation(_currentRotation);
+                ApplyRotation(currentAngle);
             }
         }
     }
     
     void ApplyRotation(float angle)
     {
-        if (_pivotParent == null) return;
-        
-        // Reset to initial local transform first
-        transform.localRotation = _startLocalRotation;
-        transform.localPosition = _startLocalPosition;
-        
-        // Apply rotation around parent's Y axis
-        transform.RotateAround(_pivotParent.position, Vector3.up, -angle);
+        transform.localRotation = startLocalRot;
+        transform.localPosition = startLocalPos;
+        transform.RotateAround(parentPivot.position, Vector3.up, -angle);
     }
     
     void ResetTransform()
     {
-        transform.localRotation = _startLocalRotation;
-        transform.localPosition = _startLocalPosition;
+        transform.localRotation = startLocalRot;
+        transform.localPosition = startLocalPos;
     }
     
-    void OnTriggerStay(Collider other)
+    void OnRelease(SelectExitEventArgs args)
     {
-        if (other.CompareTag("PlayerHand") || other.CompareTag("Finger"))
-        {
-            _isPushing = true;
-            _fingerTransform = other.transform;
-        }
+        // Trigger dial number on release
+        int number = Mathf.FloorToInt((currentAngle / maxRotationAngle) * 10f);
+        if (number == 0) number = 10;
+        Debug.Log($"Dialed: {number}");
     }
     
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("PlayerHand") || other.CompareTag("Finger"))
-        {
-            _isPushing = false;
-            _fingerTransform = null;
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Number")
+        if (other.CompareTag("Number"))
         {
             Debug.Log(other.name);
         }
