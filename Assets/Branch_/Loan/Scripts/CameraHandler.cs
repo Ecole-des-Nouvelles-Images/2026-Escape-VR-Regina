@@ -23,7 +23,7 @@ public class CameraHandler : MonoBehaviour
     private Tween _upTween;
     private Tween _downTween;
 
-    [SerializeField] private int _collisionCount = 0;
+    private int _collisionCount = 0;
     private Tween _fadeTween;
 
     
