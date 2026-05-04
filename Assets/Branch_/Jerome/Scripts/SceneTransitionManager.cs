@@ -3,12 +3,17 @@ using UnityEngine.SceneManagement;
 
 public class SceneTransitionManager : MonoBehaviour
 {
-    [SerializeField] private string nextSceneName;
     [SerializeField] private Transform _playerTransform;
-    private static Vector3 savedPosition;
-    private static Quaternion savedRotation;
-
-    [ContextMenu("Load Scene")]
+    
+    // Hardcoded scene names (adjust these to match your actual scene names)
+    private const string ACT1 = "SC_Jerome_Test_Act1";
+    private const string ACT2 = "SC_Jerome_Test_Act2";
+    private const string ACT3 = "SC_Jerome_Test_Act3";
+    
+    private static string _currentSideScene = "";
+    private static Vector3 _savedPosition;
+    private static Quaternion _savedRotation;
+    
     private void Start()
     {
         if (!_playerTransform)
@@ -16,21 +21,57 @@ public class SceneTransitionManager : MonoBehaviour
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
     }
-
-    public void TransitionToNextScene()
+    
+    public void LoadAct1Scene()
     {
-        Debug.Log("Load Scene");
-        // Save current position before leaving
-        savedPosition = _playerTransform.position;
-        savedRotation = _playerTransform.rotation;
-        
-        SceneManager.LoadScene(nextSceneName);
+        LoadSideScene(ACT1);
     }
     
-    // Call this in your player script after scene loads
-    public void RestorePosition()
+    public void LoadAct2Scene()
     {
-        _playerTransform.position = savedPosition;
-        _playerTransform.rotation = savedRotation;
+        LoadSideScene(ACT2);
+    }
+    
+    public void LoadAct3Scene()
+    {
+        LoadSideScene(ACT3);
+    }
+    
+    private void LoadSideScene(string sceneName)
+    {
+        // Unload current side scene if exists
+        if (!string.IsNullOrEmpty(_currentSideScene))
+        {
+            Scene sceneToUnload = SceneManager.GetSceneByName(_currentSideScene);
+            if (sceneToUnload.isLoaded)
+            {
+                SceneManager.UnloadSceneAsync(sceneToUnload);
+            }
+        }
+        
+        // Save player position
+        _savedPosition = _playerTransform.position;
+        _savedRotation = _playerTransform.rotation;
+        
+        // Load new side scene
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+        _currentSideScene = sceneName;
+    }
+    
+    public void ReturnToMain()
+    {
+        if (!string.IsNullOrEmpty(_currentSideScene))
+        {
+            Scene sceneToUnload = SceneManager.GetSceneByName(_currentSideScene);
+            if (sceneToUnload.isLoaded)
+            {
+                SceneManager.UnloadSceneAsync(sceneToUnload);
+                _currentSideScene = "";
+                
+                // Restore player position
+                _playerTransform.position = _savedPosition;
+                _playerTransform.rotation = _savedRotation;
+            }
+        }
     }
 }
