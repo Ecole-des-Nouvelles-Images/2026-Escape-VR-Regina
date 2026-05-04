@@ -46,7 +46,7 @@ PlayerSettings:
   defaultScreenHeight: 768
   defaultScreenWidthWeb: 960
   defaultScreenHeightWeb: 600
-  m_StereoRenderingPath: 0
+  m_StereoRenderingPath: 2
   m_ActiveColorSpace: 1
   unsupportedMSAAFallback: 0
   m_SpriteBatchMaxVertexCount: 65535
@@ -147,6 +147,7 @@ PlayerSettings:
   bundleVersion: 1.0
   preloadedAssets:
   - {fileID: 11400000, guid: 9e3df789a58452c44a639ce46bbdcdb1, type: 2}
+  - {fileID: 11400000, guid: 8ceb52543bed1b8469e160b562ddc8e5, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -180,7 +181,7 @@ PlayerSettings:
   overrideDefaultApplicationIdentifier: 1
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 32
-  AndroidTargetSdkVersion: 0
+  AndroidTargetSdkVersion: 34
   AndroidPreferredInstallLocation: 0
   AndroidPreferredDataLocation: 1
   aotOptions: 
@@ -575,7 +576,7 @@ PlayerSettings:
   - m_BuildTarget: LuminSupport
     m_GraphicsJobs: 0
   - m_BuildTarget: AndroidPlayer
-    m_GraphicsJobs: 0
+    m_GraphicsJobs: 1
   - m_BuildTarget: WebGLSupport
     m_GraphicsJobs: 0
   m_BuildTargetGraphicsJobMode:
@@ -583,6 +584,8 @@ PlayerSettings:
     m_GraphicsJobMode: 0
   - m_BuildTarget: XboxOnePlayer
     m_GraphicsJobMode: 0
+  - m_BuildTarget: AndroidPlayer
+    m_GraphicsJobMode: 1
   m_BuildTargetGraphicsAPIs:
   - m_BuildTarget: AndroidPlayer
     m_APIs: 15000000
@@ -893,7 +896,7 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: USE_INPUT_SYSTEM_POSE_CONTROL;UNITY_POST_PROCESSING_STACK_V2;USE_STICK_CONTROL_THUMBSTICKS;DOTWEEN
+    Android: USE_INPUT_SYSTEM_POSE_CONTROL;UNITY_POST_PROCESSING_STACK_V2;USE_STICK_CONTROL_THUMBSTICKS;DOTWEEN;OVR_DISABLE_HAND_PINCH_BUTTON_MAPPING
     CloudRendering: UNITY_POST_PROCESSING_STACK_V2
     EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
     GameCoreScarlett: DOTWEEN
@@ -907,7 +910,7 @@ PlayerSettings:
     PS5: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
     QNX: DOTWEEN
     Stadia: UNITY_POST_PROCESSING_STACK_V2
-    Standalone: USE_INPUT_SYSTEM_POSE_CONTROL;UNITY_POST_PROCESSING_STACK_V2;USE_STICK_CONTROL_THUMBSTICKS;DOTWEEN
+    Standalone: USE_INPUT_SYSTEM_POSE_CONTROL;UNITY_POST_PROCESSING_STACK_V2;USE_STICK_CONTROL_THUMBSTICKS;DOTWEEN;OVR_DISABLE_HAND_PINCH_BUTTON_MAPPING
     VisionOS: DOTWEEN
     WebGL: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
     Windows Store Apps: USE_INPUT_SYSTEM_POSE_CONTROL;UNITY_POST_PROCESSING_STACK_V2;USE_STICK_CONTROL_THUMBSTICKS;DOTWEEN
