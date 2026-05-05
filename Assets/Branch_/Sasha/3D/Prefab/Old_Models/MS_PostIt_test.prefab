@@ -64,7 +64,7 @@ PrefabInstance:
       addedObject: {fileID: 6141778286103498066}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 50f5c7b2f8993a84b93ccbab68492210, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4072437379577231561}
+      addedObject: {fileID: 5029479012431501164}
   m_SourcePrefab: {fileID: 100100000, guid: 50f5c7b2f8993a84b93ccbab68492210, type: 3}
 --- !u!1 &6133678542247552086 stripped
 GameObject:
@@ -227,26 +227,24 @@ MonoBehaviour:
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
---- !u!114 &4072437379577231561
-MonoBehaviour:
+--- !u!65 &5029479012431501164
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6133678542247552086}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0a1302d0d134fa8a2a5b3bf4aec3c20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Transformers.XRGeneralGrabTransformer
-  m_PermittedDisplacementAxes: -1
-  m_ConstrainedAxisDisplacementMode: 1
-  m_TwoHandedRotationMode: 1
-  m_AllowOneHandedScaling: 1
-  m_AllowTwoHandedScaling: 0
-  m_OneHandedScaleSpeed: 0.5
-  m_ThresholdMoveRatioForScale: 0.05
-  m_ClampScaling: 1
-  m_MinimumScaleRatio: 0.25
-  m_MaximumScaleRatio: 2
-  m_ScaleMultiplier: 0.25
+  serializedVersion: 3
+  m_Size: {x: 0.076, y: 0, z: 0.076}
+  m_Center: {x: 0, y: 0, z: 0}
