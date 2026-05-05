@@ -23,7 +23,7 @@ public class CameraHandler : MonoBehaviour
     private Tween _upTween;
     private Tween _downTween;
 
-    [SerializeField] private int _collisionCount = 0;
+    private int _collisionCount = 0;
     private Tween _fadeTween;
 
     
@@ -86,7 +86,7 @@ public class CameraHandler : MonoBehaviour
     {
         _fadeTween?.Kill();
         
-        _fadeTween = _fadePanel.DOFade(isFaded ? 0 : 1f, _fadeDuration).SetEase(Ease.InOutQuad);
+        _fadeTween = _fadePanel.DOFade(isFaded ? 1f : 0, _fadeDuration).SetEase(Ease.InOutQuad);
     }
 
     #region Trigger 
@@ -94,6 +94,16 @@ public class CameraHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("Player"))
+            return;
+
+        //Test clein d'oeils
+        if (other.CompareTag("Test"))
+        {
+            Blink();
+            return;
+        }
+        
         if (!other.isTrigger)
         {
             _collisionCount++;
@@ -103,6 +113,15 @@ public class CameraHandler : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (other.CompareTag("Player"))
+            return;
+        
+        if (other.CompareTag("Test"))
+        {
+            OpenEyes();
+            return;
+        }
+        
         if (!other.isTrigger)
         {
             _collisionCount = Mathf.Max(0, _collisionCount - 1);
