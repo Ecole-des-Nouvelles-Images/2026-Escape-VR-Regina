@@ -16,11 +16,11 @@ public class AssemblyManager : MonoBehaviour
     {
         piecesPlaced++;
         
-        // if (piecesPlaced >= totalPieces)
-        // {
-        //     // Hide all pieces (optional - they're already snapped)
-        //     // Show reconstructed object
-        //     reconstructedObject.SetActive(true);
-        // }
+        if (piecesPlaced >= totalPieces)
+        {
+            // Hide all pieces (optional - they're already snapped)
+            // Show reconstructed object
+            reconstructedObject.SetActive(true);
+        }
     }
 }
