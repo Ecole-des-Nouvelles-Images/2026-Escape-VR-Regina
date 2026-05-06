@@ -3589,6 +3589,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: PlayerHand
       objectReference: {fileID: 0}
+    - target: {fileID: 4867357553887340266, guid: 235e0872436395145b66e44ffde28553, type: 3}
+      propertyPath: m_InteractionLayers.m_Bits
+      value: 1073741826
+      objectReference: {fileID: 0}
     - target: {fileID: 6759061435722241920, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_Radius
       value: 0.05
@@ -3651,8 +3655,31 @@ PrefabInstance:
     - {fileID: 5720015192091282125, guid: 235e0872436395145b66e44ffde28553, type: 3}
     - {fileID: 6542329296924487898, guid: 235e0872436395145b66e44ffde28553, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5475849649248276298, guid: 235e0872436395145b66e44ffde28553, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1946275163}
+    - targetCorrespondingSourceObject: {fileID: 1754898493778326783, guid: 235e0872436395145b66e44ffde28553, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 457150493}
   m_SourcePrefab: {fileID: 100100000, guid: 235e0872436395145b66e44ffde28553, type: 3}
+--- !u!1 &457150492 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1754898493778326783, guid: 235e0872436395145b66e44ffde28553, type: 3}
+  m_PrefabInstance: {fileID: 457150491}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &457150493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457150492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5011d70960f93a047a53ddea71cfe321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PokeEventHandler
 --- !u!1 &457883420
 GameObject:
   m_ObjectHideFlags: 0
@@ -13577,6 +13604,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1941775764}
   m_CullTransparentMesh: 0
+--- !u!1 &1946275161 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5475849649248276298, guid: 235e0872436395145b66e44ffde28553, type: 3}
+  m_PrefabInstance: {fileID: 457150491}
+  m_PrefabAsset: {fileID: 0}
+--- !u!135 &1946275163
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1946275161}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.615147
+  m_Center: {x: -0.00000009422741, y: -0.11514722, z: -0.00000003030172}
 --- !u!1 &1949060115
 GameObject:
   m_ObjectHideFlags: 0
