@@ -192,11 +192,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 069200f613c7b61499b058f5f5bc1772, type: 3}
---- !u!4 &26550040 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5467633221391477440, guid: 069200f613c7b61499b058f5f5bc1772, type: 3}
-  m_PrefabInstance: {fileID: 26550039}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &317166680
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -903,11 +898,6 @@ MonoBehaviour:
   - D
   - B
   - G
-  threadStartPoint: {fileID: 26550040}
-  audioSource: {fileID: 0}
-  attachSound: {fileID: 0}
-  removeSound: {fileID: 0}
-  winSound: {fileID: 0}
 --- !u!120 &1296948992
 LineRenderer:
   serializedVersion: 3
@@ -959,7 +949,6 @@ LineRenderer:
   m_MaskInteraction: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1

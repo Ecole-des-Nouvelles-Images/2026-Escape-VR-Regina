@@ -12,15 +12,6 @@ public class ThreadManager : MonoBehaviour
     [Header("Win Condition")]
     public List<string> targetSequence; // Set in Inspector: ["A","C","B","D","F"]
     
-    [Header("References")]
-    public Transform threadStartPoint; // Where thread originates (spool or hand)
-    
-    [Header("Audio")]
-    public AudioSource audioSource;
-    public AudioClip attachSound;
-    public AudioClip removeSound;
-    public AudioClip winSound;
-    
     // Runtime data
     private List<Pin> currentOrder = new List<Pin>();
     private bool gameWon = false;
@@ -55,10 +46,6 @@ public class ThreadManager : MonoBehaviour
         newPin.SetInChain(true);
         newPin.PlayAttachEffect();
         
-        // Play sound
-        if (audioSource != null && attachSound != null)
-            audioSource.PlayOneShot(attachSound);
-        
         // Update visual thread
         UpdateThreadVisual();
         
@@ -88,10 +75,6 @@ public class ThreadManager : MonoBehaviour
         currentOrder.RemoveAt(index);
         targetPin.SetInChain(false);
         
-        // Play sound
-        if (audioSource != null && removeSound != null)
-            audioSource.PlayOneShot(removeSound);
-        
         // Update visual thread (automatically reconnects neighbors)
         UpdateThreadVisual();
         
@@ -114,20 +97,13 @@ public class ThreadManager : MonoBehaviour
             return;
         }
         
-        // Build positions list
+        // Build positions list - linear path only between consecutive pins
         List<Vector3> positions = new List<Vector3>();
         
-        // Optional: Add thread start point (spool)
-        if (threadStartPoint != null)
-            positions.Add(threadStartPoint.position);
-        
-        // Add each pin's connection point
+        // Add all pins' connection points in order
         foreach (Pin pin in currentOrder)
         {
-            if (pin.connectionPoint != null)
-                positions.Add(pin.connectionPoint.position);
-            else
-                positions.Add(pin.transform.position);
+            positions.Add(pin.connectionPoint != null ? pin.connectionPoint.position : pin.transform.position);
         }
         
         // Update line renderer
@@ -153,15 +129,14 @@ public class ThreadManager : MonoBehaviour
     {
         gameWon = true;
         Debug.Log("🎉 VICTORY! Correct sequence achieved! 🎉");
-        
-        if (audioSource != null && winSound != null)
-            audioSource.PlayOneShot(winSound);
             
         // Change thread color to gold
         if (threadLine != null)
+        {
             threadLine.startColor = Color.yellow;
             threadLine.endColor = Color.yellow;
-            
+        }
+        
         // You can add more win effects here:
         // - Particle effects
         // - UI panel

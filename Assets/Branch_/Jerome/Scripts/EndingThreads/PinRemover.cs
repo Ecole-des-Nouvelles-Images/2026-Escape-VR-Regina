@@ -12,10 +12,6 @@ public class PinRemover : MonoBehaviour
     public Material removeHighlightMaterial;
     public float highlightDuration = 0.2f;
     
-    [Header("Audio")]
-    public AudioSource audioSource;
-    public AudioClip removeSound;
-    
     private Pin currentHoveredPin;
     private bool isPoking = false;
     
@@ -50,10 +46,6 @@ public class PinRemover : MonoBehaviour
             // Visual feedback
             StartCoroutine(FlashPin(pin));
             
-            // Optional hover sound
-            if (audioSource != null && removeSound != null)
-                audioSource.PlayOneShot(removeSound);
-                
             // Remove the pin
             threadManager.RemovePin(pin);
         }

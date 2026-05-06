@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7101884473191568448}
   - component: {fileID: 2683820180361973621}
   - component: {fileID: 5675917523365887367}
+  - component: {fileID: 185382760604682290}
   m_Layer: 30
   m_Name: Pin
   m_TagString: Untagged
@@ -114,8 +115,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 1
+  m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7101884473191568448
@@ -223,6 +224,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4e1e18c3405229428d0d493a34e90dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PinDebug
+--- !u!114 &185382760604682290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6955107618978717261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 115f1a2a50d85cd4b9d6dad4c95622be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Filtering.XRPokeFilter
+  m_Interactable: {fileID: 2683820180361973621}
+  m_PokeCollider: {fileID: 8550154870606390200}
+  m_PokeConfiguration:
+    m_UseConstant: 1
+    m_ConstantValue:
+      m_PokeDirection: 3
+      m_InteractionDepthOffset: 0
+      m_EnablePokeAngleThreshold: 1
+      m_PokeAngleThreshold: 45
+    m_Variable: {fileID: 0}
 --- !u!1 &7524300812577328741
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.InputSystem; // Added for input handling
 
 public class ThreadTip : MonoBehaviour
 {
@@ -11,23 +12,23 @@ public class ThreadTip : MonoBehaviour
     public float attachDistance = 0.1f;
     public LayerMask pinLayer;
     
+    [Header("Input")]
+    public InputActionProperty triggerAction; // Assign RightHand Controller / Trigger
+    
     [Header("Visual")]
     public GameObject tipVisual;
     public Material validMaterial;
     public Material invalidMaterial;
     public ParticleSystem attachParticles;
     
-    [Header("Audio")]
-    public AudioSource audioSource;
-    public AudioClip attachSound;
-    public AudioClip invalidSound;
-    
     [Header("Snap Settings")]
     public float snapDuration = 0.2f;
     public AnimationCurve snapCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     
     private bool isDragging = false;
+    private bool isTriggerPressed = false;
     private Pin currentHighlightedPin;
+    private Pin pendingAttachPin; // Pin we're hovering over while trigger is held
     private Renderer tipRenderer;
     private Vector3 originalTipScale;
     private bool isSnapping = false;
@@ -43,6 +44,47 @@ public class ThreadTip : MonoBehaviour
             grabInteractable.selectEntered.AddListener(OnGrab);
             grabInteractable.selectExited.AddListener(OnRelease);
         }
+    }
+    
+    void OnEnable()
+    {
+        // Subscribe to trigger input
+        if (triggerAction != null)
+            triggerAction.action.performed += OnTriggerPressed;
+            triggerAction.action.canceled += OnTriggerReleased;
+    }
+    
+    void OnDisable()
+    {
+        // Unsubscribe from trigger input
+        if (triggerAction != null)
+        {
+            triggerAction.action.performed -= OnTriggerPressed;
+            triggerAction.action.canceled -= OnTriggerReleased;
+        }
+    }
+    
+    void OnTriggerPressed(InputAction.CallbackContext context)
+    {
+        if (!isDragging || isSnapping) return;
+        
+        isTriggerPressed = true;
+        
+        // Attempt attachment immediately when trigger is pressed
+        if (currentHighlightedPin != null)
+        {
+            AttemptAttachToPin(currentHighlightedPin);
+        }
+        else
+        {
+            StartCoroutine(FlashInvalid());
+        }
+    }
+    
+    void OnTriggerReleased(InputAction.CallbackContext context)
+    {
+        isTriggerPressed = false;
+        pendingAttachPin = null;
     }
     
     void Update()
@@ -90,6 +132,27 @@ public class ThreadTip : MonoBehaviour
         }
     }
     
+    void AttemptAttachToPin(Pin targetPin)
+    {
+        if (targetPin == null) return;
+        if (threadManager == null) return;
+        
+        bool success = threadManager.AddPin(targetPin);
+        
+        if (success)
+        {
+            if (attachParticles != null)
+                attachParticles.Play();
+            
+            // Snap to pin position
+            StartCoroutine(SnapToPin(targetPin));
+        }
+        else
+        {
+            StartCoroutine(FlashInvalid());
+        }
+    }
+    
     void OnGrab(SelectEnterEventArgs args)
     {
         isDragging = true;
@@ -100,75 +163,22 @@ public class ThreadTip : MonoBehaviour
     void OnRelease(SelectExitEventArgs args)
     {
         isDragging = false;
-        
-        // Try to attach to nearest pin
-        Collider[] nearbyPins = Physics.OverlapSphere(transform.position, attachDistance, pinLayer);
-        Pin nearestPin = null;
-        float nearestDistance = attachDistance;
-        
-        foreach (Collider col in nearbyPins)
-        {
-            Pin pin = col.GetComponent<Pin>();
-            if (pin != null && !pin.IsInChain())
-            {
-                Vector3 targetPos = pin.connectionPoint != null ? pin.connectionPoint.position : pin.transform.position;
-                float distance = Vector3.Distance(transform.position, targetPos);
-                if (distance < nearestDistance)
-                {
-                    nearestDistance = distance;
-                    nearestPin = pin;
-                }
-            }
-        }
-        
-        if (nearestPin != null)
-        {
-            // Success - attach to pin
-            if (threadManager != null)
-            {
-                bool success = threadManager.AddPin(nearestPin);
-                if (success)
-                {
-                    // Play success effects
-                    if (audioSource != null && attachSound != null)
-                        audioSource.PlayOneShot(attachSound);
-                    
-                    if (attachParticles != null)
-                        attachParticles.Play();
-                    
-                    // Snap to pin position
-                    StartCoroutine(SnapToPin(nearestPin));
-                }
-                else
-                {
-                    // Failed (maybe already in chain or game won)
-                    if (audioSource != null && invalidSound != null)
-                        audioSource.PlayOneShot(invalidSound);
-                }
-            }
-        }
-        else
-        {
-            // No pin nearby - invalid placement
-            if (audioSource != null && invalidSound != null)
-                audioSource.PlayOneShot(invalidSound);
-            
-            // Flash red to show invalid
-            StartCoroutine(FlashInvalid());
-        }
+        isTriggerPressed = false;
+        currentHighlightedPin = null;
+        pendingAttachPin = null;
         
         if (tipVisual != null)
             tipVisual.SetActive(false);
         
-        currentHighlightedPin = null;
         UpdateTipVisual();
+        transform.localScale = originalTipScale;
     }
     
     IEnumerator SnapToPin(Pin targetPin)
     {
         isSnapping = true;
         
-        // Disable grab during snap
+        // Disable grab and input during snap
         if (grabInteractable != null)
             grabInteractable.enabled = false;
         
