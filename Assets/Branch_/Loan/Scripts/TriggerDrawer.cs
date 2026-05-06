@@ -7,7 +7,7 @@ public class TriggerDrawer : MonoBehaviour
    [SerializeField] private GameObject _drawer;
    private void OnTriggerEnter(Collider other)
    {
-      if (other.CompareTag("Drawer"))
+      if (((1 << other.gameObject.layer) & _layerMask.value) != 0)
       {
          Rigidbody rb = other.GetComponent<Rigidbody>();
          if (rb != null)
