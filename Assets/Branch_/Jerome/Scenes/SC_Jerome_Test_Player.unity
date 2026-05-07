@@ -328,6 +328,10 @@ PrefabInstance:
       propertyPath: m_InteractionLayers.m_Bits
       value: 1073741826
       objectReference: {fileID: 0}
+    - target: {fileID: 5475849649248276298, guid: 235e0872436395145b66e44ffde28553, type: 3}
+      propertyPath: m_Layer
+      value: 29
+      objectReference: {fileID: 0}
     - target: {fileID: 6759061435722241920, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_Radius
       value: 0.05
@@ -346,7 +350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalRotation.x
@@ -354,7 +358,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalRotation.z
@@ -366,11 +370,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7630088443825957319, guid: 235e0872436395145b66e44ffde28553, type: 3}
+      propertyPath: m_Layer
+      value: 29
       objectReference: {fileID: 0}
     - target: {fileID: 7800615043754154480, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_Alpha
@@ -393,10 +401,13 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5475849649248276298, guid: 235e0872436395145b66e44ffde28553, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1946275163}
+      addedObject: {fileID: 1946275165}
     - targetCorrespondingSourceObject: {fileID: 1754898493778326783, guid: 235e0872436395145b66e44ffde28553, type: 3}
       insertIndex: -1
       addedObject: {fileID: 457150493}
+    - targetCorrespondingSourceObject: {fileID: 7630088443825957319, guid: 235e0872436395145b66e44ffde28553, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1284906950}
   m_SourcePrefab: {fileID: 100100000, guid: 235e0872436395145b66e44ffde28553, type: 3}
 --- !u!1 &457150492 stripped
 GameObject:
@@ -755,6 +766,7 @@ GameObject:
   - component: {fileID: 1099483882}
   - component: {fileID: 1099483881}
   - component: {fileID: 1099483885}
+  - component: {fileID: 1099483886}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -840,21 +852,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1099483878}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1099483884
-Transform:
+--- !u!224 &1099483884
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1099483878}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.113, y: 0.556, z: 1.827}
+  m_LocalPosition: {x: 0, y: 0, z: 1.827}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -1.113, y: 0.556}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1099483885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -869,6 +885,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CubeTrans
   sceneTransitionManager: {fileID: 351554826}
   _act: 1
+--- !u!222 &1099483886
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099483878}
+  m_CullTransparentMesh: 1
 --- !u!1 &1274159299
 GameObject:
   m_ObjectHideFlags: 0
@@ -1109,6 +1133,34 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1276395364}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1284906948 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7630088443825957319, guid: 235e0872436395145b66e44ffde28553, type: 3}
+  m_PrefabInstance: {fileID: 457150491}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &1284906950
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1284906948}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5368964
+  m_Height: 1.7225263
+  m_Direction: 2
+  m_Center: {x: -0.000000030961406, y: -0.000000090145136, z: -0.19997527}
 --- !u!1 &1548251155
 GameObject:
   m_ObjectHideFlags: 0
@@ -1481,8 +1533,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5475849649248276298, guid: 235e0872436395145b66e44ffde28553, type: 3}
   m_PrefabInstance: {fileID: 457150491}
   m_PrefabAsset: {fileID: 0}
---- !u!135 &1946275163
-SphereCollider:
+--- !u!136 &1946275165
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1499,9 +1551,11 @@ SphereCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 1
-  m_Center: {x: -0.00000009422741, y: -0.11514722, z: -0.00000003030172}
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1.8668536
+  m_Direction: 2
+  m_Center: {x: 0.0000000073411677, y: 0.0000009642783, z: -0.5926503}
 --- !u!1001 &2001820133
 PrefabInstance:
   m_ObjectHideFlags: 0
