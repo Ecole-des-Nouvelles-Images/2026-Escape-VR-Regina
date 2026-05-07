@@ -5,44 +5,44 @@ using UnityEngine;
 public class ThreadManager : MonoBehaviour
 {
     [Header("Thread Visual")]
-    public LineRenderer threadLine;
-    public Material threadMaterial;
-    public float threadWidth = 0.02f;
+    [SerializeField] private LineRenderer _threadLine;
+    [SerializeField] private Material _threadMaterial;
+    [SerializeField] private float _threadWidth = 0.02f;
     
     [Header("Win Condition")]
-    public List<string> targetSequence; // Set in Inspector: ["A","C","B","D","F"]
+    [SerializeField] private List<string> _targetSequence; // Set in Inspector: ["A","C","B","D","F"]
     
     // Runtime data
-    private List<Pin> currentOrder = new List<Pin>();
-    private bool gameWon = false;
-    
-    void Start()
+    private readonly List<Pin> _currentOrder = new();
+    private bool _gameWon;
+
+    private void Start()
     {
-        if (threadLine == null)
-            threadLine = GetComponent<LineRenderer>();
+        if (_threadLine == null)
+            _threadLine = GetComponent<LineRenderer>();
             
-        if (threadLine != null)
+        if (_threadLine != null)
         {
-            threadLine.startWidth = threadWidth;
-            threadLine.endWidth = threadWidth;
-            threadLine.material = threadMaterial;
-            threadLine.positionCount = 0;
+            _threadLine.startWidth = _threadWidth;
+            _threadLine.endWidth = _threadWidth;
+            _threadLine.material = _threadMaterial;
+            _threadLine.positionCount = 0;
         }
     }
     
     public bool AddPin(Pin newPin)
     {
-        if (gameWon) return false;
+        if (_gameWon) return false;
         
         // Prevent adding same pin twice
-        if (currentOrder.Contains(newPin))
+        if (_currentOrder.Contains(newPin))
         {
-            Debug.Log($"Pin {newPin.pinID} already in chain");
+            Debug.Log($"Pin {newPin.PinID} already in chain");
             return false;
         }
         
         // Add to chain
-        currentOrder.Add(newPin);
+        _currentOrder.Add(newPin);
         newPin.SetInChain(true);
         newPin.PlayAttachEffect();
         
@@ -50,8 +50,8 @@ public class ThreadManager : MonoBehaviour
         UpdateThreadVisual();
         
         // Log current sequence
-        string sequence = currentOrder.Count > 0 ? 
-            string.Join(" → ", currentOrder.Select(p => p.pinID)) : "Empty";
+        string sequence = _currentOrder.Count > 0 ? 
+            string.Join(" → ", _currentOrder.Select(p => p.PinID)) : "Empty";
         Debug.Log($"Current sequence: {sequence}");
         
         // Check win condition
@@ -62,79 +62,79 @@ public class ThreadManager : MonoBehaviour
     
     public bool RemovePin(Pin targetPin)
     {
-        if (gameWon) return false;
+        if (_gameWon) return false;
         
-        int index = currentOrder.IndexOf(targetPin);
+        int index = _currentOrder.IndexOf(targetPin);
         if (index == -1)
         {
-            Debug.Log($"Pin {targetPin.pinID} not in chain");
+            Debug.Log($"Pin {targetPin.PinID} not in chain");
             return false;
         }
         
         // Remove from chain
-        currentOrder.RemoveAt(index);
+        _currentOrder.RemoveAt(index);
         targetPin.SetInChain(false);
         
         // Update visual thread (automatically reconnects neighbors)
         UpdateThreadVisual();
         
         // Log new sequence
-        string sequence = currentOrder.Count > 0 ? 
-            string.Join(" → ", currentOrder.Select(p => p.pinID)) : "Empty";
+        string sequence = _currentOrder.Count > 0 ? 
+            string.Join(" → ", _currentOrder.Select(p => p.PinID)) : "Empty";
         Debug.Log($"After removal: {sequence}");
         
         return true;
     }
-    
-    void UpdateThreadVisual()
+
+    private void UpdateThreadVisual()
     {
-        if (threadLine == null) return;
+        if (_threadLine == null) return;
         
         // Need at least 2 points to draw a line
-        if (currentOrder.Count < 2)
+        if (_currentOrder.Count < 2)
         {
-            threadLine.positionCount = 0;
+            _threadLine.positionCount = 0;
             return;
         }
         
         // Build positions list - linear path only between consecutive pins
-        List<Vector3> positions = new List<Vector3>();
+        List<Vector3> positions = new();
         
         // Add all pins' connection points in order
-        foreach (Pin pin in currentOrder)
+        foreach (Pin pin in _currentOrder)
         {
-            positions.Add(pin.connectionPoint != null ? pin.connectionPoint.position : pin.transform.position);
+            positions.Add(pin.ConnectionPoint != null ? pin.ConnectionPoint.position : pin.transform.position);
         }
         
         // Update line renderer
-        threadLine.positionCount = positions.Count;
-        threadLine.SetPositions(positions.ToArray());
+        _threadLine.positionCount = positions.Count;
+        _threadLine.SetPositions(positions.ToArray());
     }
-    
-    void CheckWinCondition()
+
+    private void CheckWinCondition()
     {
         // Convert current pins to IDs
-        List<string> currentIDs = currentOrder.Select(p => p.pinID).ToList();
+        List<string> currentIDs = _currentOrder.Select(p => p.PinID).ToList();
         
         // Check if sequences match exactly
-        bool sequenceMatches = currentIDs.SequenceEqual(targetSequence);
+        bool sequenceMatches = currentIDs.SequenceEqual(_targetSequence);
         
-        if (sequenceMatches && currentIDs.Count == targetSequence.Count)
+        if (sequenceMatches && currentIDs.Count == _targetSequence.Count)
         {
             Win();
         }
     }
-    
-    void Win()
+
+    private void Win()
     {
-        gameWon = true;
+        _gameWon = true;
         Debug.Log("🎉 VICTORY! Correct sequence achieved! 🎉");
             
         // Change thread color to gold
-        if (threadLine != null)
+        if (_threadLine != null)
         {
-            threadLine.startColor = Color.yellow;
-            threadLine.endColor = Color.yellow;
+            _threadLine.startColor = Color.yellow;
+            _threadLine.endColor = Color.yellow;
         }
         
         // You can add more win effects here:
@@ -146,19 +146,19 @@ public class ThreadManager : MonoBehaviour
     // Debug/Editor method to reset the game
     public void ResetGame()
     {
-        foreach (Pin pin in currentOrder)
+        foreach (Pin pin in _currentOrder)
         {
             pin.SetInChain(false);
         }
-        currentOrder.Clear();
+        _currentOrder.Clear();
         UpdateThreadVisual();
-        gameWon = false;
+        _gameWon = false;
         
-        if (threadLine != null && threadMaterial != null)
+        if (_threadLine != null && _threadMaterial != null)
         {
-            threadLine.startColor = Color.white;
-            threadLine.endColor = Color.white;
-            threadLine.material = threadMaterial;
+            _threadLine.startColor = Color.white;
+            _threadLine.endColor = Color.white;
+            _threadLine.material = _threadMaterial;
         }
             
         Debug.Log("Game reset");
@@ -167,6 +167,6 @@ public class ThreadManager : MonoBehaviour
     // Optional: Get current sequence for UI display
     public List<string> GetCurrentSequence()
     {
-        return currentOrder.Select(p => p.pinID).ToList();
+        return _currentOrder.Select(p => p.PinID).ToList();
     }
 }
