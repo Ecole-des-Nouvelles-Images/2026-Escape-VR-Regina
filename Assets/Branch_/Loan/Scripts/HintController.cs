@@ -75,6 +75,7 @@ public class HintController : MonoBehaviour
    {
       ForceRelease();
 
+      _hintGrab.transform.SetParent(_hintGrabParent);
       _hintGrab.transform.position = _startHintGrabPause;
       _hintGrabRb.angularVelocity = Vector3.zero;
       _hintGrabRb.linearVelocity = Vector3.zero;
@@ -90,7 +91,6 @@ public class HintController : MonoBehaviour
       var interactor = _grab.firstInteractorSelecting;
 
       _grab.interactionManager.SelectExit(interactor, _grab);
-      _hintGrab.transform.SetParent(_hintGrabParent);
    }
 }
 
