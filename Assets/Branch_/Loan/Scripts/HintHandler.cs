@@ -8,8 +8,7 @@ public class HintHandler : MonoBehaviour
     {
         if (other == _collider)
         {
-            string hint = PuzzleSequenceManager.Instance.GiveStringHint();
-            Debug.Log(hint);
+            EventBus.OnHintGived?.Invoke();
         }
     }
 }

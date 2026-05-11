@@ -6,7 +6,6 @@ public class Puzzle : MonoBehaviour
     [Header("===== Data =====")]
     public PuzzleData Data;
     public bool IsSolved {get; private set;}
-    public Action<Puzzle> OnPuzzleSolved;
 
     public virtual void Solve()
     {
@@ -14,7 +13,7 @@ public class Puzzle : MonoBehaviour
             return;
         
         IsSolved = true;
-        OnPuzzleSolved?.Invoke(this);
+        EventBus.OnPuzzleSolved?.Invoke(this);
     }
 
     public virtual string GetStringPuzzleHint(int index)

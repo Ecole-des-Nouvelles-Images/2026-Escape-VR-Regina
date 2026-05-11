@@ -28,18 +28,20 @@ public class PuzzleSequenceManager : MonoBehaviour
 
     private void Start()
     {
-        foreach (var puzzle in _puzzles)
-        {
-            puzzle.OnPuzzleSolved += HandlePuzzleSolved;
-        }
-
+        EventBus.OnPuzzleSolved += HandlePuzzleSolved;
         StartPuzzle();
     }
-    
+
+    private void OnDestroy()
+    {
+        EventBus.OnPuzzleSolved -= HandlePuzzleSolved;
+    }
+
     private void StartPuzzle()
     {
         _currentHintIndex = 0;
-
+        EventBus.OnPuzzleChanged?.Invoke();
+        
         Debug.Log($"Starting puzzle: {CurrentPuzzle.Data.PuzzleName}");
     }
     
