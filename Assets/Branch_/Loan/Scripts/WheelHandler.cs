@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -34,9 +35,9 @@ public class WheelHandler : MonoBehaviour
         _visual.transform.localRotation = Quaternion.Euler(0, snappedAngle, 0);
     }
 
+    [Obsolete("Obsolete")]
     void OnSelectExited(SelectExitEventArgs args)
     {
-        
         rb.angularVelocity = Vector3.zero;
         rb.velocity = Vector3.zero;
         

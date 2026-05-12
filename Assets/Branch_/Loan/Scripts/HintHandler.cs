@@ -8,7 +8,7 @@ public class HintHandler : MonoBehaviour
     {
         if (other == _collider)
         {
-            Debug.Log("Entered a hint");
+            EventBus.OnHintGived?.Invoke();
         }
     }
 }

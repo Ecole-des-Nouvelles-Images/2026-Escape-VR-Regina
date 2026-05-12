@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LockManager : MonoBehaviour
+public class LockManager : Puzzle
 {
     [SerializeField] private List<int> _values;
     [SerializeField] private List<int> _codes;
@@ -24,25 +24,39 @@ public class LockManager : MonoBehaviour
     {
         if (index >= 0 && index < _values.Count)
         {
-            
             _values[index] = value;
+            CodeCheck();
         }
     }
 
-    void Update()
+    private void CodeCheck()
     {
+        if (PuzzleSequenceManager.Instance.CurrentPuzzle != this)
+            return;
+        
         if (_values.Count <= 2)
         {
             if (_values[0] == _codes[0] && _values[1] == _codes[1] )
             {
-                Debug.Log("Lock Complete !");
+               Solve();
             }
             return;
         }
         
         if (_values[0] == _codes[0] && _values[1] == _codes[1] && _values[2] == _codes[2])
         {
-            Debug.Log("Lock Complete !");
+            Solve();
         }
     }
+
+    public override void Solve()
+    {
+        base.Solve();
+        
+        // toute fonctionnalité une fois le Puzzle fini (exemple : jouer un sons, changement de scene, ect...)
+        
+        
+    }
+    
+    
 }
