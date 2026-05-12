@@ -1,48 +1,84 @@
-using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class WheelHandler : MonoBehaviour
 {
+    [Header("===== Wheel Settings =====")]
+
     [SerializeField] private int _index;
-    public int Value; 
-    [SerializeField] private GameObject _visual; 
-    private XRGrabInteractable grab;
-    private Rigidbody rb;
-    [SerializeField] private float _angle;
+
+    [SerializeField] private Transform _visual;
+
     [SerializeField] private LockManager _lockManager;
+
+    [SerializeField] private float _rotationSpeed = 250f;
+
+    [SerializeField]private XRBaseInteractor _currentInteractor;
+
+    [SerializeField] private XRSimpleInteractable _simpleInteractable;
+
+    private float _currentAngle;
+
+    private int _value;
+
+    private Vector3 _lastInteractorPosition;
+
+    private bool _isInteracting;
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        grab = GetComponent<XRGrabInteractable>(); 
-        
-        grab.selectExited.AddListener(OnSelectExited);
+        _simpleInteractable = GetComponent<XRSimpleInteractable>();
+
+        _simpleInteractable.hoverEntered.AddListener(OnHoverEntered);
+        _simpleInteractable.hoverExited.AddListener(OnHoverExited);
     }
 
     private void Update()
     {
-        _angle = transform.eulerAngles.y; 
-        
-        Value = Mathf.RoundToInt(_angle / 36f) % 10; 
-    
-        // On s'assure que la valeur reste positive (0-9)
-        if (Value < 0) Value += 10;
-        float snappedAngle = Value * 36f; 
-        
-        _visual.transform.localRotation = Quaternion.Euler(0, snappedAngle, 0);
+        if (!_isInteracting || _currentInteractor == null)
+            return;
+
+        Vector3 currentPosition = _currentInteractor.transform.position;
+
+        Vector3 delta = currentPosition - _lastInteractorPosition;
+
+        _currentAngle += delta.x * _rotationSpeed;
+
+        _currentAngle = Mathf.Repeat(_currentAngle, 360f);
+
+        _value = Mathf.RoundToInt(_currentAngle / 36f) % 10;
+
+        float snappedAngle = _value * 36f;
+
+        _visual.localRotation = Quaternion.Euler(0f, snappedAngle, 0f);
+
+        _lockManager.GetValue(_value, _index);
+
+        _lastInteractorPosition = currentPosition;
     }
 
-    [Obsolete("Obsolete")]
-    void OnSelectExited(SelectExitEventArgs args)
+    private void OnHoverEntered(HoverEnterEventArgs args)
     {
-        rb.angularVelocity = Vector3.zero;
-        rb.velocity = Vector3.zero;
-        
-        float finalAngle = Value * 36f; 
-        transform.localRotation = Quaternion.Euler(0, finalAngle, 0);
-        _lockManager.GetValue(Value,_index);
+        _currentInteractor = args.interactorObject as XRBaseInteractor;
+
+        if (_currentInteractor == null)
+            return;
+
+        _lastInteractorPosition = _currentInteractor.transform.position;
+
+        _isInteracting = true;
+    }
+
+    private void OnHoverExited(HoverExitEventArgs args)
+    {
+        _isInteracting = false;
+
+        _currentInteractor = null;
+
+        float snappedAngle = _value * 36f;
+
+        _visual.localRotation = Quaternion.Euler(0f, snappedAngle, 0f);
     }
 }
