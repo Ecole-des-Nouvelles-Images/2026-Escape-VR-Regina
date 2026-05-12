@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8550154870606390200}
   - component: {fileID: 7101884473191568448}
   - component: {fileID: 2683820180361973621}
-  - component: {fileID: 5675917523365887367}
   - component: {fileID: 185382760604682290}
   m_Layer: 30
   m_Name: Pin
@@ -106,7 +105,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -131,13 +130,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa0c4248305bb4746b2424c972384f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pin
-  pinID: 1
-  connectionPoint: {fileID: 2195912926292565526}
-  defaultMaterial: {fileID: 2100000, guid: 1aede2a242f8e184eb0bef8feab73aaf, type: 2}
-  highlightMaterial: {fileID: 2100000, guid: b35d9b8ece2309a47b587eebea2e04f5, type: 2}
-  pokedMaterial: {fileID: 2100000, guid: c2f4853e57c72664593edf1df7770e95, type: 2}
-  attachParticles: {fileID: 0}
-  pokeCooldown: 0.5
+  PinID: 
+  ConnectionPoint: {fileID: 2195912926292565526}
+  _defaultMaterial: {fileID: 0}
+  _highlightMaterial: {fileID: 0}
+  _pokedMaterial: {fileID: 0}
+  _attachParticles: {fileID: 0}
+  _pokeCooldown: 0.5
 --- !u!114 &2683820180361973621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,7 +152,7 @@ MonoBehaviour:
   m_InteractionManager: {fileID: 0}
   m_Colliders: []
   m_InteractionLayers:
-    m_Bits: 1073741824
+    m_Bits: 2
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
@@ -185,7 +184,19 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7101884473191568448}
+        m_TargetAssemblyTypeName: Pin, Assembly-CSharp
+        m_MethodName: OnPoked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -212,18 +223,6 @@ MonoBehaviour:
   m_StartingInteractionStrengthFilters: []
   m_AutoFindParentInteractableInHierarchy: 0
   m_ParentInteractableObject: {fileID: 0}
---- !u!114 &5675917523365887367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6955107618978717261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4e1e18c3405229428d0d493a34e90dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PinDebug
 --- !u!114 &185382760604682290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,10 +240,10 @@ MonoBehaviour:
   m_PokeConfiguration:
     m_UseConstant: 1
     m_ConstantValue:
-      m_PokeDirection: 3
+      m_PokeDirection: 4
       m_InteractionDepthOffset: 0
       m_EnablePokeAngleThreshold: 1
-      m_PokeAngleThreshold: 45
+      m_PokeAngleThreshold: 89.9
     m_Variable: {fileID: 0}
 --- !u!1 &7524300812577328741
 GameObject:
