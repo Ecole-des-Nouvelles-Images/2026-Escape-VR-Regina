@@ -1,161 +1,116 @@
 using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Filtering;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
+[RequireComponent(typeof(XRSimpleInteractable))]
+[RequireComponent(typeof(XRPokeFilter))]
 public class RotaryDialPush : MonoBehaviour
 {
-    [Header("Rotary Settings")]
-    [SerializeField] private float _maxRotationAngle = 45f;
-    [SerializeField] private float _springReturnSpeed = 8f;
-    [SerializeField] private float _pokeSensitivity = 5f;
+    [Header("Rotation Settings")]
+    [SerializeField] private float _rotationSpeed = 200f;     // degrees/sec while pushing
+    [SerializeField] private float _returnSpeed = 300f;       // degrees/sec while returning
+    [SerializeField] private float _maxRotation = 330f;
+    [SerializeField] private float _returnDelay = 0.2f;
     
-    [Header("Tracking Settings")]
-    [SerializeField] private float _activationRadius = 0.1f;  // Distance to start tracking
-    [SerializeField] private float _releaseRadius = 0.15f;   // Distance to release (should be > activation)
-    [SerializeField] private LayerMask _pokePointLayers = -1;
+    [Header("References")]
+    [SerializeField] private Transform _dialToRotate;
     
+    private XRSimpleInteractable _interactable;
     private float _currentRotation = 0f;
-    private float _targetRotation = 0f;
-    private Transform _currentPokePoint;
-    private Vector3 _lastPokePosition;
-    private bool _isPoking = false;
+    private bool _isDialing = false;
+    private bool _isReturning = false;
+    private float _returnTimer = 0f;
     
-    // Cache for performance
-    private Collider[] _nearbyColliders = new Collider[10];
-    private Vector3 _dialCenter;
-    
-    private void Start()
+    private void Awake()
     {
-        // Cache dial center position (assuming this object rotates around its parent)
-        _dialCenter = transform.parent != null ? transform.parent.position : transform.position;
+        _interactable = GetComponent<XRSimpleInteractable>();
+        
+        if (_dialToRotate == null)
+            _dialToRotate = transform.parent?.Find("Cylinder");
+        
+        // Set up interactable events
+        _interactable.selectEntered.AddListener(OnPokeEnter);
+        _interactable.selectExited.AddListener(OnPokeExit);
+    }
+    
+    private void OnDestroy()
+    {
+        if (_interactable != null)
+        {
+            _interactable.selectEntered.RemoveListener(OnPokeEnter);
+            _interactable.selectExited.RemoveListener(OnPokeExit);
+        }
     }
     
     private void Update()
     {
-        // Update dial center in case it moves
-        _dialCenter = transform.parent != null ? transform.parent.position : transform.position;
-        
-        if (!_isPoking)
+        if (_isDialing)
         {
-            // Try to find a new poke point
-            TryStartPoking();
-        }
-        
-        if (_isPoking && _currentPokePoint != null)
-        {
-            // Check if we should release
-            float distanceToCenter = Vector3.Distance(_currentPokePoint.position, _dialCenter);
-            if (distanceToCenter > _releaseRadius)
+            // Rotate clockwise while being poked
+            _currentRotation += _rotationSpeed * Time.deltaTime;
+            
+            if (_currentRotation >= _maxRotation)
             {
-                ReleaseDial();
+                _currentRotation = _maxRotation;
+                StopDialing();
             }
-            else
+            
+            ApplyRotation();
+        }
+        else if (_isReturning)
+        {
+            // Rotate back to zero
+            _currentRotation -= _returnSpeed * Time.deltaTime;
+            
+            if (_currentRotation <= 0)
             {
-                // Track rotation
-                UpdateRotation();
+                _currentRotation = 0;
+                _isReturning = false;
             }
+            
+            ApplyRotation();
         }
-        else if (!_isPoking)
+        else if (_returnTimer > 0)
         {
-            // Spring return
-            _targetRotation = Mathf.Lerp(_targetRotation, 0f, Time.deltaTime * _springReturnSpeed);
-            _currentRotation = Mathf.Lerp(_currentRotation, _targetRotation, Time.deltaTime * 15f);
-        }
-        
-        // Apply rotation
-        transform.localRotation = Quaternion.Euler(0f, _currentRotation, 0f);
-    }
-    
-    private void TryStartPoking()
-    {
-        // Find all colliders within activation radius
-        int hitCount = Physics.OverlapSphereNonAlloc(_dialCenter, _activationRadius, _nearbyColliders, _pokePointLayers);
-        
-        Transform closestPokePoint = null;
-        float closestDistance = _activationRadius;
-        
-        for (int i = 0; i < hitCount; i++)
-        {
-            Collider col = _nearbyColliders[i];
-            if (col != null && IsValidPokePoint(col))
+            // Count down the return delay
+            _returnTimer -= Time.deltaTime;
+            if (_returnTimer <= 0)
             {
-                float distance = Vector3.Distance(col.transform.position, _dialCenter);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestPokePoint = col.transform;
-                }
+                _isReturning = true;
+                _returnTimer = 0;
             }
         }
-        
-        if (closestPokePoint != null)
-        {
-            StartPoking(closestPokePoint);
-        }
+    }
+    private void OnPokeEnter(SelectEnterEventArgs args)
+    {
+        // Cancel any pending return
+        _returnTimer = 0;
+        _isReturning = false;
+        _isDialing = true;
     }
     
-    private void StartPoking(Transform pokePoint)
+    private void OnPokeExit(SelectExitEventArgs args)
     {
-        _currentPokePoint = pokePoint;
-        _lastPokePosition = _currentPokePoint.position;
-        _isPoking = true;
+        StopDialing();
     }
     
-    private void ReleaseDial()
+    public void StopDialing()
     {
-        _isPoking = false;
-        _currentPokePoint = null;
-        _targetRotation = 0f;
+        if (!_isDialing) return;
+        
+        _isDialing = false;
+        _returnTimer = _returnDelay;
     }
     
-    private void UpdateRotation()
+    private void ApplyRotation()
     {
-        Vector3 pokePosition = _currentPokePoint.position;
-        
-        Vector3 currentDirection = (pokePosition - _dialCenter).normalized;
-        Vector3 lastDirection = (_lastPokePosition - _dialCenter).normalized;
-        
-        float angleDelta = Vector3.SignedAngle(lastDirection, currentDirection, transform.forward);
-        
-        float newTarget = _targetRotation + (angleDelta * _pokeSensitivity);
-        newTarget = Mathf.Clamp(newTarget, 0f, _maxRotationAngle);
-        
-        if (newTarget >= 0f && newTarget <= _maxRotationAngle)
-        {
-            _targetRotation = newTarget;
-        }
-        
-        _currentRotation = Mathf.Lerp(_currentRotation, _targetRotation, Time.deltaTime * 15f);
-        _lastPokePosition = pokePosition;
-        
-        // Auto-release when reaching max rotation
-        if (Mathf.Approximately(_targetRotation, _maxRotationAngle) || _targetRotation >= _maxRotationAngle)
-        {
-            ReleaseDial();
-            _targetRotation = _maxRotationAngle;
-        }
+        if (_dialToRotate != null)
+            _dialToRotate.localRotation = Quaternion.Euler(0f, _currentRotation, 0f);
     }
     
-    private bool IsValidPokePoint(Collider col)
-    {
-        return (_pokePointLayers.value & (1 << col.gameObject.layer)) != 0;
-    }
-    
-    public void ResetDial()
-    {
-        _isPoking = false;
-        _currentPokePoint = null;
-        _targetRotation = 0f;
-        _currentRotation = 0f;
-        transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-    }
-    
-    // Optional: Visualize radii in editor
-    private void OnDrawGizmosSelected()
-    {
-        Vector3 center = transform.parent != null ? transform.parent.position : transform.position;
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(center, _activationRadius);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(center, _releaseRadius);
-    }
+    // Public methods for external use
+    public bool IsDialing() => _isDialing;
+    public bool IsReturning() => _isReturning;
+    public float GetCurrentRotation() => _currentRotation;
 }
