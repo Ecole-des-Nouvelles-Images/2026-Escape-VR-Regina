@@ -1105,7 +1105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ded4ef5583ef844bad18389e96d1967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
-  expectedPiece: {fileID: 279279857}
+  ExpectedPiece: {fileID: 0}
 --- !u!65 &627031314
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1491,7 +1491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ded4ef5583ef844bad18389e96d1967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
-  expectedPiece: {fileID: 112117728}
+  ExpectedPiece: {fileID: 0}
 --- !u!65 &736903198
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1607,7 +1607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ded4ef5583ef844bad18389e96d1967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
-  expectedPiece: {fileID: 640972727}
+  ExpectedPiece: {fileID: 0}
 --- !u!65 &871054608
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1638,6 +1638,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 920959898}
+  - component: {fileID: 920959899}
   m_Layer: 0
   m_Name: =====MANAGERS=====
   m_TagString: Untagged
@@ -1660,6 +1661,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &920959899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920959897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adf6c7edf26e6cf43857f4eef58491ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CandleManager
+  _candles: []
 --- !u!1 &1056948614
 GameObject:
   m_ObjectHideFlags: 0
@@ -2419,7 +2433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ded4ef5583ef844bad18389e96d1967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
-  expectedPiece: {fileID: 71194820}
+  ExpectedPiece: {fileID: 0}
 --- !u!65 &1588876068
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -52,12 +52,7 @@ public class ThreadManager : MonoBehaviour
     
     private void Start()
     {
-        ValidateReferences();
-    }
-    
-    private void ValidateReferences()
-    {
-        if (_threadMaterial == null)
+        if (!_threadMaterial)
             Debug.LogWarning("ThreadMaterial not assigned in ThreadManager", this);
     }
     
@@ -114,6 +109,7 @@ public class ThreadManager : MonoBehaviour
             string.Join(" → ", _currentOrder.Select(p => p.PinID)) : "Empty";
         Debug.Log($"After removal: {sequence}");
         
+        CheckWinCondition();
         return true;
     }
     
