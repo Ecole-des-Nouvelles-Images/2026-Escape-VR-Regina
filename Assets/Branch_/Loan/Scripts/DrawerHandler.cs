@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-public class DrawerHandler : MonoBehaviour
+public class DrawerHandler : Puzzle
 {
    [SerializeField] private GameObject _drawer01;
    [SerializeField] private GameObject _drawer02;
@@ -16,14 +16,23 @@ public class DrawerHandler : MonoBehaviour
 
    private void Update()
    {
+      if (PuzzleSequenceManager.Instance.CurrentPuzzle != this)
+         return;
+      
       if (_isEnabled)
          return ;
 
       if (_drawer01.activeInHierarchy && _drawer02.activeInHierarchy)
       {
-         _grabDrawer.enabled = true;
-         _isEnabled = true;
+         Solve();
       }
          
+   }
+
+   public override void Solve()
+   {
+      base.Solve();
+      _grabDrawer.enabled = true;
+      _isEnabled = true;
    }
 }
