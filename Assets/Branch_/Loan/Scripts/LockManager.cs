@@ -13,19 +13,20 @@ public class LockManager : Puzzle
     [Header("===== Inspect Settings =====")]
 
     [SerializeField] private Transform _inspectPoint;
-
     [SerializeField] private float _inspectScaleMultiplier = 2f;
+    [SerializeField] private bool _useStartPos;
 
     private XRGrabInteractable _grabInteractable;
 
     private Rigidbody _rb;
 
-    private Vector3 _startPosition;
-    private Quaternion _startRotation;
-    private Vector3 _startScale;
-    private Transform _startParent;
+    [SerializeField]private Vector3 _startPosition;
+    [SerializeField]private Quaternion _startRotation;
+    [SerializeField]private Vector3 _startScale;
+    [SerializeField]private Transform _startParent;
 
     private bool _isInspecting;
+    Transform _thisTransform;
 
     private void Start()
     {
@@ -43,10 +44,18 @@ public class LockManager : Puzzle
         _grabInteractable = GetComponent<XRGrabInteractable>();
         _rb = GetComponent<Rigidbody>();
 
+        _thisTransform = GetComponent<Transform>();
         _grabInteractable.selectEntered.AddListener(OnGrab);
         _grabInteractable.selectExited.AddListener(OnRelease);
 
         _startScale = transform.localScale;
+        
+        if (_useStartPos)
+        {
+            _startPosition = transform.position;
+            _startRotation = transform.rotation;
+            _startParent = transform.parent;
+        }
     }
 
     #region Puzzle
@@ -88,30 +97,21 @@ public class LockManager : Puzzle
 //===================================================================================================================================================================================================
     private void OnGrab(SelectEnterEventArgs args)
     {
-        if (_isInspecting)
-            return;
-
+        if (_isInspecting) return;
         _isInspecting = true;
-
-        _startPosition = transform.position;
-        _startRotation = transform.rotation;
-        _startParent = transform.parent;
-
-        _rb.useGravity = false;
-        _rb.linearVelocity = Vector3.zero;
-        _rb.angularVelocity = Vector3.zero;
-
+        
         _rb.isKinematic = true;
-
+        _rb.useGravity = false;
+        
         transform.SetParent(_inspectPoint);
-
+        
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
 
-        transform.localScale = _startScale * _inspectScaleMultiplier;
-
         _grabInteractable.trackPosition = false;
         _grabInteractable.trackRotation = false;
+        _inspectPoint.localScale = Vector3.one * _inspectScaleMultiplier;
+
         EventBus.OnGrabLock?.Invoke();
     }
 
@@ -123,17 +123,21 @@ public class LockManager : Puzzle
         _isInspecting = false;
 
         transform.SetParent(_startParent);
-
-        transform.position = _startPosition;
-        transform.rotation = _startRotation;
-
         transform.localScale = _startScale;
+        if (_useStartPos)
+        {
+            transform.position = _startPosition;
+            transform.rotation = _startRotation;
+
+        }
 
         _rb.isKinematic = false;
 
         _rb.useGravity = true;
         _grabInteractable.trackPosition = true;
         _grabInteractable.trackRotation = true;
+        
+        _inspectPoint.localScale = Vector3.one;
         EventBus.OnReleaseLock?.Invoke();
     }
 //===================================================================================================================================================================================================

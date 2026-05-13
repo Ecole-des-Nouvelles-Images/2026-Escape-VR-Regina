@@ -6,7 +6,7 @@ public class HintHandler : MonoBehaviour
 {
     private void Start()
     {
-        GetComponent<XRSimpleInteractable>().selectEntered.AddListener(x => ToggleGiveHint());
+        GetComponent<XRSimpleInteractable>().selectExited.AddListener(x => ToggleGiveHint());
     }
 
     private void ToggleGiveHint()
