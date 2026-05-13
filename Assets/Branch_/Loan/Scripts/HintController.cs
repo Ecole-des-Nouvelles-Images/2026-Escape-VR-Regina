@@ -13,8 +13,6 @@ public class HintController : MonoBehaviour
    [SerializeField]  private float _timeToPuzzleChange;
    [Header("===== Hint Object =====")]
    [SerializeField] private GameObject _hint;
-   [SerializeField] private GameObject _hintGrab;
-   [SerializeField] private Transform _hintGrabParent;
 
    private Vector3 _startHintGrabPause = new Vector3();
    private Rigidbody _hintGrabRb;
@@ -24,10 +22,6 @@ public class HintController : MonoBehaviour
 
    private void Start()
    {
-      _grab = GetComponentInChildren<XRGrabInteractable>();
-      _startHintGrabPause = _hintGrab.transform.position;
-      _hintGrabRb = _hintGrab.GetComponent<Rigidbody>();
-      
       EventBus.OnPuzzleChanged += PuzzleChanged;
       EventBus.OnHintGived += GivenHint;
       _currentTimeToNextHint = _timeToPuzzleChange;
@@ -73,24 +67,8 @@ public class HintController : MonoBehaviour
    
    public void Hide()
    {
-      ForceRelease();
-
-      _hintGrab.transform.SetParent(_hintGrabParent);
-      _hintGrab.transform.position = _startHintGrabPause;
-      _hintGrabRb.angularVelocity = Vector3.zero;
-      _hintGrabRb.linearVelocity = Vector3.zero;
       _hint.SetActive(false);
       _isRunning = true;
-   }
-
-   private void ForceRelease()
-   {
-      if (!_grab.isSelected)
-         return;
-
-      var interactor = _grab.firstInteractorSelecting;
-
-      _grab.interactionManager.SelectExit(interactor, _grab);
    }
 }
 
