@@ -1,26 +1,58 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class AssemblyManager : MonoBehaviour
 {
-    public int totalPieces; // How many pieces needed
-    public GameObject reconstructedObject; // The final object
+    [SerializeField] private GameObject _reconstructedObject; // The final object
     
-    private int piecesPlaced = 0;
-    
-    void Start()
+    private int _totalPieces; // How many pieces needed
+
+    public int PiecesPlaced = 0;
+    private readonly List<GameObject> _snappedPieces = new(); // Track snapped pieces
+
+    private void Start()
     {
-        reconstructedObject.SetActive(false);
+        _reconstructedObject.SetActive(false);
+
+        _totalPieces = FindObjectsByType<SocketSnapHandler>(FindObjectsSortMode.None).Length;
     }
     
-    public void PiecePlaced()
+    public void PiecePlaced(GameObject snappedPiece)
     {
-        piecesPlaced++;
-        
-        if (piecesPlaced >= totalPieces)
+        // Add to tracking list if not already there
+        if (!_snappedPieces.Contains(snappedPiece))
         {
-            // Hide all pieces (optional - they're already snapped)
-            // Show reconstructed object
-            reconstructedObject.SetActive(true);
+            _snappedPieces.Add(snappedPiece);
+            PiecesPlaced++;
+            Debug.Log($"Piece {snappedPiece.name} snapped. {PiecesPlaced}/{_totalPieces} pieces placed.");
         }
+        
+        // Check if all pieces are in place
+        if (PiecesPlaced >= _totalPieces)
+        {
+            CompleteAssembly();
+        }
+    }
+    
+    void CompleteAssembly()
+    {
+        Debug.Log("All pieces assembled! Completing assembly...");
+        
+        // Remove all snapped pieces
+        foreach (GameObject piece in _snappedPieces)
+        {
+            if (piece != null)
+            {
+                Destroy(piece);
+            }
+        }
+        
+        // Clear the list
+        _snappedPieces.Clear();
+        
+        // Show reconstructed object
+        _reconstructedObject.SetActive(true);
+        
+        Debug.Log("Assembly complete! Final object revealed.");
     }
 }
