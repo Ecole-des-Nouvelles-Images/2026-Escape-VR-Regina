@@ -29,6 +29,7 @@ public class LockManager : Puzzle
 
     private void Start()
     {
+        EventBus.OnResendCode += GetValue;
         while (_values.Count < _codes.Count)
         {
             _values.Add(0);
@@ -96,6 +97,7 @@ public class LockManager : Puzzle
         _startRotation = transform.rotation;
         _startParent = transform.parent;
 
+        _rb.useGravity = false;
         _rb.linearVelocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
 
@@ -110,6 +112,7 @@ public class LockManager : Puzzle
 
         _grabInteractable.trackPosition = false;
         _grabInteractable.trackRotation = false;
+        EventBus.OnGrabLock?.Invoke();
     }
 
     private void OnRelease(SelectExitEventArgs args)
@@ -128,8 +131,10 @@ public class LockManager : Puzzle
 
         _rb.isKinematic = false;
 
+        _rb.useGravity = true;
         _grabInteractable.trackPosition = true;
         _grabInteractable.trackRotation = true;
+        EventBus.OnReleaseLock?.Invoke();
     }
 //===================================================================================================================================================================================================
     #endregion
