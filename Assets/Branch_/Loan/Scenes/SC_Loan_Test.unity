@@ -1115,29 +1115,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: XR_Player
       objectReference: {fileID: 0}
-    - target: {fileID: 3052459447901858141, guid: 235e0872436395145b66e44ffde28553, type: 3}
-      propertyPath: m_PhysicsLayerMask.m_Bits
-      value: 193
-      objectReference: {fileID: 0}
-    - target: {fileID: 4867357553887340266, guid: 235e0872436395145b66e44ffde28553, type: 3}
-      propertyPath: m_InteractionLayers.m_Bits
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4867357553887340266, guid: 235e0872436395145b66e44ffde28553, type: 3}
-      propertyPath: m_PhysicsTriggerInteraction
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5475849649248276298, guid: 235e0872436395145b66e44ffde28553, type: 3}
-      propertyPath: m_TagString
-      value: FingerTip
-      objectReference: {fileID: 0}
-    - target: {fileID: 6176655491701591245, guid: 235e0872436395145b66e44ffde28553, type: 3}
-      propertyPath: m_InteractionLayers.m_Bits
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6217624276227296016, guid: 235e0872436395145b66e44ffde28553, type: 3}
-      propertyPath: m_PhysicsLayerMask.m_Bits
-      value: 193
+    - target: {fileID: 6759061435722241920, guid: 235e0872436395145b66e44ffde28553, type: 3}
+      propertyPath: m_Radius
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1179,26 +1159,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7630088443825957319, guid: 235e0872436395145b66e44ffde28553, type: 3}
-      propertyPath: m_TagString
-      value: FingerTip
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5475849649248276298, guid: 235e0872436395145b66e44ffde28553, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1347393766}
-    - targetCorrespondingSourceObject: {fileID: 5475849649248276298, guid: 235e0872436395145b66e44ffde28553, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1347393765}
-    - targetCorrespondingSourceObject: {fileID: 7630088443825957319, guid: 235e0872436395145b66e44ffde28553, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 865140191}
-    - targetCorrespondingSourceObject: {fileID: 7630088443825957319, guid: 235e0872436395145b66e44ffde28553, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 865140190}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 235e0872436395145b66e44ffde28553, type: 3}
 --- !u!1 &577370627
 GameObject:
@@ -1668,59 +1632,6 @@ Transform:
   - {fileID: 1033062017}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &865140188 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7630088443825957319, guid: 235e0872436395145b66e44ffde28553, type: 3}
-  m_PrefabInstance: {fileID: 545556179}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &865140190
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865140188}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
---- !u!135 &865140191
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865140188}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.1
-  m_Center: {x: 0, y: 0, z: -0.1}
 --- !u!1 &898597452
 GameObject:
   m_ObjectHideFlags: 0
@@ -2386,59 +2297,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1284732231}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1347393763 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5475849649248276298, guid: 235e0872436395145b66e44ffde28553, type: 3}
-  m_PrefabInstance: {fileID: 545556179}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &1347393765
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1347393763}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
---- !u!135 &1347393766
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1347393763}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.1
-  m_Center: {x: 0, y: 0, z: -0.1}
 --- !u!1 &1476775484
 GameObject:
   m_ObjectHideFlags: 0
