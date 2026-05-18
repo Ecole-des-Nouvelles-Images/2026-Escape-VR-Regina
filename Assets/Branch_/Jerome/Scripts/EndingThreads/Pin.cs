@@ -4,76 +4,76 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class Pin : MonoBehaviour
 {
     [Header("Identification")]
-    public string pinID; // "A", "B", "C", etc.
+    public string PinID; // "A", "B", "C", etc.
     
     [Header("Attachment Point")]
-    public Transform connectionPoint; // Where thread visually attaches
+    public Transform ConnectionPoint; // Where thread visually attaches
     
     [Header("Visual Feedback")]
-    public Material defaultMaterial;
-    public Material highlightMaterial;
-    public Material pokedMaterial; // Material when poked
-    public ParticleSystem attachParticles;
+    [SerializeField] private Material _defaultMaterial;
+    [SerializeField] private Material _highlightMaterial;
+    [SerializeField] private Material _pokedMaterial; // Material when poked
+    [SerializeField] private ParticleSystem _attachParticles;
     
     [Header("Poke Settings")]
-    public float pokeCooldown = 0.5f; // Prevent rapid removal
+    [SerializeField] private float _pokeCooldown = 0.5f; // Prevent rapid removal
     
-    private Renderer pinRenderer;
-    private bool isInChain = false;
-    private bool isPokeOnCooldown = false;
-    private Material originalMaterial;
-    
-    void Awake()
+    private Renderer _pinRenderer;
+    private bool _isInChain = false;
+    private bool _isPokeOnCooldown = false;
+    private Material _originalMaterial;
+
+    private void Awake()
     {
-        pinRenderer = GetComponent<Renderer>();
-        if (pinRenderer != null && defaultMaterial != null)
-            originalMaterial = defaultMaterial;
+        _pinRenderer = GetComponent<Renderer>();
+        if (_pinRenderer != null && _defaultMaterial != null)
+            _originalMaterial = _defaultMaterial;
     }
     
     public void SetInChain(bool inChain)
     {
-        isInChain = inChain;
+        _isInChain = inChain;
         // Optional: change color or effect when part of chain
-        if (isInChain)
+        if (_isInChain)
         {
             // Slight highlight to show it's in the chain
-            if (pinRenderer != null && highlightMaterial != null)
-                pinRenderer.material = highlightMaterial;
+            if (_pinRenderer != null && _highlightMaterial != null)
+                _pinRenderer.material = _highlightMaterial;
         }
         else
         {
-            if (pinRenderer != null && defaultMaterial != null)
-                pinRenderer.material = defaultMaterial;
+            if (_pinRenderer != null && _defaultMaterial != null)
+                _pinRenderer.material = _defaultMaterial;
         }
     }
     
     public bool IsInChain()
     {
-        return isInChain;
+        return _isInChain;
     }
     
     public void PlayAttachEffect()
     {
-        if (attachParticles != null)
-            attachParticles.Play();
+        if (_attachParticles != null)
+            _attachParticles.Play();
     }
     
     // Called by XRPokeInteractor when pin is poked
     public void OnPoked()
     {
-        if (!isInChain) return;
-        if (isPokeOnCooldown) return;
+        if (!_isInChain) return;
+        if (_isPokeOnCooldown) return;
         
         // Visual feedback for being poked
-        if (pinRenderer != null && pokedMaterial != null)
+        if (_pinRenderer != null && _pokedMaterial != null)
         {
-            pinRenderer.material = pokedMaterial;
+            _pinRenderer.material = _pokedMaterial;
             Invoke(nameof(ResetMaterialAfterPoke), 0.1f);
         }
         
         // Trigger cooldown
-        isPokeOnCooldown = true;
-        Invoke(nameof(ResetPokeCooldown), pokeCooldown);
+        _isPokeOnCooldown = true;
+        Invoke(nameof(ResetPokeCooldown), _pokeCooldown);
         
         // Find ThreadManager and request removal
         ThreadManager threadManager = FindObjectOfType<ThreadManager>();
@@ -82,20 +82,20 @@ public class Pin : MonoBehaviour
             threadManager.RemovePin(this);
         }
     }
-    
-    void ResetMaterialAfterPoke()
+
+    private void ResetMaterialAfterPoke()
     {
-        if (pinRenderer != null)
+        if (_pinRenderer != null)
         {
-            if (isInChain && highlightMaterial != null)
-                pinRenderer.material = highlightMaterial;
-            else if (!isInChain && defaultMaterial != null)
-                pinRenderer.material = defaultMaterial;
+            if (_isInChain && _highlightMaterial != null)
+                _pinRenderer.material = _highlightMaterial;
+            else if (!_isInChain && _defaultMaterial != null)
+                _pinRenderer.material = _defaultMaterial;
         }
     }
-    
-    void ResetPokeCooldown()
+
+    private void ResetPokeCooldown()
     {
-        isPokeOnCooldown = false;
+        _isPokeOnCooldown = false;
     }
 }
