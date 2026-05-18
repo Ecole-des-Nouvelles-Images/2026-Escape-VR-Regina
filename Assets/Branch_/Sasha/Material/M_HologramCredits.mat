@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SG_HologramLobby
+  m_Name: M_HologramCredits
   m_Shader: {fileID: -6465566751694194690, guid: 99ba0f461996a3f4394b625cc94a1b85, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Panel:
-        m_Texture: {fileID: 2800000, guid: 0cce74b341914214a9f4dd2c72ffae05, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1e6d2ad25f9bc2e48beb0296ba3a8bdc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TVline:
@@ -51,6 +51,8 @@ Material:
     m_Floats:
     - _AlphaClip: 1
     - _ColorMask: 15
+    - _QueueControl: -1
+    - _QueueOffset: 0
     - _Size: -1
     - _SpeedGlitch: 0.5
     - _Stencil: 0
@@ -62,7 +64,9 @@ Material:
     - _Timer: 15
     - _UIMaskSoftnessX: 1
     - _UIMaskSoftnessY: 1
+    - _XRMotionVectorsPass: 1
     m_Colors:
+    - White: {r: 1, g: 1, b: 1, a: 1}
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
     - _SpeedScanLine: {r: 0, g: 0.05, b: 0, a: 0}
     - _TestColor: {r: 0.33490568, g: 0.98626846, b: 0.99999994, a: 1}
