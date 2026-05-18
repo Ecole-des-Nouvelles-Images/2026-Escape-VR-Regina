@@ -5,66 +5,79 @@ using UnityEngine;
 public class ThreadManager : MonoBehaviour
 {
     [Header("Thread Visual")]
-    public LineRenderer threadLine;
-    public Material threadMaterial;
-    public float threadWidth = 0.02f;
+    [SerializeField] [Tooltip("Material applied to the thread (will be instanced per segment)")]
+    private Material _threadMaterial;
+    
+    [SerializeField] [Tooltip("Width of the thread in world units")]
+    [Range(0.005f, 0.1f)]
+    private float _threadWidth = 0.02f;
+    
+    [SerializeField] [Tooltip("How many texture repeats per world unit (higher = more frequent pattern)")]
+    [Range(0.1f, 3f)]
+    private float _tilingFrequency = 1f;
+    
+    [SerializeField] [Tooltip("Number of points per segment (higher = smoother curves, lower = better performance)")]
+    [Range(5, 50)]
+    private int _pointsPerSegment = 20;
+    
+    [SerializeField] [Tooltip("How much the thread droops between pins (0 = straight, 1 = very saggy)")]
+    [Range(0f, 1f)]
+    private float _sagFactor = 0.3f;
+    
+    [Header("Thread Color")]
+    [SerializeField] [Tooltip("Normal thread color")]
+    private Color _normalColor = Color.white;
+    
+    [SerializeField] [Tooltip("Thread color when win condition is met")]
+    private Color _winColor = Color.yellow;
     
     [Header("Win Condition")]
-    public List<string> targetSequence; // Set in Inspector: ["A","C","B","D","F"]
-    
-    [Header("References")]
-    public Transform threadStartPoint; // Where thread originates (spool or hand)
-    
-    [Header("Audio")]
-    public AudioSource audioSource;
-    public AudioClip attachSound;
-    public AudioClip removeSound;
-    public AudioClip winSound;
+    [SerializeField] [Tooltip("Exact sequence of Pin IDs required to win (e.g., ['A','C','B','D','F'])")]
+    private List<string> _targetSequence;
     
     // Runtime data
-    private List<Pin> currentOrder = new List<Pin>();
-    private bool gameWon = false;
+    private readonly List<Pin> _currentOrder = new();
+    private readonly List<ThreadSegment> _currentSegments = new();
+    private bool _gameWon;
     
-    void Start()
+    // Internal class to track segment data
+    private class ThreadSegment
     {
-        if (threadLine == null)
-            threadLine = GetComponent<LineRenderer>();
-            
-        if (threadLine != null)
-        {
-            threadLine.startWidth = threadWidth;
-            threadLine.endWidth = threadWidth;
-            threadLine.material = threadMaterial;
-            threadLine.positionCount = 0;
-        }
+        public LineRenderer LineRenderer;
+        public GameObject GameObject;
+        public Pin StartPin;
+        public Pin EndPin;
+        public float CachedLength;
+    }
+    
+    private void Start()
+    {
+        if (!_threadMaterial)
+            Debug.LogWarning("ThreadMaterial not assigned in ThreadManager", this);
     }
     
     public bool AddPin(Pin newPin)
     {
-        if (gameWon) return false;
+        if (_gameWon) return false;
         
         // Prevent adding same pin twice
-        if (currentOrder.Contains(newPin))
+        if (_currentOrder.Contains(newPin))
         {
-            Debug.Log($"Pin {newPin.pinID} already in chain");
+            Debug.Log($"Pin {newPin.PinID} already in chain");
             return false;
         }
         
         // Add to chain
-        currentOrder.Add(newPin);
+        _currentOrder.Add(newPin);
         newPin.SetInChain(true);
         newPin.PlayAttachEffect();
-        
-        // Play sound
-        if (audioSource != null && attachSound != null)
-            audioSource.PlayOneShot(attachSound);
         
         // Update visual thread
         UpdateThreadVisual();
         
         // Log current sequence
-        string sequence = currentOrder.Count > 0 ? 
-            string.Join(" → ", currentOrder.Select(p => p.pinID)) : "Empty";
+        string sequence = _currentOrder.Count > 0 ? 
+            string.Join(" → ", _currentOrder.Select(p => p.PinID)) : "Empty";
         Debug.Log($"Current sequence: {sequence}");
         
         // Check win condition
@@ -75,123 +88,198 @@ public class ThreadManager : MonoBehaviour
     
     public bool RemovePin(Pin targetPin)
     {
-        if (gameWon) return false;
+        if (_gameWon) return false;
         
-        int index = currentOrder.IndexOf(targetPin);
+        int index = _currentOrder.IndexOf(targetPin);
         if (index == -1)
         {
-            Debug.Log($"Pin {targetPin.pinID} not in chain");
+            Debug.Log($"Pin {targetPin.PinID} not in chain");
             return false;
         }
         
         // Remove from chain
-        currentOrder.RemoveAt(index);
+        _currentOrder.RemoveAt(index);
         targetPin.SetInChain(false);
         
-        // Play sound
-        if (audioSource != null && removeSound != null)
-            audioSource.PlayOneShot(removeSound);
-        
-        // Update visual thread (automatically reconnects neighbors)
+        // Update visual thread
         UpdateThreadVisual();
         
         // Log new sequence
-        string sequence = currentOrder.Count > 0 ? 
-            string.Join(" → ", currentOrder.Select(p => p.pinID)) : "Empty";
+        string sequence = _currentOrder.Count > 0 ? 
+            string.Join(" → ", _currentOrder.Select(p => p.PinID)) : "Empty";
         Debug.Log($"After removal: {sequence}");
         
+        CheckWinCondition();
         return true;
     }
     
-    void UpdateThreadVisual()
+    private void UpdateThreadVisual()
     {
-        if (threadLine == null) return;
+        // Clear existing segments
+        ClearAllSegments();
         
-        // Need at least 2 points to draw a line
-        if (currentOrder.Count < 2)
+        // Need at least 2 pins to draw anything
+        if (_currentOrder.Count < 2) return;
+        
+        // Create a segment between each consecutive pair of pins
+        for (int i = 0; i < _currentOrder.Count - 1; i++)
         {
-            threadLine.positionCount = 0;
-            return;
+            Pin startPin = _currentOrder[i];
+            Pin endPin = _currentOrder[i + 1];
+            
+            CreateSegment(startPin, endPin);
         }
-        
-        // Build positions list
-        List<Vector3> positions = new List<Vector3>();
-        
-        // Optional: Add thread start point (spool)
-        if (threadStartPoint != null)
-            positions.Add(threadStartPoint.position);
-        
-        // Add each pin's connection point
-        foreach (Pin pin in currentOrder)
-        {
-            if (pin.connectionPoint != null)
-                positions.Add(pin.connectionPoint.position);
-            else
-                positions.Add(pin.transform.position);
-        }
-        
-        // Update line renderer
-        threadLine.positionCount = positions.Count;
-        threadLine.SetPositions(positions.ToArray());
     }
     
-    void CheckWinCondition()
+    private void ClearAllSegments()
+    {
+        foreach (var segment in _currentSegments)
+        {
+            if (segment.GameObject != null)
+                Destroy(segment.GameObject);
+        }
+        _currentSegments.Clear();
+    }
+    
+    private void CreateSegment(Pin startPin, Pin endPin)
+    {
+        // Get world positions
+        Vector3 startPos = startPin.ConnectionPoint != null ? 
+            startPin.ConnectionPoint.position : startPin.transform.position;
+        Vector3 endPos = endPin.ConnectionPoint != null ? 
+            endPin.ConnectionPoint.position : endPin.transform.position;
+        
+        // Generate sag points
+        List<Vector3> points = GenerateCatenaryPoints(startPos, endPos, _pointsPerSegment);
+        
+        // Calculate actual curved length of this segment
+        float curvedLength = CalculateCurveLength(points);
+        
+        // Create GameObject for this segment
+        GameObject segmentObj = new GameObject($"ThreadSegment_{startPin.PinID}_{endPin.PinID}");
+        segmentObj.transform.SetParent(transform);
+        
+        // Add and configure LineRenderer
+        LineRenderer line = segmentObj.AddComponent<LineRenderer>();
+        line.startWidth = _threadWidth;
+        line.endWidth = _threadWidth;
+        line.material = new Material(_threadMaterial); // Create instance for per-segment tiling
+        line.startColor = _normalColor;
+        line.endColor = _normalColor;
+        line.positionCount = points.Count;
+        line.SetPositions(points.ToArray());
+        
+        // Apply world-space tiling based on actual curved length
+        ApplyWorldSpaceTiling(line, curvedLength);
+        
+        // Store segment data
+        _currentSegments.Add(new ThreadSegment
+        {
+            LineRenderer = line,
+            GameObject = segmentObj,
+            StartPin = startPin,
+            EndPin = endPin,
+            CachedLength = curvedLength
+        });
+    }
+    
+    private List<Vector3> GenerateCatenaryPoints(Vector3 start, Vector3 end, int resolution)
+    {
+        List<Vector3> points = new List<Vector3>(resolution + 1);
+        
+        // Calculate horizontal distance (ignoring Y axis for sag calculation)
+        float horizontalDistance = Vector3.Distance(
+            new Vector3(start.x, 0, start.z), 
+            new Vector3(end.x, 0, end.z)
+        );
+        
+        float maxSag = horizontalDistance * _sagFactor;
+        
+        for (int i = 0; i <= resolution; i++)
+        {
+            float t = i / (float)resolution;
+            
+            // Straight line position (includes height difference naturally)
+            Vector3 point = Vector3.Lerp(start, end, t);
+            
+            // Calculate sag - maximum at t=0.5, zero at t=0 and t=1
+            float sagCurve = 4 * t * (1 - t);
+            float sagAmount = maxSag * sagCurve;
+            
+            // Sag pulls DOWN relative to the straight line (assumes Y is up axis)
+            point.y -= sagAmount;
+            
+            points.Add(point);
+        }
+        
+        return points;
+    }
+    
+    private float CalculateCurveLength(List<Vector3> points)
+    {
+        float length = 0f;
+        for (int i = 0; i < points.Count - 1; i++)
+        {
+            length += Vector3.Distance(points[i], points[i + 1]);
+        }
+        return length;
+    }
+    
+    private void ApplyWorldSpaceTiling(LineRenderer line, float curvedLength)
+    {
+        // Calculate how many texture repeats based on actual curved length
+        float tilingX = curvedLength * _tilingFrequency;
+        
+        // Apply tiling to the material instance
+        line.material.mainTextureScale = new Vector2(tilingX, 1);
+        line.material.mainTextureOffset = Vector2.zero;
+    }
+    
+    private void CheckWinCondition()
     {
         // Convert current pins to IDs
-        List<string> currentIDs = currentOrder.Select(p => p.pinID).ToList();
+        List<string> currentIDs = _currentOrder.Select(p => p.PinID).ToList();
         
         // Check if sequences match exactly
-        bool sequenceMatches = currentIDs.SequenceEqual(targetSequence);
+        bool sequenceMatches = currentIDs.SequenceEqual(_targetSequence);
         
-        if (sequenceMatches && currentIDs.Count == targetSequence.Count)
+        if (sequenceMatches && currentIDs.Count == _targetSequence.Count)
         {
             Win();
         }
     }
     
-    void Win()
+    private void Win()
     {
-        gameWon = true;
+        _gameWon = true;
         Debug.Log("🎉 VICTORY! Correct sequence achieved! 🎉");
         
-        if (audioSource != null && winSound != null)
-            audioSource.PlayOneShot(winSound);
-            
-        // Change thread color to gold
-        if (threadLine != null)
-            threadLine.startColor = Color.yellow;
-            threadLine.endColor = Color.yellow;
-            
-        // You can add more win effects here:
-        // - Particle effects
-        // - UI panel
-        // - Load next scene
+        // Change all segment colors to gold
+        foreach (var segment in _currentSegments)
+        {
+            if (segment.LineRenderer != null)
+            {
+                segment.LineRenderer.startColor = _winColor;
+                segment.LineRenderer.endColor = _winColor;
+            }
+        }
     }
     
-    // Debug/Editor method to reset the game
     public void ResetGame()
     {
-        foreach (Pin pin in currentOrder)
+        foreach (Pin pin in _currentOrder)
         {
             pin.SetInChain(false);
         }
-        currentOrder.Clear();
-        UpdateThreadVisual();
-        gameWon = false;
+        _currentOrder.Clear();
+        ClearAllSegments();
+        _gameWon = false;
         
-        if (threadLine != null && threadMaterial != null)
-        {
-            threadLine.startColor = Color.white;
-            threadLine.endColor = Color.white;
-            threadLine.material = threadMaterial;
-        }
-            
         Debug.Log("Game reset");
     }
     
-    // Optional: Get current sequence for UI display
     public List<string> GetCurrentSequence()
     {
-        return currentOrder.Select(p => p.pinID).ToList();
+        return _currentOrder.Select(p => p.PinID).ToList();
     }
 }

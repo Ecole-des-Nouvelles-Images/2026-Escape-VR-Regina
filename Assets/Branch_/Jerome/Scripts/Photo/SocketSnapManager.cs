@@ -5,13 +5,14 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class SocketSnapHandler : MonoBehaviour
 {
-    public GameObject ExpectedPiece;
+    [SerializeField] private GameObject _expectedPiece;
     private XRSocketInteractor _socket;
     private bool _isOccupied = false;
     private AssemblyManager _manager;
     private XRGrabInteractable _currentlyHoveredPiece;
-    
-    void Start()
+    private bool _hasSnappedCorrectly = false; // Track if this socket has completed its snap
+
+    private void Start()
     {
         _socket = GetComponent<XRSocketInteractor>();
         _manager = FindFirstObjectByType<AssemblyManager>();
@@ -20,69 +21,91 @@ public class SocketSnapHandler : MonoBehaviour
         _socket.hoverEntered.AddListener(OnHoverEntered);
         _socket.hoverExited.AddListener(OnHoverExited);
     }
-    
-    void OnHoverEntered(HoverEnterEventArgs args)
+
+    private void OnHoverEntered(HoverEnterEventArgs args)
     {
-        if (_isOccupied) return;
+        if (_isOccupied || _hasSnappedCorrectly) return;
         
         GameObject hoveredPiece = args.interactableObject.transform.gameObject;
         
         // Only track the correct piece
-        if (hoveredPiece == ExpectedPiece)
+        if (hoveredPiece == _expectedPiece)
         {
             _currentlyHoveredPiece = hoveredPiece.GetComponent<XRGrabInteractable>();
         }
     }
-    
-    void OnHoverExited(HoverExitEventArgs args)
+
+    private void OnHoverExited(HoverExitEventArgs args)
     {
-        if (_isOccupied) return;
+        if (_isOccupied || _hasSnappedCorrectly) return;
         
         GameObject hoveredPiece = args.interactableObject.transform.gameObject;
         
-        if (hoveredPiece == ExpectedPiece)
+        if (hoveredPiece == _expectedPiece)
         {
             _currentlyHoveredPiece = null;
         }
     }
-    
-    void OnSnapped(SelectEnterEventArgs args)
+
+    private void OnSnapped(SelectEnterEventArgs args)
     {
-        if (_isOccupied) return;
+        if (_isOccupied || _hasSnappedCorrectly) return;
         
         GameObject snappedPiece = args.interactableObject.transform.gameObject;
         
         // Wrong piece - eject it
-        if (snappedPiece != ExpectedPiece)
+        if (snappedPiece != _expectedPiece)
         {
             _socket.interactionManager.SelectExit(args.interactorObject, args.interactableObject);
             Rigidbody rb = snappedPiece.GetComponent<Rigidbody>();
             if (rb != null)
-                rb.AddForce(_socket.transform.forward * 1, ForceMode.Impulse);
+                rb.AddForce(_socket.transform.forward * 2f, ForceMode.Impulse);
             return;
         }
         
         // Correct piece - accept it
+        AcceptCorrectPiece(snappedPiece);
+    }
+
+    private void AcceptCorrectPiece(GameObject piece)
+    {
         _isOccupied = true;
+        _hasSnappedCorrectly = true;
         
         // Force exact position
-        snappedPiece.transform.position = _socket.transform.position;
-        snappedPiece.transform.rotation = _socket.transform.rotation;
+        piece.transform.position = _socket.transform.position;
+        piece.transform.rotation = _socket.transform.rotation;
         
-        snappedPiece.GetComponent<XRGrabInteractable>().enabled = false;
+        // Disable interaction
+        XRGrabInteractable grabInteractable = piece.GetComponent<XRGrabInteractable>();
+        if (grabInteractable != null)
+            grabInteractable.enabled = false;
         
-        Rigidbody rbCorrect = snappedPiece.GetComponent<Rigidbody>();
-        if (rbCorrect != null)
-            rbCorrect.isKinematic = true;
+        // Make kinematic to prevent physics interference
+        Rigidbody rb = piece.GetComponent<Rigidbody>();
+        if (rb != null)
+            rb.isKinematic = true;
         
+        // Optional: Hide or disable socket visuals
         _socket.enabled = false;
-        _manager?.PiecePlaced();
+        
+        // Notify the AssemblyManager that this piece has been snapped
+        if (_manager != null)
+        {
+            _manager.PiecePlaced(piece);
+        }
+        else
+        {
+            Debug.LogError("AssemblyManager not found in scene!");
+        }
+        
+        Debug.Log($"Piece {piece.name} successfully snapped to {gameObject.name}");
     }
-    
-    void Update()
+
+    private void Update()
     {
         // If a correct piece is hovering AND player releases it
-        if (_currentlyHoveredPiece != null && !_isOccupied)
+        if (_currentlyHoveredPiece != null && !_isOccupied && !_hasSnappedCorrectly)
         {
             // Check if the piece is no longer being held
             if (!_currentlyHoveredPiece.isSelected)
@@ -92,20 +115,27 @@ public class SocketSnapHandler : MonoBehaviour
             }
         }
     }
-    
-    void ForceSnap()
+
+    private void ForceSnap()
     {
-        if (_currentlyHoveredPiece == null || _isOccupied) return;
+        if (!_currentlyHoveredPiece || _isOccupied || _hasSnappedCorrectly) return;
         
         GameObject piece = _currentlyHoveredPiece.gameObject;
         
         // Manually force the socket to select it
-        var interactor = _socket as IXRSelectInteractor;
-        var interactable = _currentlyHoveredPiece as IXRSelectInteractable;
-        
-        if (interactor != null && interactable != null)
+
+        if (_socket is IXRSelectInteractor interactor && _currentlyHoveredPiece is IXRSelectInteractable interactable)
         {
             _socket.interactionManager.SelectEnter(interactor, interactable);
         }
+    }
+    
+    // Optional: Method to reset the socket for testing/replay
+    public void ResetSocket()
+    {
+        _isOccupied = false;
+        _hasSnappedCorrectly = false;
+        _currentlyHoveredPiece = null;
+        _socket.enabled = true;
     }
 }
