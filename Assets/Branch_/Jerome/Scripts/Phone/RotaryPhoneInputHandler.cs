@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class RotaryPhoneInputHandler : MonoBehaviour
+public class RotaryPhoneInputHandler : Puzzle
 {
     private readonly Stack<char> _numberStack = new();
     private readonly List<char> _phoneNumber = new();
@@ -19,19 +19,30 @@ public class RotaryPhoneInputHandler : MonoBehaviour
         string number = new(phoneNumber.ToArray());
         
         int index = _validNumbers.IndexOf(number);
-        //_phoneNumber.Clear();
         if (index == -1) return;
         
         // Define what number corresponds to what action/event
         switch (index)
         {
             case 0:
+                
+                Solve();
                 break;
             case 1:
                 break;
             case 2:
                 break;
         }
+    }
+
+    public void ReleaseDial()
+    {
+        // take from the top of the stack
+        _phoneNumber.Add(_numberStack.Pop());
+        if (_phoneNumber.Count == 7) CompareNumber(_phoneNumber);
+
+        _numberStack.Clear();
+        
     }
     public void InputNumber()
     {

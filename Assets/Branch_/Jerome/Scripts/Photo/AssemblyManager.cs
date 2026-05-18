@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class AssemblyManager : MonoBehaviour
+public class AssemblyManager : Puzzle
 {
     [SerializeField] private GameObject _reconstructedObject; // The final object
     
@@ -53,6 +53,7 @@ public class AssemblyManager : MonoBehaviour
         // Show reconstructed object
         _reconstructedObject.SetActive(true);
         
+        Solve();
         Debug.Log("Assembly complete! Final object revealed.");
     }
 }
