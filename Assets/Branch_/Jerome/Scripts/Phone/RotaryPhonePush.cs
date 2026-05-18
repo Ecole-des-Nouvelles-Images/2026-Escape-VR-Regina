@@ -15,6 +15,7 @@ public class RotaryDialPush : MonoBehaviour
     
     [Header("References")]
     [SerializeField] private Transform _dialToRotate;
+    [SerializeField] private RotaryPhoneInputHandler _inputHandler;
     
     private XRSimpleInteractable _interactable;
     private float _currentRotation = 0f;
@@ -26,9 +27,10 @@ public class RotaryDialPush : MonoBehaviour
     {
         _interactable = GetComponent<XRSimpleInteractable>();
         
-        if (_dialToRotate == null)
+        if (!_dialToRotate)
             _dialToRotate = transform.parent?.Find("Cylinder");
         
+        if (!_inputHandler) _inputHandler = FindFirstObjectByType<RotaryPhoneInputHandler>();
         // Set up interactable events
         _interactable.selectEntered.AddListener(OnPokeEnter);
         _interactable.selectExited.AddListener(OnPokeExit);
@@ -36,11 +38,10 @@ public class RotaryDialPush : MonoBehaviour
     
     private void OnDestroy()
     {
-        if (_interactable != null)
-        {
-            _interactable.selectEntered.RemoveListener(OnPokeEnter);
-            _interactable.selectExited.RemoveListener(OnPokeExit);
-        }
+        if (!_interactable) return;
+        
+        _interactable.selectEntered.RemoveListener(OnPokeEnter);
+        _interactable.selectExited.RemoveListener(OnPokeExit);
     }
     
     private void Update()
@@ -101,6 +102,7 @@ public class RotaryDialPush : MonoBehaviour
         
         _isDialing = false;
         _returnTimer = _returnDelay;
+        _inputHandler.ReleaseDial();
     }
     
     private void ApplyRotation()

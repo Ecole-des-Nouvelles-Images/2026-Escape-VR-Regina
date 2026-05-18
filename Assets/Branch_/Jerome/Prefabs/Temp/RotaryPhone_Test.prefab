@@ -473,6 +473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb119d91a840f284681abc77f0a6bfdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotaryPhoneInputHandler
+  Data: {fileID: 11400000, guid: 972b7b75b387c364bb1aad0935195945, type: 2}
 --- !u!114 &534238256000076020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,11 +486,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24e39f6b343fd8949add6acfd99a0ceb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotaryDialPush
-  _rotationSpeed: 20
-  _returnSpeed: 30
+  _rotationSpeed: 40
+  _returnSpeed: 60
   _maxRotation: 330
-  _returnDelay: 0.2
+  _returnDelay: 0.4
   _dialToRotate: {fileID: 3999772054961950599}
+  _inputHandler: {fileID: 0}
 --- !u!114 &4069848807642744322
 MonoBehaviour:
   m_ObjectHideFlags: 0

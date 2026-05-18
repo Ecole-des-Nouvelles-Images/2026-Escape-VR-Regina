@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-public class CandleManager : MonoBehaviour
+public class CandleManager : Puzzle
 {
     [SerializeField] private List<CandleExtinguish> _candles = new();
     
@@ -33,13 +33,7 @@ public class CandleManager : MonoBehaviour
 
         if (allExtinguished)
         {
-            AllCandlesExtinguished();
+            Solve(); // All candles have been extinguished, puzzle is solved.
         }
-    }
-    
-    private void AllCandlesExtinguished()
-    {
-        Debug.Log("=== ALL CANDLES HAVE BEEN EXTINGUISHED! ===");
-        // TODO puzzle finished event
     }
 }
