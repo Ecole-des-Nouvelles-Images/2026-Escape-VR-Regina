@@ -1,47 +1,107 @@
+using System;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class WheelHandler : MonoBehaviour
 {
+    [Header("===== References =====")]
     [SerializeField] private int _index;
-    public int Value; 
-    [SerializeField] private GameObject _visual; 
-    private XRGrabInteractable grab;
-    private Rigidbody rb;
-    [SerializeField] private float _angle;
-    [SerializeField] private LockManager _lockManager;
+    [SerializeField] private Transform _visual;
+    
+    [Header("===== Settings =====")]
+    [SerializeField] private float _sensitivity = 5f;
 
-    private void Awake()
+    private float _currentAngle;
+    private int _lastValue = -1;
+    private Vector3 _lastFingerPosition;
+    private Transform _activeFinger;
+    private bool _isInteracting;
+    private bool _isGrabbing;
+
+    #region Trigger
+//===================================================================================================================================================================================================
+    private void OnTriggerEnter(Collider other)
     {
-        rb = GetComponent<Rigidbody>();
-        grab = GetComponent<XRGrabInteractable>(); 
-        
-        grab.selectExited.AddListener(OnSelectExited);
+        if (!_isGrabbing)
+            return;
+        // On vérifie si c'est bien le bout du doigt qui touche
+        if (other.CompareTag("FingerTip"))
+        {
+            _activeFinger = other.transform;
+            _lastFingerPosition = _activeFinger.position;
+            _isInteracting = true;
+            Debug.Log($"Wheel {_index} : Contact avec le doigt !");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!_isGrabbing)
+            return;
+        if (other.CompareTag("FingerTip"))
+        {
+            _isInteracting = false;
+            _activeFinger = null;
+            SnapToValue();
+            Debug.Log($"Wheel {_index} : Fin de contact.");
+        }
+    }
+//===================================================================================================================================================================================================
+    #endregion
+
+    private void Start()
+    {
+        EventBus.OnGrabLock += IsGrabLock;
+        EventBus.OnReleaseLock += IsReleaseGrab;
+    }
+
+    private void OnDisable()
+    {
+        EventBus.OnGrabLock -= IsGrabLock;
+        EventBus.OnReleaseLock -= IsReleaseGrab;
     }
 
     private void Update()
     {
-        _angle = transform.eulerAngles.y; 
+        if (!_isInteracting || _activeFinger == null) return;
+
+        // Calcul du déplacement latéral
+        Vector3 currentFingerPos = _activeFinger.position;
+        Vector3 worldDelta = currentFingerPos - _lastFingerPosition;
         
-        Value = Mathf.RoundToInt(_angle / 36f) % 10; 
-    
-        // On s'assure que la valeur reste positive (0-9)
-        if (Value < 0) Value += 10;
-        float snappedAngle = Value * 36f; 
+        // On projette sur l'axe X local de la molette
+        float localDeltaX = transform.InverseTransformDirection(worldDelta).x;
+
+        // Rotation
+        _currentAngle += localDeltaX * _sensitivity * 360f;
+        _visual.localRotation = Quaternion.Euler(0f, -_currentAngle, 0f);
+
+        // Calcul de la valeur
+        int currentValue = Mathf.RoundToInt(Mathf.Repeat(_currentAngle, 360f) / 36f) % 10;
         
-        _visual.transform.localRotation = Quaternion.Euler(0, snappedAngle, 0);
+        if (currentValue != _lastValue)
+        { 
+            _lastValue = currentValue;
+            
+           EventBus.OnResendCode?.Invoke(currentValue, _index);
+        }
+
+        _lastFingerPosition = currentFingerPos;
     }
 
-    void OnSelectExited(SelectExitEventArgs args)
+    private void SnapToValue()
     {
-        
-        rb.angularVelocity = Vector3.zero;
-        rb.velocity = Vector3.zero;
-        
-        float finalAngle = Value * 36f; 
-        transform.localRotation = Quaternion.Euler(0, finalAngle, 0);
-        _lockManager.GetValue(Value,_index);
+        float snappedAngle = _lastValue * 36f;
+        _currentAngle = snappedAngle;
+        _visual.localRotation = Quaternion.Euler(0f, snappedAngle, 0f);
+    }
+
+    private void IsGrabLock()
+    {
+        _isGrabbing = true;
+    }
+
+    private void IsReleaseGrab()
+    {
+        _isGrabbing = false;
     }
 }

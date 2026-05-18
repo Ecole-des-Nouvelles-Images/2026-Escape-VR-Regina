@@ -1,14 +1,16 @@
+using System;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class HintHandler : MonoBehaviour
 {
-    [SerializeField] private Collider _collider;
-    
-    void OnTriggerEnter(Collider other)
+    private void Start()
     {
-        if (other == _collider)
-        {
-            Debug.Log("Entered a hint");
-        }
+        GetComponent<XRSimpleInteractable>().selectEntered.AddListener(x => ToggleGiveHint());
+    }
+
+    private void ToggleGiveHint()
+    {
+        EventBus.OnHintGived?.Invoke();
     }
 }
