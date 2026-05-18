@@ -6,6 +6,7 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private Transform _playerTransform;
     
     // Hardcoded scene names (adjust these to match your actual scene names)
+    // SC_Jerome_Test_Act
     private const string ACT1 = "SC_Act1";
     private const string ACT2 = "SC_Act2";
     private const string ACT3 = "SC_Act3";

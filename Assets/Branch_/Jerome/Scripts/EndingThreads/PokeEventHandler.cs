@@ -5,30 +5,30 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 [RequireComponent(typeof(XRPokeInteractor))]
 public class PokeEventHandler : MonoBehaviour
 {
-    private XRPokeInteractor pokeInteractor;
-    
-    void Awake()
+    private XRPokeInteractor _pokeInteractor;
+
+    private void Awake()
     {
-        pokeInteractor = GetComponent<XRPokeInteractor>();
+        _pokeInteractor = GetComponent<XRPokeInteractor>();
     }
-    
-    void OnEnable()
+
+    private void OnEnable()
     {
-        if (pokeInteractor != null)
+        if (_pokeInteractor != null)
         {
-            pokeInteractor.selectEntered.AddListener(OnPoke);
+            _pokeInteractor.selectEntered.AddListener(OnPoke);
         }
     }
-    
-    void OnDisable()
+
+    private void OnDisable()
     {
-        if (pokeInteractor != null)
+        if (_pokeInteractor != null)
         {
-            pokeInteractor.selectEntered.RemoveListener(OnPoke);
+            _pokeInteractor.selectEntered.RemoveListener(OnPoke);
         }
     }
-    
-    void OnPoke(SelectEnterEventArgs args)
+
+    private void OnPoke(SelectEnterEventArgs args)
     {
         // Try to get Pin component from the poked object
         Pin pin = args.interactableObject.transform.GetComponent<Pin>();
