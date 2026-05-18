@@ -56,6 +56,7 @@ public class LockManager : Puzzle
             _startRotation = transform.rotation;
             _startParent = transform.parent;
         }
+        _inspectPoint = GameObject.FindWithTag("InspectPoints").GetComponent<Transform>();
     }
 
     #region Puzzle

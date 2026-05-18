@@ -227,8 +227,13 @@ MonoBehaviour:
   Data: {fileID: 11400000, guid: 7e4cbb37e112db7488c0aa91121658b8, type: 2}
   _values: 
   _codes: 0300000001000000
-  _inspectPoint: {fileID: 2135740643}
+  _inspectPoint: {fileID: 0}
   _inspectScaleMultiplier: 2
+  _useStartPos: 0
+  _startPosition: {x: 0, y: 0, z: 0}
+  _startRotation: {x: 0, y: 0, z: 0, w: 0}
+  _startScale: {x: 0, y: 0, z: 0}
+  _startParent: {fileID: 0}
 --- !u!4 &14281313
 Transform:
   m_ObjectHideFlags: 0
@@ -2488,11 +2493,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!4 &2135740643 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5299907645634725193, guid: 235e0872436395145b66e44ffde28553, type: 3}
-  m_PrefabInstance: {fileID: 545556179}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &198668804712106480
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2873,7 +2873,7 @@ PrefabInstance:
     - target: {fileID: 5101929711154130232, guid: b83b87be172c5b048b0e145e14788999, type: 3}
       propertyPath: _inspectPoint
       value: 
-      objectReference: {fileID: 2135740643}
+      objectReference: {fileID: 0}
     - target: {fileID: 9202707030333728219, guid: b83b87be172c5b048b0e145e14788999, type: 3}
       propertyPath: m_Name
       value: Lock_Prefabs
