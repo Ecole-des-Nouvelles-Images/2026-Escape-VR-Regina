@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ThreadManager : MonoBehaviour
+public class ThreadManager : Puzzle
 {
     [Header("Thread Visual")]
     [SerializeField] [Tooltip("Material applied to the thread (will be instanced per segment)")]
@@ -133,11 +133,11 @@ public class ThreadManager : MonoBehaviour
     
     private void ClearAllSegments()
     {
-        foreach (var segment in _currentSegments)
+        foreach (ThreadSegment segment in _currentSegments.Where(segment => segment.GameObject))
         {
-            if (segment.GameObject != null)
-                Destroy(segment.GameObject);
+            Destroy(segment.GameObject);
         }
+
         _currentSegments.Clear();
     }
     
@@ -215,7 +215,7 @@ public class ThreadManager : MonoBehaviour
         return points;
     }
     
-    private float CalculateCurveLength(List<Vector3> points)
+    private static float CalculateCurveLength(List<Vector3> points)
     {
         float length = 0f;
         for (int i = 0; i < points.Count - 1; i++)
@@ -242,11 +242,11 @@ public class ThreadManager : MonoBehaviour
         
         // Check if sequences match exactly
         bool sequenceMatches = currentIDs.SequenceEqual(_targetSequence);
+
+        if (!sequenceMatches || currentIDs.Count != _targetSequence.Count) return;
         
-        if (sequenceMatches && currentIDs.Count == _targetSequence.Count)
-        {
-            Win();
-        }
+        Solve();
+        Win();
     }
     
     private void Win()
@@ -255,13 +255,10 @@ public class ThreadManager : MonoBehaviour
         Debug.Log("🎉 VICTORY! Correct sequence achieved! 🎉");
         
         // Change all segment colors to gold
-        foreach (var segment in _currentSegments)
+        foreach (ThreadSegment segment in _currentSegments.Where(segment => segment.LineRenderer))
         {
-            if (segment.LineRenderer != null)
-            {
-                segment.LineRenderer.startColor = _winColor;
-                segment.LineRenderer.endColor = _winColor;
-            }
+            segment.LineRenderer.startColor = _winColor;
+            segment.LineRenderer.endColor = _winColor;
         }
     }
     
