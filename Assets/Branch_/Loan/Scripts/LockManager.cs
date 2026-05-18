@@ -87,6 +87,8 @@ public class LockManager : Puzzle
     public override void Solve()
     {
         base.Solve();
+        
+        EventBus.OnCloseEyes?.Invoke();
 
         Debug.Log("Lock Opened");
     }

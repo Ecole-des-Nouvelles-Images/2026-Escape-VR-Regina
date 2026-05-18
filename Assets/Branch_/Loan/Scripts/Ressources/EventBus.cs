@@ -21,4 +21,11 @@ public static class EventBus
     public static Action OnGrabLock;
     public static Action OnReleaseLock;
     public static Action<int,int> OnResendCode;
+    
+    // =========================
+    // PLAYER EVENTS
+    // =========================
+
+    public static Action OnCloseEyes;
+    public static Action OnOpenEyes;
 }
