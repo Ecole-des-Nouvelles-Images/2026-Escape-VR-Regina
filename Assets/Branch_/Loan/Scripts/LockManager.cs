@@ -90,7 +90,7 @@ public class LockManager : Puzzle
     {
         base.Solve();
         
-        EventBus.OnCloseEyes?.Invoke();
+        EventBus.OnOpenChest?.Invoke();
 
         Debug.Log("Lock Opened");
     }

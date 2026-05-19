@@ -24,7 +24,7 @@ public class HintController : MonoBehaviour
    {
       EventBus.OnPuzzleChanged += PuzzleChanged;
       EventBus.OnHintGived += GivenHint;
-      _currentTimeToNextHint = _timeToPuzzleChange;
+      PuzzleChanged();
    }
 
    private void OnDisable()
