@@ -22,6 +22,7 @@ public static class EventBus
     public static Action OnReleaseLock;
     public static Action<int,int> OnResendCode;
     public static Action OnOpenChest;
+    public static Action OnChestMove;
     
     // =========================
     // PLAYER EVENTS

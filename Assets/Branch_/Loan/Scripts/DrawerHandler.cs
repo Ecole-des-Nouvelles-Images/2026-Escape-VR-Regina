@@ -12,6 +12,7 @@ public class DrawerHandler : Puzzle
    [SerializeField]private XRSocketInteractor  _grabSocket1;
 
    private bool _isEnabled;
+   private bool _isOpen;
 
    private void Awake()
    {
@@ -32,7 +33,7 @@ public class DrawerHandler : Puzzle
       {
          Solve();
       }
-         
+      
    }
 
    private void OnSocket(SelectEnterEventArgs args)
@@ -54,6 +55,7 @@ public class DrawerHandler : Puzzle
    public override void Solve()
    {
       base.Solve();
+      
       _grabDrawer.enabled = true;
       _isEnabled = true;
    }

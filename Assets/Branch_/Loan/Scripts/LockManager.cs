@@ -52,8 +52,8 @@ public class LockManager : Puzzle
         
         if (_useStartPos)
         {
-            _startPosition = transform.position;
-            _startRotation = transform.rotation;
+            _startPosition = transform.localPosition;
+            _startRotation = transform.localRotation;
             _startParent = transform.parent;
         }
         _inspectPoint = GameObject.FindWithTag("InspectPoints").GetComponent<Transform>();
@@ -126,21 +126,33 @@ public class LockManager : Puzzle
 
         _isInspecting = false;
 
+        // 1. On remet le parent d'origine d'abord
         transform.SetParent(_startParent);
-        transform.localScale = _startScale;
+        transform.localScale = _startScale; // Assure-toi de l'avoir setup dans le Start() !
+
         if (_useStartPos)
         {
-            transform.position = _startPosition;
-            transform.rotation = _startRotation;
+            // 2. On replace le transform
+            transform.localPosition = _startPosition;
+            transform.localRotation = _startRotation;
 
+            // 3. SECURITÉ PHYSIQUE : On stoppe net toutes les forces accumulées pendant le Grab
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+        
+            // On force le moteur physique à s'aligner sur la position initiale
+            _rb.position = transform.position;
+            _rb.rotation = transform.rotation;
         }
 
+        // 4. On réactive la physique
         _rb.isKinematic = false;
-
         _rb.useGravity = true;
+    
+        // 5. On rend le contrôle au XR Toolkit
         _grabInteractable.trackPosition = true;
         _grabInteractable.trackRotation = true;
-        
+    
         _inspectPoint.localScale = Vector3.one;
         EventBus.OnReleaseLock?.Invoke();
     }
