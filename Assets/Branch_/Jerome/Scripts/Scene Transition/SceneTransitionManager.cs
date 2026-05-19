@@ -7,9 +7,9 @@ public class SceneTransitionManager : MonoBehaviour
     
     // Hardcoded scene names (adjust these to match your actual scene names)
     // SC_Jerome_Test_Act
-    private const string ACT1 = "SC_Act1";
-    private const string ACT2 = "SC_Act2";
-    private const string ACT3 = "SC_Act3";
+    [SerializeField] private string _act1 = "SC_Act1";
+    [SerializeField] private string _act2 = "SC_Act2";
+    [SerializeField] private string _act3 = "SC_Act3";
     
     private static string _currentSideScene = "";
     private static Vector3 _savedPosition;
@@ -25,17 +25,17 @@ public class SceneTransitionManager : MonoBehaviour
     
     public void LoadAct1Scene()
     {
-        LoadSideScene(ACT1);
+        LoadSideScene(_act1);
     }
     
     public void LoadAct2Scene()
     {
-        LoadSideScene(ACT2);
+        LoadSideScene(_act2);
     }
     
     public void LoadAct3Scene()
     {
-        LoadSideScene(ACT3);
+        LoadSideScene(_act3);
     }
     
     private void LoadSideScene(string sceneName)
