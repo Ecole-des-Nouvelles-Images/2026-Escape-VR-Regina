@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_HologramGlitch
+  m_Name: M_UnityLogo_Glitch
   m_Shader: {fileID: -6465566751694194690, guid: 67648f8da31d07c48a5cb2a00578893a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,7 +24,15 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_725b6e0f91c747a9a3a6891d4d62f07e_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 1e6d2ad25f9bc2e48beb0296ba3a8bdc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Text:
         m_Texture: {fileID: 2800000, guid: 1e6d2ad25f9bc2e48beb0296ba3a8bdc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -42,14 +50,29 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DistortScrollSpeed: 1
-    - _DistortStrenght: 1
-    - _DistortionScale: 1.17
+    - _ColorMask: 15
+    - _DistortScrollSpeed: -0.46
+    - _DistortStrenght: 0.59
+    - _DistortionScale: 0.1
+    - _GlitchAmount: 15.74
+    - _GlitchStrength: 0.09
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ScanLineAmount: 20
+    - _ScreenBrightness: 2
+    - _ScreenLag: 1
+    - _ScrollSpeed: -0.55
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UIMaskSoftnessX: 1
+    - _UIMaskSoftnessY: 1
     - _XRMotionVectorsPass: 1
     m_Colors:
-    - _Color: {r: 1.458824, g: 4, b: 3.922988, a: 1}
+    - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 0.364706, g: 1, b: 0.980747, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5237416254264387890
