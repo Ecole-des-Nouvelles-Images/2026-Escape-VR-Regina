@@ -19,6 +19,9 @@ public class WheelHandler : MonoBehaviour
     private bool _isInteracting;
     private bool _isGrabbing;
 
+    // VARIABLE PRO : On stocke l'axe de déplacement pour toute la durée de cette interaction
+    private Vector3 _interactionAxis;
+
     #region Trigger
     private void OnTriggerEnter(Collider other)
     {
@@ -29,6 +32,11 @@ public class WheelHandler : MonoBehaviour
         {
             _activeFinger = other.transform;
             _lastFingerPosition = _activeFinger.position;
+            
+            // LOGIQUE PRO : On fige l'axe X local actuel (axe rouge) de la molette en coordonées World.
+            // Comme on le stocke ici, même si la molette tourne au frame suivant, notre axe de référence reste fixe !
+            _interactionAxis = transform.right; 
+
             _isInteracting = true;
         }
     }
@@ -65,9 +73,12 @@ public class WheelHandler : MonoBehaviour
         Vector3 currentFingerPos = _activeFinger.position;
         Vector3 worldDelta = currentFingerPos - _lastFingerPosition;
         
-        float localDeltaX = transform.InverseTransformDirection(worldDelta).x;
+        // LOGIQUE PRO : Produit scalaire (Vector3.Dot) entre le déplacement du doigt et notre axe figé.
+        // Cela extrait uniquement la quantité de mouvement "gauche/droite" le long de la molette,
+        // en ignorant totalement si le joueur avance, recule ou lève le doigt.
+        float localDeltaX = Vector3.Dot(worldDelta, _interactionAxis);
 
-        // AJUSTEMENT 1 : Indépendance du framerate (basé sur ~90 FPS de référence pour garder ta sensibilité)
+        // Indépendance du framerate (basé sur ~90 FPS de référence pour garder ta sensibilité d'origine)
         float frameIndependentDelta = localDeltaX * (Time.deltaTime * 90f);
 
         // Rotation
@@ -87,7 +98,7 @@ public class WheelHandler : MonoBehaviour
 
     private void SnapToValue()
     {
-        // AJUSTEMENT 2 : Sécurité pour s'assurer que _lastValue ne vaut pas -1 au premier clic
+        // Sécurité pour s'assurer que _lastValue ne vaut pas -1 au premier clic
         if (_lastValue == -1) _lastValue = _currentValue;
 
         float snappedAngle = (10 - _lastValue) % 10 * 36f;
