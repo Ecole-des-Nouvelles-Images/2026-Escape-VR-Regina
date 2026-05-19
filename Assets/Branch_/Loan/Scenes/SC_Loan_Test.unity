@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LockController
   Data: {fileID: 11400000, guid: 7e4cbb37e112db7488c0aa91121658b8, type: 2}
+  PuzzleID: 0
   _values: 
   _codes: 0300000001000000
   _inspectPoint: {fileID: 0}
@@ -2770,6 +2771,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1979676846774240649, guid: 7213705e4fae87c4b88ef3fb2cea1b3a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979676846774240649, guid: 7213705e4fae87c4b88ef3fb2cea1b3a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979676846774240649, guid: 7213705e4fae87c4b88ef3fb2cea1b3a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979676846774240649, guid: 7213705e4fae87c4b88ef3fb2cea1b3a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2809,13 +2822,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1979676846774240649, guid: 7213705e4fae87c4b88ef3fb2cea1b3a, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2138969549402115964, guid: 7213705e4fae87c4b88ef3fb2cea1b3a, type: 3}
       propertyPath: m_Name
       value: Simple_Obj
       objectReference: {fileID: 0}
     - target: {fileID: 2138969549402115964, guid: 7213705e4fae87c4b88ef3fb2cea1b3a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

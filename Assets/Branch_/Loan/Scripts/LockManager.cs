@@ -73,9 +73,10 @@ public class LockManager : Puzzle
 
     private void CheckCode()
     {
-        if (PuzzleSequenceManager.Instance.CurrentPuzzle != this)
+        Debug.Log(PuzzleSequenceManager.Instance.CurrentPuzzle);
+        if (PuzzleSequenceManager.Instance.CurrentPuzzle.PuzzleID != PuzzleID)
             return;
-
+        
         for (int i = 0; i < _codes.Count; i++)
         {
             if (_values[i] != _codes[i])

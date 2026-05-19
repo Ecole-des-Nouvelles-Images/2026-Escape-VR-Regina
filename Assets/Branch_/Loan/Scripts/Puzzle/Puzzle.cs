@@ -5,6 +5,7 @@ public class Puzzle : MonoBehaviour
 {
     [Header("===== Data =====")]
     public PuzzleData Data;
+    public int PuzzleID;
     public bool IsSolved {get; private set;}
 
     public virtual void Solve()

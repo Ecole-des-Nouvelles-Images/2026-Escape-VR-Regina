@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class WheelHandler : MonoBehaviour
@@ -12,24 +13,23 @@ public class WheelHandler : MonoBehaviour
 
     private float _currentAngle;
     private int _lastValue = -1;
+    private int _currentValue;
     private Vector3 _lastFingerPosition;
     private Transform _activeFinger;
     private bool _isInteracting;
     private bool _isGrabbing;
 
     #region Trigger
-//===================================================================================================================================================================================================
     private void OnTriggerEnter(Collider other)
     {
         if (!_isGrabbing)
             return;
-        // On vérifie si c'est bien le bout du doigt qui touche
+
         if (other.CompareTag("FingerTip"))
         {
             _activeFinger = other.transform;
             _lastFingerPosition = _activeFinger.position;
             _isInteracting = true;
-            Debug.Log($"Wheel {_index} : Contact avec le doigt !");
         }
     }
 
@@ -41,11 +41,9 @@ public class WheelHandler : MonoBehaviour
         {
             _isInteracting = false;
             _activeFinger = null;
-            SnapToValue();
-            Debug.Log($"Wheel {_index} : Fin de contact.");
+            SnapToValue(); // Envoie le code uniquement ici au moment du lâcher
         }
     }
-//===================================================================================================================================================================================================
     #endregion
 
     private void Start()
@@ -64,44 +62,42 @@ public class WheelHandler : MonoBehaviour
     {
         if (!_isInteracting || _activeFinger == null) return;
 
-        // Calcul du déplacement latéral
         Vector3 currentFingerPos = _activeFinger.position;
         Vector3 worldDelta = currentFingerPos - _lastFingerPosition;
         
-        // On projette sur l'axe X local de la molette
         float localDeltaX = transform.InverseTransformDirection(worldDelta).x;
 
+        // AJUSTEMENT 1 : Indépendance du framerate (basé sur ~90 FPS de référence pour garder ta sensibilité)
+        float frameIndependentDelta = localDeltaX * (Time.deltaTime * 90f);
+
         // Rotation
-        _currentAngle += localDeltaX * _sensitivity * 360f;
+        _currentAngle += frameIndependentDelta * _sensitivity * 360f;
         _visual.localRotation = Quaternion.Euler(0f, -_currentAngle, 0f);
 
-        // Calcul de la valeur
-        int currentValue = Mathf.RoundToInt(Mathf.Repeat(_currentAngle, 360f) / 36f) % 10;
-        
-        if (currentValue != _lastValue)
-        { 
-            _lastValue = currentValue;
-            
-           EventBus.OnResendCode?.Invoke(currentValue, _index);
-        }
+        // Calcul de la valeur en continu (0 à 9)
+        _currentValue = (10 - (Mathf.RoundToInt(Mathf.Repeat(_currentAngle, 360f) / 36f) % 10)) % 10;
 
+        if (_currentValue != _lastValue)
+        { 
+            _lastValue = _currentValue;
+        }
+        
         _lastFingerPosition = currentFingerPos;
     }
 
     private void SnapToValue()
     {
-        float snappedAngle = _lastValue * 36f;
+        // AJUSTEMENT 2 : Sécurité pour s'assurer que _lastValue ne vaut pas -1 au premier clic
+        if (_lastValue == -1) _lastValue = _currentValue;
+
+        float snappedAngle = (10 - _lastValue) % 10 * 36f;
         _currentAngle = snappedAngle;
-        _visual.localRotation = Quaternion.Euler(0f, snappedAngle, 0f);
+        _visual.localRotation = Quaternion.Euler(0f, -snappedAngle, 0f);
+        
+        // C'est bien ici et seulement ici que le code est envoyé
+        EventBus.OnResendCode?.Invoke(_lastValue, _index);
     }
 
-    private void IsGrabLock()
-    {
-        _isGrabbing = true;
-    }
-
-    private void IsReleaseGrab()
-    {
-        _isGrabbing = false;
-    }
+    private void IsGrabLock() => _isGrabbing = true;
+    private void IsReleaseGrab() => _isGrabbing = false;
 }

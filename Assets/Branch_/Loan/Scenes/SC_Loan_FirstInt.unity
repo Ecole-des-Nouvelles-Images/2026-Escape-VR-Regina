@@ -784,7 +784,7 @@ PrefabInstance:
     - target: {fileID: 2379174316581805489, guid: 929853876f669d94d9741cad2ffe4a72, type: 3}
       propertyPath: '_puzzles.Array.data[1]'
       value: 
-      objectReference: {fileID: 1905837334}
+      objectReference: {fileID: 5775840831092576586}
     - target: {fileID: 7811223231722126317, guid: 929853876f669d94d9741cad2ffe4a72, type: 3}
       propertyPath: m_Name
       value: Manager
@@ -1351,6 +1351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LockManager
   Data: {fileID: 11400000, guid: 7e4cbb37e112db7488c0aa91121658b8, type: 2}
+  PuzzleID: 0
   _values: 
   _codes: 08000000020000000400000009000000
   _inspectPoint: {fileID: 0}
@@ -2045,7 +2046,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalRotation.x
@@ -2053,7 +2054,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalRotation.z
@@ -2065,7 +2066,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -3435,17 +3436,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b83b87be172c5b048b0e145e14788999, type: 3}
---- !u!114 &1905837334 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5101929711154130232, guid: b83b87be172c5b048b0e145e14788999, type: 3}
-  m_PrefabInstance: {fileID: 1905837333}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e988d8f0c71c9c14b92bb5de7c9ef155, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LockManager
 --- !u!1001 &1917582655
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15163,6 +15153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DrawerHandler
   Data: {fileID: 11400000, guid: 3ad7ea11fdba4034c885c2c1006e2e70, type: 2}
+  PuzzleID: 0
   _drawer01: {fileID: 731286065}
   _drawer02: {fileID: 399734765}
   _grabDrawer: {fileID: 7439968260917067352}
@@ -18639,7 +18630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8489315a108e7724688b5b4dbeea6550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelHandler
-  _index: 0
+  _index: 1
   _visual: {fileID: 7589981494590392790}
   _sensitivity: 3
 --- !u!4 &5424020714941772107
@@ -19633,6 +19624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LockManager
   Data: {fileID: 11400000, guid: 7e4cbb37e112db7488c0aa91121658b8, type: 2}
+  PuzzleID: 1
   _values: 
   _codes: 07000000020000000400000009000000
   _inspectPoint: {fileID: 0}
@@ -19754,7 +19746,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8489315a108e7724688b5b4dbeea6550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelHandler
-  _index: 0
+  _index: 3
   _visual: {fileID: 8280125202007327719}
   _sensitivity: 3
 --- !u!1 &5818935000504399296
@@ -21245,7 +21237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8489315a108e7724688b5b4dbeea6550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WheelHandler
-  _index: 0
+  _index: 2
   _visual: {fileID: 3112501016656989107}
   _sensitivity: 3
 --- !u!4 &6321265789847876255
