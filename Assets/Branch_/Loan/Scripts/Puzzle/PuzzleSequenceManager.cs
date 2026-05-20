@@ -62,6 +62,7 @@ public class PuzzleSequenceManager : MonoBehaviour
         if (_currentPuzzleIndex >= _puzzles.Count)
         {
             Debug.Log("All puzzles completed!");
+            EventBus.OnCloseEyes?.Invoke();
             return;
         }
 

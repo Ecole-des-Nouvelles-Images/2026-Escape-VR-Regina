@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactors.XRDirectInteractor
   m_InteractionManager: {fileID: 0}
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 9
   m_Handedness: 1
   m_AttachTransform: {fileID: 0}
   m_KeepSelectedTargetValid: 1
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_ImproveAccuracyWithSphereCollider: 1
   m_PhysicsLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   m_PhysicsTriggerInteraction: 1
 --- !u!135 &5884004053019614076
 SphereCollider:
@@ -228,7 +228,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1000175223377146655}
+  - {fileID: 7478628169947897920}
   m_Father: {fileID: 1420627713461847957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &3147423393106161573
@@ -482,7 +484,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.05
+  m_Radius: 0.02
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3388010621703704187
 Rigidbody:
@@ -756,11 +758,11 @@ RectTransform:
   - {fileID: 3254236584247415846}
   - {fileID: 5367624709603168360}
   - {fileID: 1298116197329253702}
-  m_Father: {fileID: 7540578162621230075}
+  m_Father: {fileID: 8819943966943791160}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.1176}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2800, y: 1600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &5253388909231585854
@@ -1122,7 +1124,6 @@ Transform:
   m_Children:
   - {fileID: 1420627713461847957}
   - {fileID: 4308154827413487200}
-  - {fileID: 1000175223377146655}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8478053309440016055
@@ -1278,7 +1279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactors.XRDirectInteractor
   m_InteractionManager: {fileID: 0}
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 9
   m_Handedness: 2
   m_AttachTransform: {fileID: 0}
   m_KeepSelectedTargetValid: 1
@@ -1401,7 +1402,7 @@ MonoBehaviour:
   m_ImproveAccuracyWithSphereCollider: 1
   m_PhysicsLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 129
   m_PhysicsTriggerInteraction: 1
 --- !u!135 &5128401928153327724
 SphereCollider:
@@ -1537,9 +1538,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1401515633905995084}
+  - component: {fileID: 1833344841045549439}
+  - component: {fileID: 3101767869565598324}
   m_Layer: 0
   m_Name: Poke Point
-  m_TagString: Untagged
+  m_TagString: FingerTip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1560,6 +1563,54 @@ Transform:
   - {fileID: 5436959799819473658}
   m_Father: {fileID: 7986880804731932189}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!54 &1833344841045549439
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5475849649248276298}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 136
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!135 &3101767869565598324
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5475849649248276298}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 136
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.2
+  m_Center: {x: 0, y: 0, z: -0.22}
 --- !u!1 &7081320766058300197
 GameObject:
   m_ObjectHideFlags: 0
@@ -1644,9 +1695,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6399510133581878182}
+  - component: {fileID: 1910881095851426125}
+  - component: {fileID: 634294801576055413}
   m_Layer: 0
   m_Name: Poke Point
-  m_TagString: Untagged
+  m_TagString: FingerTip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1667,6 +1720,54 @@ Transform:
   - {fileID: 4930556663665013935}
   m_Father: {fileID: 1866924489403487968}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!135 &1910881095851426125
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7630088443825957319}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 136
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.2
+  m_Center: {x: 0, y: -0.1, z: -0.12}
+--- !u!54 &634294801576055413
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7630088443825957319}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 136
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &7812299158671077592
 GameObject:
   m_ObjectHideFlags: 0
@@ -1883,6 +1984,37 @@ MonoBehaviour:
   - groupMember: {fileID: 6456305027269270836}
     overrideGroupMembers:
     - {fileID: 6176655491701591245}
+--- !u!1 &8238810044326263866
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7478628169947897920}
+  m_Layer: 2
+  m_Name: InspectPoints
+  m_TagString: InspectPoints
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7478628169947897920
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8238810044326263866}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8819943966943791160}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4469856013971052059
 PrefabInstance:
   m_ObjectHideFlags: 0
