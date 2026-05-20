@@ -33,6 +33,7 @@ public class LockManager : Puzzle
 
     private bool _isInspecting;
     private bool _isUnlocked;
+    private ChestHandler _chestHandler; 
 
     private void Start()
     {
@@ -59,6 +60,7 @@ public class LockManager : Puzzle
         {
             _startPosition = transform.localPosition;
             _startRotation = transform.localRotation;
+            _chestHandler = GetComponentInParent<ChestHandler>(); 
             _startParent = transform.parent;
         }
         _inspectPoint = GameObject.FindWithTag("InspectPoints").GetComponent<Transform>();
@@ -132,8 +134,11 @@ public class LockManager : Puzzle
         yield return gameObject.transform.DOScale(Vector3.zero, 0.25f).SetEase(Ease.InBack).WaitForCompletion();
 
         // Fin de l'action
-        EventBus.OnOpenChest?.Invoke();
-
+        if (_useStartPos)
+        {
+            _chestHandler.OpenChest();
+        }
+        
         Destroy(gameObject);
     }
 //===================================================================================================================================================================================================

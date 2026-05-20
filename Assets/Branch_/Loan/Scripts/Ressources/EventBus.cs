@@ -17,11 +17,11 @@ public static class EventBus
     
     public static Action OnPuzzleChanged;
     public static Action<Puzzle> OnPuzzleSolved;
-    public static Action OnHintGived;
+    // public static Action OnHintGived;
     public static Action OnGrabLock;
     public static Action OnReleaseLock;
     public static Action<int,int> OnResendCode;
-    public static Action OnOpenChest;
+    // public static Action OnOpenChest;
     
     // =========================
     // PLAYER EVENTS

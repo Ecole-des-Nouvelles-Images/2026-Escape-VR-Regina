@@ -7,18 +7,9 @@ public class ChestHandler : MonoBehaviour
 {
     [SerializeField ] private GameObject _topChest;
     [SerializeField] private float _duration;
-    private void Start()
-    {
-        EventBus.OnOpenChest += OpenChest;
-    }
-
-    private void OnDisable()
-    {
-        EventBus.OnOpenChest-=OpenChest ;
-    }
     
     [ContextMenu("Open Chest")]
-    private void OpenChest()
+    public void OpenChest()
     {
         StartCoroutine(OpenChestCoroutine());
     }

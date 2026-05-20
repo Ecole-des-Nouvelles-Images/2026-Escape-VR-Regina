@@ -4,13 +4,15 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class HintHandler : MonoBehaviour
 {
+    private HintController _hintController;
     private void Start()
     {
+        _hintController = GetComponentInParent<HintController>();
         GetComponent<XRSimpleInteractable>().selectExited.AddListener(x => ToggleGiveHint());
     }
 
     private void ToggleGiveHint()
     {
-        EventBus.OnHintGived?.Invoke();
+        _hintController.GivenHint();
     }
 }
