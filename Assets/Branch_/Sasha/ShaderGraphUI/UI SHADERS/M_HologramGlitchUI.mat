@@ -52,14 +52,16 @@ Material:
     m_Floats:
     - _ColorMask: 15
     - _DistortScrollSpeed: 0.02
-    - _DistortStrenght: 0.5
+    - _DistortStrenght: 0.2
     - _DistortionScale: 0.05
     - _GlitchAmount: 0.5
-    - _GlitchStrength: 0.2
+    - _GlitchScale: 15
+    - _GlitchStrength: 0.05
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ScanLineAmount: 40
-    - _ScreenBrightness: 0.5
+    - _ScanLineAmount: 700
+    - _ScanlineScale: 35
+    - _ScreenBrightness: 0.2
     - _ScreenLag: 2
     - _ScrollSpeed: 0.1
     - _Stencil: 0
@@ -72,7 +74,7 @@ Material:
     - _XRMotionVectorsPass: 1
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.364706, g: 1, b: 0.980747, a: 1}
+    - _Color: {r: 0.729412, g: 2, b: 1.961494, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5237416254264387890
