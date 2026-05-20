@@ -32,18 +32,6 @@ public class CameraHandler : MonoBehaviour
         _upStartPos = _upPanel.anchoredPosition;
         _downStartPos = _downPanel.anchoredPosition;
     }
-
-    private void OnEnable()
-    {
-        EventBus.OnCloseEyes += Blink;
-        EventBus.OnOpenEyes += OpenEyes;
-    }
-
-    private void OnDisable()
-    {
-        EventBus.OnCloseEyes -= Blink;
-        EventBus.OnOpenEyes -= OpenEyes;
-    }
     
     // CALL THIS FROM EVENT (scene change)
     public void PlaySceneBlink()
@@ -54,7 +42,7 @@ public class CameraHandler : MonoBehaviour
     #region BLINK CORE
 //=========================================================================================================================================================================================================
     [ContextMenu("Blink")]
-    private void Blink()
+    public void Blink()
     {
         float duration = Random.Range(_blinkDurationRange.x, _blinkDurationRange.y);
 

@@ -13,7 +13,7 @@ public class LockManager : Puzzle
     [SerializeField] private List<int> _codes = new();
 
     [Header("===== Inspect Settings =====")]
-
+    [SerializeField] private List<WheelHandler > _wheelHandlers = new();
     [SerializeField] private Transform _inspectPoint;
     [SerializeField] private float _inspectScaleMultiplier = 2f;
     [SerializeField] private bool _useStartPos;
@@ -163,7 +163,10 @@ public class LockManager : Puzzle
         _grabInteractable.trackRotation = false;
         _inspectPoint.localScale = Vector3.one * _inspectScaleMultiplier;
 
-        EventBus.OnGrabLock?.Invoke();
+        foreach (var wheel in _wheelHandlers)
+        {
+            wheel.IsGrabLock();
+        }
     }
 
     private void OnRelease(SelectExitEventArgs args)
@@ -201,7 +204,10 @@ public class LockManager : Puzzle
         _grabInteractable.trackRotation = true;
     
         _inspectPoint.localScale = Vector3.one;
-        EventBus.OnReleaseLock?.Invoke();
+        foreach (var wheel in _wheelHandlers)
+        {
+            wheel.IsReleaseGrab();
+        }
     }
 //===================================================================================================================================================================================================
     #endregion

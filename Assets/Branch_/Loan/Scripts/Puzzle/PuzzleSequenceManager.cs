@@ -11,7 +11,7 @@ public class PuzzleSequenceManager : MonoBehaviour
 
     [SerializeField] private int _currentPuzzleIndex = 0;
     [SerializeField] private int _currentHintIndex = 0;
-    
+    private CameraHandler _cameraHandler;
     public Puzzle CurrentPuzzle => _puzzles[_currentPuzzleIndex];
     
     private void Awake()
@@ -24,6 +24,8 @@ public class PuzzleSequenceManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        _cameraHandler = FindAnyObjectByType<CameraHandler>();
     }
 
     private void Start()
@@ -62,7 +64,7 @@ public class PuzzleSequenceManager : MonoBehaviour
         if (_currentPuzzleIndex >= _puzzles.Count)
         {
             Debug.Log("All puzzles completed!");
-            EventBus.OnCloseEyes?.Invoke();
+            _cameraHandler.Blink();
             return;
         }
 

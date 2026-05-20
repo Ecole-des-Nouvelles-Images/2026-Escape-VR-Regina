@@ -56,15 +56,7 @@ public class WheelHandler : MonoBehaviour
 
     private void Start()
     {
-        EventBus.OnGrabLock += IsGrabLock;
-        EventBus.OnReleaseLock += IsReleaseGrab;
         _visual.DOKill();
-    }
-
-    private void OnDisable()
-    {
-        EventBus.OnGrabLock -= IsGrabLock;
-        EventBus.OnReleaseLock -= IsReleaseGrab;
     }
 
     private void Update()
@@ -130,8 +122,8 @@ public class WheelHandler : MonoBehaviour
         EventBus.OnResendCode?.Invoke(_lastValue, _index);
     }
 
-    private void IsGrabLock() => _isGrabbing = true;
-    private void IsReleaseGrab() 
+    public void IsGrabLock() => _isGrabbing = true;
+    public void IsReleaseGrab() 
     {
         _isGrabbing = false;
         if (_isInteracting)

@@ -119,6 +119,28 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &306599320 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1677894178079039188, guid: c8bb134c0916584439e11afefcff2889, type: 3}
+  m_PrefabInstance: {fileID: 836031327598080765}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8489315a108e7724688b5b4dbeea6550, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WheelHandler
+--- !u!114 &443390747 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8078289396863906164, guid: c8bb134c0916584439e11afefcff2889, type: 3}
+  m_PrefabInstance: {fileID: 836031327598080765}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8489315a108e7724688b5b4dbeea6550, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WheelHandler
 --- !u!1001 &499518401
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -174,11 +196,11 @@ PrefabInstance:
     - target: {fileID: 2379174316581805489, guid: 929853876f669d94d9741cad2ffe4a72, type: 3}
       propertyPath: '_puzzles.Array.data[0]'
       value: 
-      objectReference: {fileID: 5807466682665687727}
+      objectReference: {fileID: 4303234868202445359}
     - target: {fileID: 2379174316581805489, guid: 929853876f669d94d9741cad2ffe4a72, type: 3}
       propertyPath: '_puzzles.Array.data[1]'
       value: 
-      objectReference: {fileID: 4303234868202445359}
+      objectReference: {fileID: 5807466682665687727}
     - target: {fileID: 7811223231722126317, guid: 929853876f669d94d9741cad2ffe4a72, type: 3}
       propertyPath: m_Name
       value: Manager
@@ -249,6 +271,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b02e3f3fcfa9c9741903771099649a7e, type: 3}
+--- !u!114 &909887235 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5973793169503164138, guid: c8bb134c0916584439e11afefcff2889, type: 3}
+  m_PrefabInstance: {fileID: 836031327598080765}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8489315a108e7724688b5b4dbeea6550, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WheelHandler
+--- !u!114 &1120277660 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2939089942356404200, guid: c8bb134c0916584439e11afefcff2889, type: 3}
+  m_PrefabInstance: {fileID: 836031327598080765}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8489315a108e7724688b5b4dbeea6550, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WheelHandler
 --- !u!1 &1234229152
 GameObject:
   m_ObjectHideFlags: 0
@@ -2596,6 +2640,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6089751794945206689, guid: c8bb134c0916584439e11afefcff2889, type: 3}
+      propertyPath: _values.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6089751794945206689, guid: c8bb134c0916584439e11afefcff2889, type: 3}
       propertyPath: '_codes.Array.data[0]'
       value: 0
       objectReference: {fileID: 0}
@@ -2611,6 +2659,26 @@ PrefabInstance:
       propertyPath: '_codes.Array.data[3]'
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6089751794945206689, guid: c8bb134c0916584439e11afefcff2889, type: 3}
+      propertyPath: _wheelHandlers.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6089751794945206689, guid: c8bb134c0916584439e11afefcff2889, type: 3}
+      propertyPath: '_wheelHandlers.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1120277660}
+    - target: {fileID: 6089751794945206689, guid: c8bb134c0916584439e11afefcff2889, type: 3}
+      propertyPath: '_wheelHandlers.Array.data[1]'
+      value: 
+      objectReference: {fileID: 306599320}
+    - target: {fileID: 6089751794945206689, guid: c8bb134c0916584439e11afefcff2889, type: 3}
+      propertyPath: '_wheelHandlers.Array.data[2]'
+      value: 
+      objectReference: {fileID: 909887235}
+    - target: {fileID: 6089751794945206689, guid: c8bb134c0916584439e11afefcff2889, type: 3}
+      propertyPath: '_wheelHandlers.Array.data[3]'
+      value: 
+      objectReference: {fileID: 443390747}
     - target: {fileID: 6335331198733143865, guid: c8bb134c0916584439e11afefcff2889, type: 3}
       propertyPath: _moveCurve.m_Curve.Array.data[0].time
       value: -0.0022236463
