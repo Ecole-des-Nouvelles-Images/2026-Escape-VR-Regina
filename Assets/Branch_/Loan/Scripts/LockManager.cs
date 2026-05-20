@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
@@ -15,18 +17,22 @@ public class LockManager : Puzzle
     [SerializeField] private Transform _inspectPoint;
     [SerializeField] private float _inspectScaleMultiplier = 2f;
     [SerializeField] private bool _useStartPos;
+    
+    [Header("===== Solve Settings =====")]
+    [SerializeField] private GameObject _upLock;
+    [SerializeField] private float _duration = 0.5f;
 
     private XRGrabInteractable _grabInteractable;
 
     private Rigidbody _rb;
-
+    [Header("===== Debugs Settings =====")]
     [SerializeField]private Vector3 _startPosition;
     [SerializeField]private Quaternion _startRotation;
     [SerializeField]private Vector3 _startScale;
     [SerializeField]private Transform _startParent;
 
     private bool _isInspecting;
-    Transform _thisTransform;
+    private bool _isUnlocked;
 
     private void Start()
     {
@@ -43,8 +49,7 @@ public class LockManager : Puzzle
 
         _grabInteractable = GetComponent<XRGrabInteractable>();
         _rb = GetComponent<Rigidbody>();
-
-        _thisTransform = GetComponent<Transform>();
+        
         _grabInteractable.selectEntered.AddListener(OnGrab);
         _grabInteractable.selectExited.AddListener(OnRelease);
 
@@ -89,10 +94,47 @@ public class LockManager : Puzzle
     public override void Solve()
     {
         base.Solve();
+        _isUnlocked = true;
+        StartCoroutine(AnimateUpLock());
+    }
+    
+    private IEnumerator AnimateUpLock()
+    {
+        if (_upLock == null) yield break;
+
+        // 1. On crée une Séquence DOTween
+        Sequence lockSequence = DOTween.Sequence();
+
+        // 2. On calcule nos cibles locales
+        Vector3 targetPosition = _upLock.transform.localPosition + new Vector3(0, 0.02f, 0);
+        // Avec DOTween, on passe directement les angles en Vector3 pour la rotation, c'est plus simple !
+        Vector3 targetRotation = _upLock.transform.localEulerAngles + new Vector3(0, 50f, 0);
+
+        // 3. On ajoute toutes les animations en MÊME TEMPS dans la séquence (via .Join)
+        // .SetEase(Ease.InOutQuad) ajoute automatiquement le lissage parfait pour la VR
+        lockSequence.Join(_upLock.transform.DOLocalMove(targetPosition, _duration).SetEase(Ease.InOutQuad));
+        lockSequence.Join(_upLock.transform.DOLocalRotate(targetRotation, _duration).SetEase(Ease.InOutQuad));
         
+        // On ajoute le petit tremblement mécanique (shake) pendant la même durée
+        lockSequence.Join(gameObject.transform.DOShakeRotation(_duration, new Vector3(5f, 0f, 5f), 10));
+        gameObject.transform.DOPunchPosition(new Vector3(0, 0.01f, 0), 0.3f, 5, 1f);
+
+        // 4. On attend que la séquence entière se termine
+        // ( lockSequence.WaitForCompletion() est un utilitaire DOTween magique pour les coroutines )
+        yield return lockSequence.WaitForCompletion();
+
+
+        // ==========================================
+        // ANIMATION DE FIN : DISPARITION
+        // ==========================================
+        
+        // Le cadenas rétrécit proprement avant de mourir
+        yield return gameObject.transform.DOScale(Vector3.zero, 0.25f).SetEase(Ease.InBack).WaitForCompletion();
+
+        // Fin de l'action
         EventBus.OnOpenChest?.Invoke();
 
-        Debug.Log("Lock Opened");
+        Destroy(gameObject);
     }
 //===================================================================================================================================================================================================
     #endregion
@@ -121,7 +163,7 @@ public class LockManager : Puzzle
 
     private void OnRelease(SelectExitEventArgs args)
     {
-        if (!_isInspecting)
+        if (!_isInspecting || _isUnlocked)
             return;
 
         _isInspecting = false;

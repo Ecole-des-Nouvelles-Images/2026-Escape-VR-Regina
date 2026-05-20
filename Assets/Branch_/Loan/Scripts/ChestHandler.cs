@@ -1,24 +1,20 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 public class ChestHandler : MonoBehaviour
 {
     [SerializeField ] private GameObject _topChest;
     [SerializeField] private float _duration;
-    [SerializeField] private Transform _posTransform;
-    [SerializeField] private AnimationCurve _moveCurve = AnimationCurve.Linear(0, 0, 1, 1);
     private void Start()
     {
         EventBus.OnOpenChest += OpenChest;
-        EventBus.OnChestMove += MoveChest;
-        _posTransform = GameObject.FindWithTag("ChestPoint").GetComponent<Transform>();
     }
 
     private void OnDisable()
     {
         EventBus.OnOpenChest-=OpenChest ;
-        EventBus.OnChestMove -= MoveChest;
     }
     
     [ContextMenu("Open Chest")]
@@ -26,71 +22,42 @@ public class ChestHandler : MonoBehaviour
     {
         StartCoroutine(OpenChestCoroutine());
     }
-
-    private void MoveChest()
-    {
-        StartCoroutine(MoveChestCoroutine());
-    }
-
-    private IEnumerator MoveChestCoroutine()
-    {
-        Vector3 startPosition = transform.position;
-        Quaternion startRotation = transform.rotation; // Optionnel : si tu veux aussi aligner la rotation
-
-        float elapsedTime = 0f;
-
-        while (elapsedTime < _duration)
-        {
-            elapsedTime += Time.deltaTime;
-        
-            
-            float normalizedTime = elapsedTime / _duration;
-        
-            
-            float curveValue = _moveCurve.Evaluate(normalizedTime);
-            
-            transform.position = Vector3.Lerp(startPosition, _posTransform.position, curveValue);
-        
-            // Optionnel : Rotation fluide (décommente si tu en as besoin)
-            transform.rotation = Quaternion.Slerp(startRotation, _posTransform.rotation, curveValue);
-
-            // Attend le prochain frame avant de continuer la boucle
-            yield return null;
-        }
-
-        // Sécurité : On force la position exacte à la fin pour éviter les micro-écarts de virgule flottante
-        transform.position = _posTransform.position;
-        transform.rotation = _posTransform.rotation;
-    }
     
-    private IEnumerator OpenChestCoroutine()
+   private IEnumerator OpenChestCoroutine()
     {
-        float startZ = _topChest.transform.localEulerAngles.z;
-        float targetZ = -140f;
+        if (_topChest == null) yield break;
 
-        _duration = 1.5f;
-        float time = 0f;
+        // On crée notre conteneur d'animations
+        Sequence openSequence = DOTween.Sequence();
 
-        while (time < _duration)
-        {
-            time += Time.deltaTime;
+        // Target de rotation pour le couvercle (sur l'axe Z)
+        Vector3 targetRotation = new Vector3(_topChest.transform.localEulerAngles.x, _topChest.transform.localEulerAngles.y, -140f);
 
-            float t = time / _duration;
+        // ==========================================
+        // ÉTAPE 1 : ANTICIPATION (0.4 seconde)
+        // ==========================================
+        // A. Le coffre entier vibre légèrement (effet mécanique/magique)
+        Transform shakeTarget = gameObject != null ? gameObject.transform : transform;
+        openSequence.Append(shakeTarget.DOShakeRotation(0.4f, new Vector3(2f, 2f, 2f), 30));
+        
+        // B. En même temps, le coffre se gonfle de 8% sur l'axe Y (effet "pression")
+        openSequence.Join(shakeTarget.DOPunchScale(new Vector3(0f, 0.08f, 0f), 0.4f, 5, 1f));
 
-            float currentZ = Mathf.LerpAngle(startZ, targetZ, t);
+        // On attend que cette phase de tremblement soit finie
+        openSequence.AppendInterval(0.1f);
 
-            Vector3 rot = _topChest.transform.localEulerAngles;
-            rot.z = currentZ;
 
-            _topChest.transform.localEulerAngles = rot;
+        // ==========================================
+        // ÉTAPE 2 : L'OUVERTURE (1.2 seconde)
+        // ==========================================
+        // Le couvercle tourne vers -140° en Z.
+        // L'Ease "OutBack" va faire s'ouvrir le coffre un peu trop grand (ex: -145°) 
+        // puis le faire revenir se stabiliser à -140° avec un effet de rebond lourd très réaliste.
+        openSequence.Append(_topChest.transform.DOLocalRotate(targetRotation, 1.2f, RotateMode.FastBeyond360).SetEase(Ease.OutBack));
+        
 
-            yield return null;
-        }
-
-        Vector3 finalRot = _topChest.transform.localEulerAngles;
-        finalRot.z = targetZ;
-
-        _topChest.transform.localEulerAngles = finalRot;
+        // Magie DOTween : On attend que toute la séquence soit terminée avant de couper la coroutine
+        yield return openSequence.WaitForCompletion();
     }
     
 }

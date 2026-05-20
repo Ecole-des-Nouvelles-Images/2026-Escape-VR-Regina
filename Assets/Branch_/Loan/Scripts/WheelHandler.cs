@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -38,13 +39,12 @@ public class WheelHandler : MonoBehaviour
             _interactionAxis = transform.right; 
 
             _isInteracting = true;
+            _visual.DOKill();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!_isGrabbing)
-            return;
         if (other.CompareTag("FingerTip"))
         {
             _isInteracting = false;
@@ -58,6 +58,7 @@ public class WheelHandler : MonoBehaviour
     {
         EventBus.OnGrabLock += IsGrabLock;
         EventBus.OnReleaseLock += IsReleaseGrab;
+        _visual.DOKill();
     }
 
     private void OnDisable()
@@ -91,6 +92,13 @@ public class WheelHandler : MonoBehaviour
         if (_currentValue != _lastValue)
         { 
             _lastValue = _currentValue;
+            
+            // ==========================================
+            // EFFET 1 : LE CLIQUETIS (PUNCH ROTATION)
+            // ==========================================
+            // Au lieu de toucher à la POSITION (qui décalait ta roulette en Z), 
+            // on fait un punch de ROTATION sur l'axe Y. La roulette va "sauter" d'un coup sec.
+            _visual.DOPunchRotation(new Vector3(0f, 15f, 0f), 0.08f, 5, 1f);
         }
         
         _lastFingerPosition = currentFingerPos;
@@ -100,15 +108,37 @@ public class WheelHandler : MonoBehaviour
     {
         // Sécurité pour s'assurer que _lastValue ne vaut pas -1 au premier clic
         if (_lastValue == -1) _lastValue = _currentValue;
-
         float snappedAngle = (10 - _lastValue) % 10 * 36f;
         _currentAngle = snappedAngle;
-        _visual.localRotation = Quaternion.Euler(0f, -snappedAngle, 0f);
+        
+        _visual.DOKill();
+        _visual.DOLocalRotate(new Vector3(0f, -snappedAngle, 0f), 0.15f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() => 
+            {
+                // ==========================================
+                // EFFET 3 : L'ENCLENCHEMENT (PUNCH SCALE SÉCURISÉ)
+                // ==========================================
+                // On fait un punch d'échelle UNIQUEMENT sur X et Z pour simuler le "clac".
+                // Si ton pivot bouge encore, c'est que le centre (Center/Pivot) de ton modèle 3D 
+                // dans Unity n'est pas bien aligné au milieu de la roulette.
+                _visual.DOPunchScale(new Vector3(0.08f, 0f, 0.08f), 0.12f, 8, 1f);
+            });
+        // _visual.localRotation = Quaternion.Euler(0f, -snappedAngle, 0f);
         
         // C'est bien ici et seulement ici que le code est envoyé
         EventBus.OnResendCode?.Invoke(_lastValue, _index);
     }
 
     private void IsGrabLock() => _isGrabbing = true;
-    private void IsReleaseGrab() => _isGrabbing = false;
+    private void IsReleaseGrab() 
+    {
+        _isGrabbing = false;
+        if (_isInteracting)
+        {
+            _isInteracting = false;
+            _activeFinger = null;
+            SnapToValue();
+        }
+    }
 }
