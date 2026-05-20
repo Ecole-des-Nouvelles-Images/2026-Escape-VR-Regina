@@ -27,9 +27,6 @@ public class RotaryDialPush : MonoBehaviour
     {
         _interactable = GetComponent<XRSimpleInteractable>();
         
-        if (!_dialToRotate)
-            _dialToRotate = transform.parent?.Find("Cylinder");
-        
         if (!_inputHandler) _inputHandler = FindFirstObjectByType<RotaryPhoneInputHandler>();
         // Set up interactable events
         _interactable.selectEntered.AddListener(OnPokeEnter);
@@ -108,7 +105,7 @@ public class RotaryDialPush : MonoBehaviour
     private void ApplyRotation()
     {
         if (_dialToRotate != null)
-            _dialToRotate.localRotation = Quaternion.Euler(0f, _currentRotation, 0f);
+            _dialToRotate.localRotation = Quaternion.Euler(0f, 0f, _currentRotation);
     }
     
     // Public methods for external use

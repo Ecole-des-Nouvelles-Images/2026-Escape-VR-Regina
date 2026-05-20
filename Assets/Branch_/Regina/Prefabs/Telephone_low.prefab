@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotaryPhoneInputHandler
   Data: {fileID: 11400000, guid: 972b7b75b387c364bb1aad0935195945, type: 2}
+  PuzzleID: 0
 --- !u!114 &2666860763410032368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,7 +241,7 @@ MonoBehaviour:
   m_PokeConfiguration:
     m_UseConstant: 1
     m_ConstantValue:
-      m_PokeDirection: 5
+      m_PokeDirection: 6
       m_InteractionDepthOffset: 0
       m_EnablePokeAngleThreshold: 1
       m_PokeAngleThreshold: 89.9
@@ -257,8 +258,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24e39f6b343fd8949add6acfd99a0ceb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotaryDialPush
-  _rotationSpeed: 40
-  _returnSpeed: 60
+  _rotationSpeed: 4
+  _returnSpeed: 6
   _maxRotation: 230
   _returnDelay: 0.4
   _dialToRotate: {fileID: 2527938855214638673}
@@ -976,7 +977,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 94
+  m_Constraints: 62
   m_CollisionDetection: 0
 --- !u!4 &8266205354578058183 stripped
 Transform:

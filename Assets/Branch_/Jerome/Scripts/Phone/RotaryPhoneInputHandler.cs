@@ -13,6 +13,11 @@ public class RotaryPhoneInputHandler : Puzzle
         if (other.CompareTag("Number")) _numberStack.Push(Convert.ToChar(other.gameObject.name));
     }
 
+    private void Start()
+    {
+        _numberStack.Push('0'); // Edge Case : Player releases dial immediately
+    }
+
     // No-OP for now, but it would compare the number to any we have listed as correct otherwise empty the number
     private void CompareNumber(List<char> phoneNumber)
     {
@@ -42,6 +47,7 @@ public class RotaryPhoneInputHandler : Puzzle
         if (_phoneNumber.Count == 7) CompareNumber(_phoneNumber);
 
         _numberStack.Clear();
+        _numberStack.Push('0'); // Edge Case : Player releases dial immediately
         
     }
     public void InputNumber()
