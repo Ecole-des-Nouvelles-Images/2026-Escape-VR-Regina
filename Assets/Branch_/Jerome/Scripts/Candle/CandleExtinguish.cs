@@ -4,6 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(Renderer))]
 public class CandleExtinguish : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem _flame;
+    [SerializeField] private ParticleSystem _extinguish;
+    
     private bool _isExtinguished = false;
     private Collider _candleCollider;
     private Renderer _candleRenderer;
@@ -50,6 +53,16 @@ public class CandleExtinguish : MonoBehaviour
         
         // Turn off the collider
         if (_candleCollider) _candleCollider.enabled = false;
+        
+        // Turn off the continuous flame VFX
+        if (_flame) _flame.Stop();
+    
+        // Play the one-shot extinguish VFX
+        if (_extinguish)
+        {
+            _extinguish.Play();
+            Destroy(_extinguish.gameObject, _extinguish.main.duration);
+        }
         
         // Notify the manager that this candle has been extinguished
         if (_candleManager) _candleManager.CandleExtinguished(this);

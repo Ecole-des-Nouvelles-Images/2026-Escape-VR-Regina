@@ -23,14 +23,12 @@ public class HintController : MonoBehaviour
    private void Start()
    {
       EventBus.OnPuzzleChanged += PuzzleChanged;
-      EventBus.OnHintGived += GivenHint;
-      _currentTimeToNextHint = _timeToPuzzleChange;
+      PuzzleChanged();
    }
 
    private void OnDisable()
    {
       EventBus.OnPuzzleChanged -= PuzzleChanged;
-      EventBus.OnHintGived -= GivenHint;
    }
 
    private void PuzzleChanged()
@@ -40,7 +38,7 @@ public class HintController : MonoBehaviour
       Hide();
    }
 
-   private void GivenHint()
+   public void GivenHint()
    {
       _currentTime = 0;
       _currentTimeToNextHint = _timeToNextHintGive;
