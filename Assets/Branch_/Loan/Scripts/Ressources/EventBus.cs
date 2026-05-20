@@ -20,7 +20,9 @@ public static class EventBus
     public static Action<int,int> OnResendCode;
     
     // =========================
-    // PLAYER EVENTS
+    // Player EVENTS
     // =========================
-    
+
+    public static Action OnCloseEyes;
+    public static Action OnOpenEyes;
 }

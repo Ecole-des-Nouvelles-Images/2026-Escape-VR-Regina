@@ -31,6 +31,14 @@ public class CameraHandler : MonoBehaviour
     {
         _upStartPos = _upPanel.anchoredPosition;
         _downStartPos = _downPanel.anchoredPosition;
+        EventBus.OnCloseEyes += Blink;
+        EventBus.OnOpenEyes += OpenEyes;
+    }
+
+    private void OnDestroy()
+    {
+        EventBus.OnCloseEyes -= Blink;
+        EventBus.OnOpenEyes -= OpenEyes;
     }
     
     // CALL THIS FROM EVENT (scene change)
