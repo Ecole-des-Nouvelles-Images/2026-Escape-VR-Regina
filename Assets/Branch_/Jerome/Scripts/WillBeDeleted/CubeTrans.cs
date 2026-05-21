@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CubeTrans : MonoBehaviour
@@ -5,6 +6,12 @@ public class CubeTrans : MonoBehaviour
     [SerializeField] private SceneTransitionManager sceneTransitionManager;
     [Range(1,3)]
     [SerializeField] private int _act;
+
+    private void Start()
+    {
+        if (!sceneTransitionManager) 
+        sceneTransitionManager = FindFirstObjectByType<SceneTransitionManager>();
+    }
 
     private void OnTriggerExit(Collider other)
     {
