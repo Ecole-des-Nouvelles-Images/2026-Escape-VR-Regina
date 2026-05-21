@@ -222,7 +222,7 @@ MonoBehaviour:
     m_UseConstant: 1
     m_ConstantValue:
       m_PokeDirection: 6
-      m_InteractionDepthOffset: 0.045
+      m_InteractionDepthOffset: 0.011
       m_EnablePokeAngleThreshold: 1
       m_PokeAngleThreshold: 89.9
     m_Variable: {fileID: 0}
@@ -238,8 +238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24e39f6b343fd8949add6acfd99a0ceb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotaryDialPush
-  _rotationSpeed: 1
-  _returnSpeed: 2
+  _rotationSpeed: 8
+  _returnSpeed: 16
   _maxRotation: 230
   _returnDelay: 0.4
   _dialToRotate: {fileID: 2527938855214638673}
