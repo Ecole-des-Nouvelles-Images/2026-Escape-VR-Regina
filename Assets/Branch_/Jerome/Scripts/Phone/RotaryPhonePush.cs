@@ -18,7 +18,8 @@ public class RotaryDialPush : MonoBehaviour
     [SerializeField] private RotaryPhoneInputHandler _inputHandler;
     
     private XRSimpleInteractable _interactable;
-    private float _currentRotation = 0f;
+    private Quaternion _initialRotation;      // Store the dial's starting rotation
+    private float _currentRotationDelta = 0f; // How much rotation has been added (in degrees)
     private bool _isDialing = false;
     private bool _isReturning = false;
     private float _returnTimer = 0f;
@@ -27,13 +28,24 @@ public class RotaryDialPush : MonoBehaviour
     {
         _interactable = GetComponent<XRSimpleInteractable>();
         
-        if (!_dialToRotate)
-            _dialToRotate = transform.parent?.Find("Cylinder");
-        
         if (!_inputHandler) _inputHandler = FindFirstObjectByType<RotaryPhoneInputHandler>();
+        
         // Set up interactable events
         _interactable.selectEntered.AddListener(OnPokeEnter);
         _interactable.selectExited.AddListener(OnPokeExit);
+    }
+    
+    private void Start()
+    {
+        // Store the initial rotation of the dial
+        if (_dialToRotate != null)
+        {
+            _initialRotation = _dialToRotate.rotation;
+        }
+        else
+        {
+            Debug.LogError("Dial to rotate reference is missing!", this);
+        }
     }
     
     private void OnDestroy()
@@ -48,12 +60,13 @@ public class RotaryDialPush : MonoBehaviour
     {
         if (_isDialing)
         {
-            // Rotate clockwise while being poked
-            _currentRotation += _rotationSpeed * Time.deltaTime;
+            // Increase the rotation delta while being poked
+            _currentRotationDelta += _rotationSpeed * Time.deltaTime;
             
-            if (_currentRotation >= _maxRotation)
+            // Clamp to max rotation
+            if (_currentRotationDelta >= _maxRotation)
             {
-                _currentRotation = _maxRotation;
+                _currentRotationDelta = _maxRotation;
                 StopDialing();
             }
             
@@ -61,12 +74,13 @@ public class RotaryDialPush : MonoBehaviour
         }
         else if (_isReturning)
         {
-            // Rotate back to zero
-            _currentRotation -= _returnSpeed * Time.deltaTime;
+            // Decrease the rotation delta back to zero
+            _currentRotationDelta -= _returnSpeed * Time.deltaTime;
             
-            if (_currentRotation <= 0)
+            // Clamp to zero
+            if (_currentRotationDelta <= 0)
             {
-                _currentRotation = 0;
+                _currentRotationDelta = 0;
                 _isReturning = false;
             }
             
@@ -83,6 +97,7 @@ public class RotaryDialPush : MonoBehaviour
             }
         }
     }
+    
     private void OnPokeEnter(SelectEnterEventArgs args)
     {
         // Cancel any pending return
@@ -96,23 +111,50 @@ public class RotaryDialPush : MonoBehaviour
         StopDialing();
     }
     
-    public void StopDialing()
+    private void StopDialing()
     {
         if (!_isDialing) return;
         
         _isDialing = false;
         _returnTimer = _returnDelay;
-        _inputHandler.ReleaseDial();
+        
+        // Notify the input handler that dialing has stopped
+        if (_inputHandler != null)
+            _inputHandler.ReleaseDial();
     }
     
     private void ApplyRotation()
     {
-        if (_dialToRotate != null)
-            _dialToRotate.localRotation = Quaternion.Euler(0f, _currentRotation, 0f);
+        if (_dialToRotate == null) return;
+        
+        // Create the delta rotation from the current accumulated angle
+        // Negative sign to rotate clockwise (adjust sign as needed for your setup)
+        Quaternion deltaRotation = Quaternion.Euler(0f, 0f, _currentRotationDelta);
+        
+        // Combine the initial rotation with the delta rotation
+        // Using multiplication applies the delta rotation on top of the initial rotation
+        _dialToRotate.rotation = _initialRotation * deltaRotation;
     }
     
     // Public methods for external use
     public bool IsDialing() => _isDialing;
     public bool IsReturning() => _isReturning;
-    public float GetCurrentRotation() => _currentRotation;
+    public float GetCurrentRotation() => _currentRotationDelta;
+    
+    // Optional: Reset the dial to its initial position
+    public void ResetDial()
+    {
+        _currentRotationDelta = 0;
+        _isDialing = false;
+        _isReturning = false;
+        _returnTimer = 0;
+        ApplyRotation();
+    }
+    
+    // Optional: Manually set the rotation delta (for external control)
+    public void SetRotationDelta(float deltaDegrees)
+    {
+        _currentRotationDelta = Mathf.Clamp(deltaDegrees, 0f, _maxRotation);
+        ApplyRotation();
+    }
 }
