@@ -1251,6 +1251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
   _expectedPiece: {fileID: 279279857}
+  _lerpDuration: 1
 --- !u!65 &627031314
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1367,6 +1368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
   _expectedPiece: {fileID: 501464481}
+  _lerpDuration: 1
 --- !u!65 &736903198
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1483,6 +1485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
   _expectedPiece: {fileID: 521797489}
+  _lerpDuration: 1
 --- !u!65 &871054608
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1660,6 +1663,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295cd36359c49734ca32f68014a8331b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CandleExtinguish
+  _flame: {fileID: 0}
+  _extinguish: {fileID: 0}
 --- !u!1 &1113738092
 GameObject:
   m_ObjectHideFlags: 0
@@ -1785,6 +1790,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295cd36359c49734ca32f68014a8331b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CandleExtinguish
+  _flame: {fileID: 0}
+  _extinguish: {fileID: 0}
 --- !u!1 &1139544440
 GameObject:
   m_ObjectHideFlags: 0
@@ -2026,6 +2033,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295cd36359c49734ca32f68014a8331b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CandleExtinguish
+  _flame: {fileID: 0}
+  _extinguish: {fileID: 0}
 --- !u!1 &1484725603
 GameObject:
   m_ObjectHideFlags: 0
@@ -2422,6 +2431,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295cd36359c49734ca32f68014a8331b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CandleExtinguish
+  _flame: {fileID: 0}
+  _extinguish: {fileID: 0}
 --- !u!1 &1548251155
 GameObject:
   m_ObjectHideFlags: 0
@@ -2566,6 +2577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
   _expectedPiece: {fileID: 1484725603}
+  _lerpDuration: 1
 --- !u!65 &1588876068
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2805,6 +2817,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1604850902}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1696665579
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2746748258541325622, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
+      propertyPath: m_Name
+      value: Telephone_low Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 3266719760199915404, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.9534942
+      objectReference: {fileID: 0}
+    - target: {fileID: 3266719760199915404, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.711
+      objectReference: {fileID: 0}
+    - target: {fileID: 3266719760199915404, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.9646902
+      objectReference: {fileID: 0}
+    - target: {fileID: 3266719760199915404, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3266719760199915404, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3266719760199915404, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3266719760199915404, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3266719760199915404, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3266719760199915404, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3266719760199915404, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a8eee597bee95a34fadf3744203e08f6, type: 3}
 --- !u!1 &1703568385
 GameObject:
   m_ObjectHideFlags: 0
@@ -2965,6 +3034,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295cd36359c49734ca32f68014a8331b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CandleExtinguish
+  _flame: {fileID: 0}
+  _extinguish: {fileID: 0}
 --- !u!1 &1815318735
 GameObject:
   m_ObjectHideFlags: 0
@@ -3171,3 +3242,4 @@ SceneRoots:
   - {fileID: 521797495}
   - {fileID: 1604850902}
   - {fileID: 269217895}
+  - {fileID: 1696665579}
