@@ -79,7 +79,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WheelHandler
   _index: 1
   _visual: {fileID: 1987748688907881223}
-  _sensitivity: 5
+  _sensitivity: 10
+  _inspectTransform: {fileID: 0}
+  _interactionAxis: {x: 0, y: 0, z: 0}
 --- !u!65 &5875645077185393009
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -181,6 +183,8 @@ MonoBehaviour:
   _index: 2
   _visual: {fileID: 476227413425502876}
   _sensitivity: 5
+  _inspectTransform: {fileID: 0}
+  _interactionAxis: {x: 0, y: 0, z: 0}
 --- !u!65 &759224538919019743
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -550,6 +554,8 @@ MonoBehaviour:
   _index: 3
   _visual: {fileID: 4178042872462295468}
   _sensitivity: 5
+  _inspectTransform: {fileID: 0}
+  _interactionAxis: {x: 0, y: 0, z: 0}
 --- !u!65 &9032471632771353167
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1077,7 +1083,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WheelHandler
   _index: 0
   _visual: {fileID: 6551837944943349078}
-  _sensitivity: 5
+  _sensitivity: 20
+  _inspectTransform: {fileID: 0}
+  _interactionAxis: {x: 0, y: 0, z: 0}
 --- !u!65 &4708054296728105171
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1217,7 +1225,7 @@ MonoBehaviour:
   Data: {fileID: 11400000, guid: 7e4cbb37e112db7488c0aa91121658b8, type: 2}
   PuzzleID: 1
   _values: 
-  _codes: 07000000020000000400000009000000
+  _codes: 00000000000000000000000002000000
   _wheelHandlers:
   - {fileID: 6253664134452581120}
   - {fileID: 6350879016019615719}

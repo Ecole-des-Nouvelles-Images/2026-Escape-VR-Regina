@@ -19,13 +19,14 @@ public class WheelHandler : MonoBehaviour
     private Transform _activeFinger;
     private bool _isInteracting;
     private bool _isGrabbing;
+    [SerializeField]private Transform _inspectTransform;
 
     // VARIABLE PRO : On stocke l'axe de déplacement pour toute la durée de cette interaction
-    private Vector3 _interactionAxis;
+    [SerializeField] private Vector3 _interactionAxis;
 
     // SÉCURITÉ DOTWEEN : On stocke le scale de départ pour éviter les déformations en boucle
     private Vector3 _startScale;
-
+    
     #region Trigger
     private void OnTriggerEnter(Collider other)
     {
@@ -43,7 +44,7 @@ public class WheelHandler : MonoBehaviour
             
             // LOGIQUE PRO : On fige l'axe X local actuel (axe rouge) de la molette en coordonées World.
             // Comme on le stocke ici, même si la molette tourne au frame suivant, notre axe de référence reste fixe !
-            _interactionAxis = transform.right; 
+            _interactionAxis = _inspectTransform.right; 
 
             _isInteracting = true;
             
@@ -65,7 +66,7 @@ public class WheelHandler : MonoBehaviour
     {
         // On sauvegarde le vrai scale d'origine défini dans l'inspecteur
         _startScale = _visual.localScale;
-        
+        _inspectTransform = GameObject.Find("InspectPoints").transform;
         _visual.DOKill();
     }
 
@@ -74,12 +75,14 @@ public class WheelHandler : MonoBehaviour
         if (!_isInteracting || _activeFinger == null) return;
 
         Vector3 currentFingerPos = _activeFinger.position;
-        Vector3 worldDelta = currentFingerPos - _lastFingerPosition;
-        
-        // LOGIQUE PRO : Produit scalaire (Vector3.Dot) entre le déplacement du doigt et notre axe figé.
-        // Cela extrait uniquement la quantité de mouvement "gauche/droite" le long de la molette,
-        // en ignorant totalement si le joueur avance, recule ou lève le doigt.
-        float localDeltaX = Vector3.Dot(worldDelta, _interactionAxis);
+
+        // Au lieu de faire un calcul World, on traduit la position du doigt dans l'espace LOCAL de la molette
+        Vector3 localCurrentPos = transform.InverseTransformPoint(currentFingerPos);
+        Vector3 localLastPos = transform.InverseTransformPoint(_lastFingerPosition);
+
+        // Maintenant, on fait une simple soustraction sur l'axe X local. 
+        // C'est 100% fiable, peu importe l'orientation de l'objet dans l'espace !
+        float localDeltaX = localCurrentPos.x - localLastPos.x;
 
         // Indépendance du framerate (basé sur ~90 FPS de référence pour garder ta sensibilité d'origine)
         float frameIndependentDelta = localDeltaX * (Time.deltaTime * 90f);
