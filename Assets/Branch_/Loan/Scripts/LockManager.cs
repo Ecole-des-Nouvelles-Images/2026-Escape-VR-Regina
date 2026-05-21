@@ -8,7 +8,6 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 public class LockManager : Puzzle
 {
     [Header("===== Puzzle Settings =====")]
-
     [SerializeField] private List<int> _values = new();
     [SerializeField] private List<int> _codes = new();
 
@@ -23,6 +22,7 @@ public class LockManager : Puzzle
     [SerializeField] private float _duration = 0.5f;
 
     private XRGrabInteractable _grabInteractable;
+    private XRSimpleInteractable _simpleInteractable;
 
     private Rigidbody _rb;
     [Header("===== Debugs Settings =====")]
@@ -48,11 +48,16 @@ public class LockManager : Puzzle
             _values.RemoveAt(_values.Count - 1);
         }
 
-        _grabInteractable = GetComponent<XRGrabInteractable>();
+        _simpleInteractable = GetComponent<XRSimpleInteractable>();
+        // _grabInteractable = GetComponent<XRGrabInteractable>();
         _rb = GetComponent<Rigidbody>();
         
-        _grabInteractable.selectEntered.AddListener(OnGrab);
-        _grabInteractable.selectExited.AddListener(OnRelease);
+        
+        if (_simpleInteractable == null)
+            Debug.LogError("No found Simple Interactable on this GameObject.");
+        _simpleInteractable.selectEntered.AddListener(OnGrab);
+        // _grabInteractable.selectEntered.AddListener(OnGrab);
+        // _grabInteractable.selectExited.AddListener(OnRelease);
 
         _startScale = transform.localScale;
         
@@ -64,6 +69,69 @@ public class LockManager : Puzzle
             _startParent = transform.parent;
         }
         _inspectPoint = GameObject.FindWithTag("InspectPoints").GetComponent<Transform>();
+    }
+
+    public void OnGrab(ActivateEventArgs arg0)
+    {
+       Debug.Log("Grabbed");
+        if (_isInspecting || _isUnlocked)
+        {
+            _isInspecting = false;
+    
+            // 1. On remet le parent d'origine d'abord
+            transform.SetParent(_startParent);
+            transform.localScale = _startScale; // Assure-toi de l'avoir setup dans le Start() !
+    
+            if (_useStartPos)
+            {
+                // 2. On replace le transform
+                transform.localPosition = _startPosition;
+                transform.localRotation = _startRotation;
+    
+                // 3. SECURITÉ PHYSIQUE : On stoppe net toutes les forces accumulées pendant le Grab
+                _rb.linearVelocity = Vector3.zero;
+                _rb.angularVelocity = Vector3.zero;
+        
+                // On force le moteur physique à s'aligner sur la position initiale
+                _rb.position = transform.position;
+                _rb.rotation = transform.rotation;
+            }
+    
+            // 4. On réactive la physique
+            _rb.isKinematic = false;
+            _rb.useGravity = true;
+    
+            // 5. On rend le contrôle au XR Toolkit
+            // _grabInteractable.trackPosition = true;
+            // _grabInteractable.trackRotation = true;
+    
+            _inspectPoint.localScale = Vector3.one;
+            foreach (var wheel in _wheelHandlers)
+            {
+                wheel.IsReleaseGrab();
+            }
+        }
+        else 
+        {
+            _isInspecting = true;
+        
+            _rb.isKinematic = true;
+            _rb.useGravity = false;
+        
+            transform.SetParent(_inspectPoint);
+        
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            
+            // _grabInteractable.trackPosition = false;
+            // _grabInteractable.trackRotation = false;
+            _inspectPoint.localScale = Vector3.one * _inspectScaleMultiplier;
+    
+            foreach (var wheel in _wheelHandlers)
+            {
+                wheel.IsGrabLock();
+            }
+        }
     }
 
     #region Puzzle
@@ -148,67 +216,186 @@ public class LockManager : Puzzle
 //===================================================================================================================================================================================================
     private void OnGrab(SelectEnterEventArgs args)
     {
-        if (_isInspecting) return;
-        _isInspecting = true;
-        
-        _rb.isKinematic = true;
-        _rb.useGravity = false;
-        
-        transform.SetParent(_inspectPoint);
-        
-        transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity;
-
-        _grabInteractable.trackPosition = false;
-        _grabInteractable.trackRotation = false;
-        _inspectPoint.localScale = Vector3.one * _inspectScaleMultiplier;
-
-        foreach (var wheel in _wheelHandlers)
+        if (_isInspecting || _isUnlocked)
         {
-            wheel.IsGrabLock();
+            _isInspecting = false;
+    
+            // 1. On remet le parent d'origine d'abord
+            transform.SetParent(_startParent);
+            transform.localScale = _startScale; // Assure-toi de l'avoir setup dans le Start() !
+    
+            if (_useStartPos)
+            {
+                // 2. On replace le transform
+                transform.localPosition = _startPosition;
+                transform.localRotation = _startRotation;
+    
+                // 3. SECURITÉ PHYSIQUE : On stoppe net toutes les forces accumulées pendant le Grab
+                _rb.linearVelocity = Vector3.zero;
+                _rb.angularVelocity = Vector3.zero;
+        
+                // On force le moteur physique à s'aligner sur la position initiale
+                _rb.position = transform.position;
+                _rb.rotation = transform.rotation;
+            }
+    
+            // 4. On réactive la physique
+            _rb.isKinematic = false;
+            _rb.useGravity = true;
+    
+            // 5. On rend le contrôle au XR Toolkit
+            // _grabInteractable.trackPosition = true;
+            // _grabInteractable.trackRotation = true;
+    
+            _inspectPoint.localScale = Vector3.one;
+            foreach (var wheel in _wheelHandlers)
+            {
+                wheel.IsReleaseGrab();
+            }
         }
+        else 
+        {
+            _isInspecting = true;
+        
+            _rb.isKinematic = true;
+            _rb.useGravity = false;
+        
+            transform.SetParent(_inspectPoint);
+        
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            
+            // _grabInteractable.trackPosition = false;
+            // _grabInteractable.trackRotation = false;
+            _inspectPoint.localScale = Vector3.one * _inspectScaleMultiplier;
+    
+            foreach (var wheel in _wheelHandlers)
+            {
+                wheel.IsGrabLock();
+            }
+        }
+        
+        // if (_isInspecting) return;
+        // _isInspecting = true;
+        //
+        // _rb.isKinematic = true;
+        // _rb.useGravity = false;
+        //
+        // transform.SetParent(_inspectPoint);
+        //
+        // transform.localPosition = Vector3.zero;
+        // transform.localRotation = Quaternion.identity;
+        //
+        // _grabInteractable.trackPosition = false;
+        // _grabInteractable.trackRotation = false;
+        // _inspectPoint.localScale = Vector3.one * _inspectScaleMultiplier;
+        //
+        // foreach (var wheel in _wheelHandlers)
+        // {
+        //     wheel.IsGrabLock();
+        // }
     }
 
-    private void OnRelease(SelectExitEventArgs args)
-    {
-        if (!_isInspecting || _isUnlocked)
-            return;
-
-        _isInspecting = false;
-
-        // 1. On remet le parent d'origine d'abord
-        transform.SetParent(_startParent);
-        transform.localScale = _startScale; // Assure-toi de l'avoir setup dans le Start() !
-
-        if (_useStartPos)
-        {
-            // 2. On replace le transform
-            transform.localPosition = _startPosition;
-            transform.localRotation = _startRotation;
-
-            // 3. SECURITÉ PHYSIQUE : On stoppe net toutes les forces accumulées pendant le Grab
-            _rb.linearVelocity = Vector3.zero;
-            _rb.angularVelocity = Vector3.zero;
-        
-            // On force le moteur physique à s'aligner sur la position initiale
-            _rb.position = transform.position;
-            _rb.rotation = transform.rotation;
-        }
-
-        // 4. On réactive la physique
-        _rb.isKinematic = false;
-        _rb.useGravity = true;
-    
-        // 5. On rend le contrôle au XR Toolkit
-        _grabInteractable.trackPosition = true;
-        _grabInteractable.trackRotation = true;
-    
-        _inspectPoint.localScale = Vector3.one;
-        foreach (var wheel in _wheelHandlers)
-        {
-            wheel.IsReleaseGrab();
-        }
-    }
+    // private void OnRelease(SelectExitEventArgs args)
+    // {
+    //     
+    //     if (_isInspecting || _isUnlocked)
+    //     {
+    //         _isInspecting = false;
+    //
+    //         // 1. On remet le parent d'origine d'abord
+    //         transform.SetParent(_startParent);
+    //         transform.localScale = _startScale; // Assure-toi de l'avoir setup dans le Start() !
+    //
+    //         if (_useStartPos)
+    //         {
+    //             // 2. On replace le transform
+    //             transform.localPosition = _startPosition;
+    //             transform.localRotation = _startRotation;
+    //
+    //             // 3. SECURITÉ PHYSIQUE : On stoppe net toutes les forces accumulées pendant le Grab
+    //             _rb.linearVelocity = Vector3.zero;
+    //             _rb.angularVelocity = Vector3.zero;
+    //     
+    //             // On force le moteur physique à s'aligner sur la position initiale
+    //             _rb.position = transform.position;
+    //             _rb.rotation = transform.rotation;
+    //         }
+    //
+    //         // 4. On réactive la physique
+    //         _rb.isKinematic = false;
+    //         _rb.useGravity = true;
+    //
+    //         // 5. On rend le contrôle au XR Toolkit
+    //         // _grabInteractable.trackPosition = true;
+    //         // _grabInteractable.trackRotation = true;
+    //
+    //         _inspectPoint.localScale = Vector3.one;
+    //         foreach (var wheel in _wheelHandlers)
+    //         {
+    //             wheel.IsReleaseGrab();
+    //         }
+    //     }
+    //     else 
+    //     {
+    //         _isInspecting = true;
+    //     
+    //         _rb.isKinematic = true;
+    //         _rb.useGravity = false;
+    //     
+    //         transform.SetParent(_inspectPoint);
+    //     
+    //         transform.localPosition = Vector3.zero;
+    //         transform.localRotation = Quaternion.identity;
+    //
+    //         // _grabInteractable.trackPosition = false;
+    //         // _grabInteractable.trackRotation = false;
+    //         _inspectPoint.localScale = Vector3.one * _inspectScaleMultiplier;
+    //
+    //         foreach (var wheel in _wheelHandlers)
+    //         {
+    //             wheel.IsGrabLock();
+    //         }
+    //     }
+    //     
+    //     // if (!_isInspecting || _isUnlocked)
+    //     //     return;
+    //     //
+    //     // _isInspecting = false;
+    //     //
+    //     // // 1. On remet le parent d'origine d'abord
+    //     // transform.SetParent(_startParent);
+    //     // transform.localScale = _startScale; // Assure-toi de l'avoir setup dans le Start() !
+    //     //
+    //     // if (_useStartPos)
+    //     // {
+    //     //     // 2. On replace le transform
+    //     //     transform.localPosition = _startPosition;
+    //     //     transform.localRotation = _startRotation;
+    //     //
+    //     //     // 3. SECURITÉ PHYSIQUE : On stoppe net toutes les forces accumulées pendant le Grab
+    //     //     _rb.linearVelocity = Vector3.zero;
+    //     //     _rb.angularVelocity = Vector3.zero;
+    //     //
+    //     //     // On force le moteur physique à s'aligner sur la position initiale
+    //     //     _rb.position = transform.position;
+    //     //     _rb.rotation = transform.rotation;
+    //     // }
+    //     //
+    //     // // 4. On réactive la physique
+    //     // _rb.isKinematic = false;
+    //     // _rb.useGravity = true;
+    //     //
+    //     // // 5. On rend le contrôle au XR Toolkit
+    //     // _grabInteractable.trackPosition = true;
+    //     // _grabInteractable.trackRotation = true;
+    //     //
+    //     // _inspectPoint.localScale = Vector3.one;
+    //     // foreach (var wheel in _wheelHandlers)
+    //     // {
+    //     //     wheel.IsReleaseGrab();
+    //     // }
+    // }
 //===================================================================================================================================================================================================
     #endregion
 }
