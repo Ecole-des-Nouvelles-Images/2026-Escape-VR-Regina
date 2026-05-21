@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_UnityLogo_Glitch
+  m_Name: M_HologramGlitchLOGO
   m_Shader: {fileID: -6465566751694194690, guid: 67648f8da31d07c48a5cb2a00578893a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -51,19 +51,19 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorMask: 15
-    - _DistortScrollSpeed: -0.46
-    - _DistortStrenght: 0.59
-    - _DistortionScale: 0.1
-    - _GlitchAmount: 15.74
-    - _GlitchScale: 2
-    - _GlitchStrength: 0.09
+    - _DistortScrollSpeed: 5
+    - _DistortStrenght: 0.5
+    - _DistortionScale: 1
+    - _GlitchAmount: 0.9
+    - _GlitchScale: 20
+    - _GlitchStrength: 0.97
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ScanLineAmount: 20
-    - _ScanlineScale: 35
-    - _ScreenBrightness: 2
-    - _ScreenLag: 1
-    - _ScrollSpeed: -0.55
+    - _ScanLineAmount: 70
+    - _ScanlineScale: 1
+    - _ScreenBrightness: 0.05
+    - _ScreenLag: 2
+    - _ScrollSpeed: 1
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
@@ -74,7 +74,7 @@ Material:
     - _XRMotionVectorsPass: 1
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.364706, g: 1, b: 0.980747, a: 1}
+    - _Color: {r: 0.2587933, g: 1.4173158, b: 1.6625507, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5237416254264387890

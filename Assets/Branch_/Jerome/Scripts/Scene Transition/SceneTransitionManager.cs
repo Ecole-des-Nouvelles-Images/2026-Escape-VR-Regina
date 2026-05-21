@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +9,7 @@ public class SceneTransitionManager : MonoBehaviour
     
     // Hardcoded scene names (adjust these to match your actual scene names)
     // SC_Jerome_Test_Act
+    [SerializeField] private string _hub = "SC_Loan_TestHub";
     [SerializeField] private string _act1 = "SC_Act1";
     [SerializeField] private string _act2 = "SC_Act2";
     [SerializeField] private string _act3 = "SC_Act3";
@@ -21,21 +24,31 @@ public class SceneTransitionManager : MonoBehaviour
         {
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
+
+        EventBus.OnGameStarted += LoadAct1Scene;
+        EventBus.OnCloseEyes?.Invoke();
+        StartCoroutine(LoadSceneCoroutine(_hub));
     }
-    
+
+    private void OnDisable()
+    {
+        EventBus.OnGameStarted -= LoadAct1Scene;
+    }
+
     public void LoadAct1Scene()
     {
-        LoadSideScene(_act1);
+        EventBus.OnCloseEyes?.Invoke();
+        StartCoroutine(LoadSceneCoroutine(_act1));
     }
     
     public void LoadAct2Scene()
     {
-        LoadSideScene(_act2);
+        StartCoroutine(LoadSceneCoroutine(_act2));
     }
     
     public void LoadAct3Scene()
     {
-        LoadSideScene(_act3);
+        StartCoroutine(LoadSceneCoroutine(_act3));
     }
     
     private void LoadSideScene(string sceneName)
@@ -74,5 +87,13 @@ public class SceneTransitionManager : MonoBehaviour
                 _playerTransform.rotation = _savedRotation;
             }
         }
+    }
+    
+    private IEnumerator LoadSceneCoroutine(string scene)
+    {
+        yield return new WaitForSeconds(1f);
+        LoadSideScene(scene);
+        yield return new WaitForSeconds(1f);
+        EventBus.OnOpenEyes?.Invoke();
     }
 }
