@@ -35,10 +35,40 @@ public class SceneTransitionManager : MonoBehaviour
         EventBus.OnGameStarted -= LoadAct1Scene;
     }
 
+    public void LoadActScene(int sceneIndex)
+    {
+        switch (sceneIndex)
+        {
+            case 1: 
+                {
+                    EventBus.OnCloseEyes?.Invoke();
+                    StartCoroutine(LoadSceneCoroutine(_act1));
+                } break;
+            
+            case 2:
+                {
+                    EventBus.OnCloseEyes?.Invoke();
+                    StartCoroutine(LoadSceneCoroutine(_act2));
+                } break;
+            
+            case 3:
+                {
+                    EventBus.OnCloseEyes?.Invoke();
+                    StartCoroutine(LoadSceneCoroutine(_act3));
+                } break;
+            
+            default:
+                {
+                    Debug.LogError("Invalid scene index");
+                } break;
+        }
+    }
+    
     public void LoadAct1Scene()
     {
         EventBus.OnCloseEyes?.Invoke();
         StartCoroutine(LoadSceneCoroutine(_act1));
+        Debug.Log("Loading act1");
     }
     
     public void LoadAct2Scene()
