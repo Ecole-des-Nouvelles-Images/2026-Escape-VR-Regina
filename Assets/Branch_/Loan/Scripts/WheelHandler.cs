@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class WheelHandler : MonoBehaviour
 {
+    #region Variables
+
     [Header("===== References =====")]
     [SerializeField] private int _index;
     [SerializeField] private Transform _visual;
@@ -19,13 +21,12 @@ public class WheelHandler : MonoBehaviour
     private Transform _activeFinger;
     private bool _isInteracting;
     private bool _isGrabbing;
-    [SerializeField]private Transform _inspectTransform;
-
-    // VARIABLE PRO : On stocke l'axe de déplacement pour toute la durée de cette interaction
-    [SerializeField] private Vector3 _interactionAxis;
 
     // SÉCURITÉ DOTWEEN : On stocke le scale de départ pour éviter les déformations en boucle
     private Vector3 _startScale;
+
+    #endregion
+    
     
     #region Trigger
     private void OnTriggerEnter(Collider other)
@@ -42,12 +43,7 @@ public class WheelHandler : MonoBehaviour
             _activeFinger = other.transform;
             _lastFingerPosition = _activeFinger.position;
             
-            // LOGIQUE PRO : On fige l'axe X local actuel (axe rouge) de la molette en coordonées World.
-            // Comme on le stocke ici, même si la molette tourne au frame suivant, notre axe de référence reste fixe !
-            _interactionAxis = _inspectTransform.right; 
-
             _isInteracting = true;
-            
         }
     }
 
@@ -66,7 +62,6 @@ public class WheelHandler : MonoBehaviour
     {
         // On sauvegarde le vrai scale d'origine défini dans l'inspecteur
         _startScale = _visual.localScale;
-        _inspectTransform = GameObject.Find("InspectPoints").transform;
         _visual.DOKill();
     }
 

@@ -7,6 +7,8 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class LockManager : Puzzle
 {
+    #region Variables
+
     [Header("===== Puzzle Settings =====")]
     [SerializeField] private List<int> _values = new();
     [SerializeField] private List<int> _codes = new();
@@ -34,6 +36,8 @@ public class LockManager : Puzzle
     private bool _isInspecting;
     private bool _isUnlocked;
     private ChestHandler _chestHandler; 
+
+    #endregion
 
     private void Start()
     {
