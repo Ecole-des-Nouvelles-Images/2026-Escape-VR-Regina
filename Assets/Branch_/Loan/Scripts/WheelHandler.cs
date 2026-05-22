@@ -23,6 +23,9 @@ public class WheelHandler : MonoBehaviour
     // VARIABLE PRO : On stocke l'axe de déplacement pour toute la durée de cette interaction
     private Vector3 _interactionAxis;
 
+    // SÉCURITÉ DOTWEEN : On stocke le scale de départ pour éviter les déformations en boucle
+    private Vector3 _startScale;
+
     #region Trigger
     private void OnTriggerEnter(Collider other)
     {
@@ -31,6 +34,10 @@ public class WheelHandler : MonoBehaviour
 
         if (other.CompareTag("FingerTip"))
         {
+            // Sécurité : On remet le scale normal avant de tuer le tween en cours
+            _visual.localScale = _startScale;
+            _visual.DOKill();
+            
             _activeFinger = other.transform;
             _lastFingerPosition = _activeFinger.position;
             
@@ -39,7 +46,7 @@ public class WheelHandler : MonoBehaviour
             _interactionAxis = transform.right; 
 
             _isInteracting = true;
-            _visual.DOKill();
+            
         }
     }
 
@@ -56,6 +63,9 @@ public class WheelHandler : MonoBehaviour
 
     private void Start()
     {
+        // On sauvegarde le vrai scale d'origine défini dans l'inspecteur
+        _startScale = _visual.localScale;
+        
         _visual.DOKill();
     }
 
@@ -103,7 +113,10 @@ public class WheelHandler : MonoBehaviour
         float snappedAngle = (10 - _lastValue) % 10 * 36f;
         _currentAngle = snappedAngle;
         
+        // Sécurité : On remet le scale normal avant de relancer l'enchaînement de Tweens
+        _visual.localScale = _startScale;
         _visual.DOKill();
+        
         _visual.DOLocalRotate(new Vector3(0f, -snappedAngle, 0f), 0.15f)
             .SetEase(Ease.OutBack)
             .OnComplete(() => 

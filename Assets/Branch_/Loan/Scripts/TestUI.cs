@@ -2,8 +2,14 @@ using UnityEngine;
 
 public class TestUI : MonoBehaviour
 {
+    private bool _isGameStarted = false;
     public void StartGame()
     {
-        EventBus.OnGameStarted?.Invoke();
+        if (!_isGameStarted)
+        {
+            _isGameStarted = true;
+            EventBus.OnGameStarted?.Invoke();
+        }
+        
     }
 }
