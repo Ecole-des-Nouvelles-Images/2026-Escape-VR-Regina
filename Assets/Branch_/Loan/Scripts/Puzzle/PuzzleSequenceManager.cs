@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
+
 
 public class PuzzleSequenceManager : MonoBehaviour
 {
     public static PuzzleSequenceManager Instance;
-    
+
+    [SerializeField] private bool _lockFixedTime;
     [Header("===== Ordered Puzzles =====")]
     public ChapterData CurrentChapter;
     [SerializeField] private int _currentChapterIndex;
@@ -26,6 +29,27 @@ public class PuzzleSequenceManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        if (_lockFixedTime)
+        {
+             //Cast Speed of Physique
+                    float refreshRate = XRDevice.refreshRate;
+                    
+                    if (refreshRate <= 0)
+                        refreshRate = 72f;
+                    
+                    float timeFixed = 1 / refreshRate;
+            
+                    if (timeFixed <= 0.006)
+                    {
+                        timeFixed = 1f / 72f;
+                    }
+                    
+                    Time.fixedDeltaTime = 1f / timeFixed;
+                    Application.targetFrameRate = Mathf.RoundToInt(refreshRate);
+        }
+       
+        
         _currentChapterIndex = 0;
         
         _cameraHandler = FindAnyObjectByType<CameraHandler>();
