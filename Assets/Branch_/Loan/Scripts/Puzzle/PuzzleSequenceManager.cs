@@ -33,7 +33,7 @@ public class PuzzleSequenceManager : MonoBehaviour
         if (_lockFixedTime)
         {
              //Cast Speed of Physique
-                    float refreshRate = 72f;
+                    float refreshRate = XRDevice.refreshRate;
                     
                     if (refreshRate <= 0)
                         refreshRate = 72f;
