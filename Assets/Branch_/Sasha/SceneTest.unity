@@ -24880,7 +24880,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8857181398816635814, guid: bb476dc44bd6f364989be241b513f9e5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26273,17 +26273,57 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1518990880202690698, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
+      propertyPath: lengthInSec
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518990880202690698, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
+      propertyPath: InitialModule.size3D
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518990880202690698, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
+      propertyPath: NoiseModule.frequency
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518990880202690698, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
+      propertyPath: VelocityModule.y.scalar
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518990880202690698, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
+      propertyPath: NoiseModule.strength.scalar
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518990880202690698, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 1518990880202690698, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
+      propertyPath: NoiseModule.scrollSpeed.scalar
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518990880202690698, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 0.03
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518990880202690698, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1518990880202690698, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4675192116359879092, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 3447038591770236762, guid: 0bb25756271bb4f4cbb4055410790c81, type: 3}
+      objectReference: {fileID: 3447038591770236762, guid: 556583e824fc9204eb2ee6d40cef4245, type: 3}
+    - target: {fileID: 4675192116359879092, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
+      propertyPath: m_Mesh1
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4675192116359879092, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
+      propertyPath: m_Mesh2
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4675192116359879092, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
       propertyPath: m_Flip.x
       value: 0
@@ -26302,11 +26342,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5565121986073327693, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.056
       objectReference: {fileID: 0}
     - target: {fileID: 5565121986073327693, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.181
       objectReference: {fileID: 0}
     - target: {fileID: 5565121986073327693, guid: 2be692429e27fac49b8de9bbc82e31d5, type: 3}
       propertyPath: m_LocalPosition.z
