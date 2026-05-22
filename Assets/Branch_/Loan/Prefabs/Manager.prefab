@@ -44,8 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8bd8a191b2c8b646ae424c216f1a154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleSequenceManager
-  _puzzles:
-  - {fileID: 0}
-  - {fileID: 0}
+  _lockFixedTime: 1
+  CurrentChapter:
+    ChapterNumber: 0
+    TimeToSwitch: 0
+    Puzzles: []
+  _currentChapterIndex: 0
   _currentPuzzleIndex: 0
   _currentHintIndex: 0

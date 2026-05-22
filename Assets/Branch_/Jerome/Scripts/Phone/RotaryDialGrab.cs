@@ -4,101 +4,323 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-public class RotaryDialGrab : XRGrabInteractable
+public class RotaryDialGrab : XRBaseInteractable
 {
-    [Header("Rotary Settings")]
-    [SerializeField] private float _maxRotationAngle = 45f;
-    [SerializeField] private float _springReturnSpeed = 8f;
-    [SerializeField] private float _grabSensitivity = 5f;
-    [SerializeField] private RotaryPhoneInputHandler _rotaryPhoneInput;
+    [Header("Rotation Settings")]
+    [SerializeField] private float _maxRotationAngle = 330f;  // Match push script's max rotation
+    [SerializeField] private float _returnSpeed = 300f;       // Match push script's return speed (degrees/sec)
+    [SerializeField] private float _returnDelay = 0.2f;       // Match push script's return delay
     
-    private float _currentRotation = 0f;
-    private float _targetRotation = 0f;
+    [Header("References")]
+    [SerializeField] private Transform _dialToRotate;
+    [SerializeField] private RotaryPhoneInputHandler _inputHandler;
+    
+    [Header("Rotation Axis")]
+    [SerializeField] private bool _rotateOnZAxis = true;      // Rotary phones typically rotate on Z axis
+    [SerializeField] private Vector3 _customRotationAxis = Vector3.forward;
+    
+    // Rotation tracking (similar to push script)
+    private Quaternion _initialRotation;
+    private float _currentRotationDelta = 0f;
+    private bool _isDialing = false;
+    private bool _isReturning = false;
+    private float _returnTimer = 0f;
+    
+    // 1:1 tracking variables
     private IXRSelectInteractor _currentInteractor;
-    private Vector3 _lastInteractorPosition;
-    
+    private Vector3 _lastInteractorDirection;
+    private float _rotationStartDelta = 0f;
+    private Vector3 _rotationStartDirection;
+    private bool _hasStartedRotation = false;
     
     protected override void Awake()
     {
         base.Awake();
         
-        // Disable movement entirely
-        trackPosition = false;
-        trackRotation = false;
-        
-        // Prevent object from being moved
-        movementType = MovementType.VelocityTracking;
+        // Find input handler if not assigned
+        if (!_inputHandler)
+            _inputHandler = FindFirstObjectByType<RotaryPhoneInputHandler>();
     }
-
+    
+    private void Start()
+    {
+        // Store the initial rotation of the dial
+        if (_dialToRotate != null)
+        {
+            _initialRotation = _dialToRotate.rotation;
+        }
+        else
+        {
+            _dialToRotate = transform;
+            _initialRotation = transform.rotation;
+            Debug.LogWarning("Dial to rotate reference is missing! Using this transform.", this);
+        }
+    }
+    
     protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
         base.OnSelectEntered(args);
-        _currentInteractor = args.interactorObject;
         
-        // Store initial position for delta calculation
+        // Cancel any pending return
+        _returnTimer = 0;
+        _isReturning = false;
+        _isDialing = true;
+        _currentInteractor = args.interactorObject;
+        _hasStartedRotation = false;
+        
+        // Get initial hand position for 1:1 tracking
         Transform attachTransform = args.interactorObject.GetAttachTransform(this);
         if (attachTransform != null)
         {
-            _lastInteractorPosition = attachTransform.position;
+            Vector3 dialCenter = GetDialCenter();
+            Vector3 handPosition = attachTransform.position;
+            Vector3 handDirection = (handPosition - dialCenter).normalized;
+            
+            // Project onto rotation plane
+            handDirection = ProjectOntoRotationPlane(handDirection);
+            
+            _lastInteractorDirection = handDirection;
+            _rotationStartDirection = handDirection;
+            _rotationStartDelta = _currentRotationDelta;
+            _hasStartedRotation = true;
         }
     }
     
     protected override void OnSelectExited(SelectExitEventArgs args)
     {
         base.OnSelectExited(args);
-        _currentInteractor = null;
         
-        // Optional: Spring return to 0 when released
-        _targetRotation = 0f;
+        if (_isDialing)
+        {
+            StopDialing();
+        }
+        
+        _currentInteractor = null;
+        _hasStartedRotation = false;
     }
     
-    private void Update()
+    public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
     {
-        if (_currentInteractor != null)
+        base.ProcessInteractable(updatePhase);
+        
+        if (updatePhase == XRInteractionUpdateOrder.UpdatePhase.Dynamic)
         {
-            // Safely get the attach transform
-            Transform attachTransform = _currentInteractor.GetAttachTransform(this);
-            if (attachTransform == null) return;
-            
-            // Calculate delta movement around the dial's center
-            Vector3 dialCenter = transform.parent != null ? transform.parent.position : transform.position;
-            Vector3 interactorPos = attachTransform.position;
-            
-            // Get direction vectors from dial center
-            Vector3 currentDirection = (interactorPos - dialCenter).normalized;
-            Vector3 lastDirection = (_lastInteractorPosition - dialCenter).normalized;
-            
-            // Calculate angle delta
-            float angleDelta = Vector3.SignedAngle(lastDirection, currentDirection, transform.forward);
-            
-            // ONLY allow clockwise rotation (positive delta)
-            // But allow counter-clockwise movement if it doesn't go below 0
-            float newTarget = _targetRotation + (angleDelta * _grabSensitivity);
-            
-            // Clamp between 0 and max rotation (clockwise only)
-            newTarget = Mathf.Clamp(newTarget, 0f, _maxRotationAngle);
-            
-            // Only update if the new target is valid
-            // This prevents counter-clockwise rotation past 0
-            if (newTarget >= 0f && newTarget <= _maxRotationAngle)
+            if (_isDialing && _currentInteractor != null && _hasStartedRotation)
             {
-                _targetRotation = newTarget;
+                UpdateRotation1To1();
             }
             
-            // Smooth follow
-            _currentRotation = Mathf.Lerp(_currentRotation, _targetRotation, Time.deltaTime * 15f);
-            
-            // Update last position
-            _lastInteractorPosition = interactorPos;
+            UpdateRotationMechanics();
         }
-        else
+    }
+    
+    private void UpdateRotation1To1()
+    {
+        // Safely get the attach transform
+        Transform attachTransform = _currentInteractor.GetAttachTransform(this);
+        if (attachTransform == null) return;
+        
+        // Get dial center and current hand position
+        Vector3 dialCenter = GetDialCenter();
+        Vector3 handPosition = attachTransform.position;
+        Vector3 currentHandDirection = (handPosition - dialCenter).normalized;
+        
+        // Project onto rotation plane
+        currentHandDirection = ProjectOntoRotationPlane(currentHandDirection);
+        
+        // Calculate the signed angle from start direction to current direction
+        float angleDelta = Vector3.SignedAngle(_rotationStartDirection, currentHandDirection, GetRotationAxis());
+        
+        // Calculate new rotation delta based on start delta + delta movement
+        float newDelta = _rotationStartDelta + angleDelta;
+        
+        // Apply constraints (clockwise only - from 0 to max, never below 0)
+        if (newDelta < 0)
         {
-            // Spring return to zero
-            _targetRotation = Mathf.Lerp(_targetRotation, 0f, Time.deltaTime * _springReturnSpeed);
-            _currentRotation = Mathf.Lerp(_currentRotation, _targetRotation, Time.deltaTime * 15f);
+            newDelta = 0;
+            // Reset start position when hitting the stop (gives mechanical feel)
+            _rotationStartDelta = 0;
+            _rotationStartDirection = currentHandDirection;
         }
         
-        // Apply rotation - only on Y axis (assuming that's your dial rotation axis)
-        transform.localRotation = Quaternion.Euler(0f, _currentRotation, 0f);
+        // Clamp to max rotation (like physical stop)
+        if (newDelta > _maxRotationAngle)
+        {
+            newDelta = _maxRotationAngle;
+            // Optional: Add haptic feedback when hitting max
+            if (_currentInteractor is XRBaseControllerInteractor controllerInteractor && newDelta >= _maxRotationAngle)
+            {
+                controllerInteractor.SendHapticImpulse(0.2f, 0.05f);
+            }
+        }
+        
+        // Apply 1:1 rotation
+        _currentRotationDelta = newDelta;
+        
+        // Store for next frame
+        _lastInteractorDirection = currentHandDirection;
     }
+    
+    private void UpdateRotationMechanics()
+    {
+        if (_isDialing)
+        {
+            // Apply rotation while dialing (1:1 already set in UpdateRotation1To1)
+            ApplyRotation();
+        }
+        else if (_isReturning)
+        {
+            // Decrease the rotation delta back to zero (using same speed as push script)
+            _currentRotationDelta -= _returnSpeed * Time.deltaTime;
+            
+            // Clamp to zero
+            if (_currentRotationDelta <= 0)
+            {
+                _currentRotationDelta = 0;
+                _isReturning = false;
+            }
+            
+            ApplyRotation();
+        }
+        else if (_returnTimer > 0)
+        {
+            // Count down the return delay
+            _returnTimer -= Time.deltaTime;
+            if (_returnTimer <= 0)
+            {
+                _isReturning = true;
+                _returnTimer = 0;
+            }
+        }
+    }
+    
+    private void StopDialing()
+    {
+        if (!_isDialing) return;
+        
+        _isDialing = false;
+        _returnTimer = _returnDelay;
+        
+        // Notify the input handler that dialing has stopped (same logic as push script)
+        if (_inputHandler != null)
+            _inputHandler.ReleaseDial();
+    }
+    
+    private void ApplyRotation()
+    {
+        if (_dialToRotate == null) return;
+        
+        // Create the delta rotation from the current accumulated angle
+        Quaternion deltaRotation;
+        if (_rotateOnZAxis)
+            deltaRotation = Quaternion.Euler(0f, 0f, _currentRotationDelta);
+        else
+            deltaRotation = Quaternion.AngleAxis(_currentRotationDelta, _customRotationAxis);
+        
+        // Combine the initial rotation with the delta rotation
+        _dialToRotate.rotation = _initialRotation * deltaRotation;
+    }
+    
+    private Vector3 GetDialCenter()
+    {
+        // Use parent as pivot point if available, otherwise use dial position
+        Transform pivotTransform = _dialToRotate.parent != null ? _dialToRotate.parent : _dialToRotate;
+        return pivotTransform.position;
+    }
+    
+    private Vector3 GetRotationAxis()
+    {
+        return _rotateOnZAxis ? Vector3.forward : _customRotationAxis.normalized;
+    }
+    
+    private Vector3 ProjectOntoRotationPlane(Vector3 direction)
+    {
+        Vector3 axis = GetRotationAxis();
+        
+        // Remove component along rotation axis to project onto rotation plane
+        float axisComponent = Vector3.Dot(direction, axis);
+        Vector3 projected = direction - (axis * axisComponent);
+        
+        // Normalize and handle zero vector
+        if (projected.magnitude < 0.001f)
+        {
+            // Find a perpendicular vector to the axis
+            if (Mathf.Abs(Vector3.Dot(axis, Vector3.right)) < 0.9f)
+                return Vector3.Cross(axis, Vector3.right).normalized;
+            else
+                return Vector3.Cross(axis, Vector3.up).normalized;
+        }
+        
+        return projected.normalized;
+    }
+    
+    // Public methods for external use (matching push script interface)
+    public bool IsDialing() => _isDialing;
+    public bool IsReturning() => _isReturning;
+    public float GetCurrentRotation() => _currentRotationDelta;
+    
+    // Reset the dial to its initial position (same as push script)
+    public void ResetDial()
+    {
+        _currentRotationDelta = 0;
+        _isDialing = false;
+        _isReturning = false;
+        _returnTimer = 0;
+        _hasStartedRotation = false;
+        ApplyRotation();
+    }
+    
+    // Manually set the rotation delta (for external control)
+    public void SetRotationDelta(float deltaDegrees)
+    {
+        _currentRotationDelta = Mathf.Clamp(deltaDegrees, 0f, _maxRotationAngle);
+        ApplyRotation();
+    }
+    
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (_dialToRotate == null)
+            Debug.LogWarning("Dial To Rotate reference is missing!", this);
+        
+        if (_maxRotationAngle <= 0)
+            _maxRotationAngle = 330f;
+        
+        if (_returnSpeed <= 0)
+            _returnSpeed = 300f;
+        
+        if (_returnDelay < 0)
+            _returnDelay = 0.2f;
+    }
+    
+    private void OnDrawGizmosSelected()
+    {
+        if (_dialToRotate == null) return;
+        
+        // Draw rotation arc
+        Gizmos.color = Color.green;
+        Vector3 center = GetDialCenter();
+        Vector3 axis = GetRotationAxis();
+        
+        // Find a reference direction for drawing
+        Vector3 referenceDir;
+        if (_rotateOnZAxis)
+            referenceDir = _dialToRotate.right;
+        else
+            referenceDir = Vector3.Cross(axis, Vector3.up);
+        
+        // Draw start and end angles
+        Quaternion startRot = Quaternion.AngleAxis(0, axis);
+        Quaternion endRot = Quaternion.AngleAxis(-_maxRotationAngle, axis); // Negative for clockwise
+        
+        Vector3 startDir = startRot * referenceDir;
+        Vector3 endDir = endRot * referenceDir;
+        
+        Gizmos.DrawRay(center, startDir * 0.5f);
+        Gizmos.DrawRay(center, endDir * 0.5f);
+        
+        // Draw arc
+        UnityEditor.Handles.DrawWireArc(center, axis, startDir, -_maxRotationAngle, 0.5f);
+    }
+#endif
 }
