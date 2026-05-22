@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6526282282029837693}
   - component: {fileID: 2453034522345821879}
+  - component: {fileID: 7840653651135018233}
   m_Layer: 0
   m_Name: Prf_Act3_Managers
   m_TagString: Untagged
@@ -39,12 +40,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2764110663979845784}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36b03e2b071a34c44845957745a51b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThreadManager
   Data: {fileID: 11400000, guid: 5bc2d66099b4a8340a20bc59a072f2c6, type: 2}
+  PuzzleID: 0
   _threadMaterial: {fileID: 2100000, guid: b2f412826d27a464390b06a70f7741da, type: 2}
   _threadWidth: 0.1
   _tilingFrequency: 1
@@ -56,3 +58,19 @@ MonoBehaviour:
   - A
   - B
   - C
+--- !u!114 &7840653651135018233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2764110663979845784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58449ef978c4ffe47b39bd10c0dee784, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FinalPuzzleManager
+  Data: {fileID: 11400000, guid: 8faf50636b62a3c4496a11f47a3098f3, type: 2}
+  PuzzleID: 6
+  _successObject: {fileID: 0}
+  _failureEffect: {fileID: 0}
