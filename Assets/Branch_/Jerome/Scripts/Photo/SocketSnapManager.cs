@@ -7,6 +7,7 @@ using System.Collections;
 public class SocketSnapHandler : MonoBehaviour
 {
     [SerializeField] private GameObject _expectedPiece;
+    [SerializeField] private ParticleSystem _puzzleCompleted;
     private GameObject _savePiece;
     private XRSocketInteractor _socket;
     private bool _isOccupied = false;
@@ -170,7 +171,7 @@ public class SocketSnapHandler : MonoBehaviour
             
             yield return null;
         }
-        
+        if (_puzzleCompleted) _puzzleCompleted.Play();
         // Ensure exact final position
         _savePiece.transform.position = targetPosition;
         _savePiece.transform.rotation = targetRotation;

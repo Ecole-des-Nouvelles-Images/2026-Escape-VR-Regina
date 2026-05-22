@@ -41,19 +41,16 @@ public class SceneTransitionManager : MonoBehaviour
         {
             case 1: 
                 {
-                    EventBus.OnCloseEyes?.Invoke();
                     StartCoroutine(LoadSceneCoroutine(_act1));
                 } break;
             
             case 2:
                 {
-                    EventBus.OnCloseEyes?.Invoke();
                     StartCoroutine(LoadSceneCoroutine(_act2));
                 } break;
             
             case 3:
                 {
-                    EventBus.OnCloseEyes?.Invoke();
                     StartCoroutine(LoadSceneCoroutine(_act3));
                 } break;
             
@@ -63,12 +60,14 @@ public class SceneTransitionManager : MonoBehaviour
                 } break;
         }
     }
-    
+
+    public void LoadHubScene()
+    {
+        StartCoroutine(LoadSceneCoroutine(_hub));
+    }
     public void LoadAct1Scene()
     {
-        EventBus.OnCloseEyes?.Invoke();
         StartCoroutine(LoadSceneCoroutine(_act1));
-        Debug.Log("Loading act1");
     }
     
     public void LoadAct2Scene()
@@ -121,6 +120,7 @@ public class SceneTransitionManager : MonoBehaviour
     
     private IEnumerator LoadSceneCoroutine(string scene)
     {
+        EventBus.OnCloseEyes?.Invoke();
         yield return new WaitForSeconds(1f);
         LoadSideScene(scene);
         yield return new WaitForSeconds(1f);
