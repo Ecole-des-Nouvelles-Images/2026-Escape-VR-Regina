@@ -107,7 +107,8 @@ public class FinalPuzzleManager : Puzzle
     {
         // If there's more to happen before saying that it has been solved
         
-        Solve();
+        Solve
+            ();
     }
     
     private void OnFailure(GameObject wrongPiece)

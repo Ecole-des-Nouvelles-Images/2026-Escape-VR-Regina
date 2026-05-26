@@ -891,6 +891,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: XR_Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3003787950178342399, guid: 235e0872436395145b66e44ffde28553, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1953,8 +1957,6 @@ MonoBehaviour:
   _index: 0
   _visual: {fileID: 1769461104}
   _sensitivity: 2
-  _inspectTransform: {fileID: 0}
-  _interactionAxis: {x: 0, y: 0, z: 0}
 --- !u!114 &1911438471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2581,8 +2583,6 @@ MonoBehaviour:
   _index: 1
   _visual: {fileID: 16994822}
   _sensitivity: 2
-  _inspectTransform: {fileID: 0}
-  _interactionAxis: {x: 0, y: 0, z: 0}
 --- !u!54 &2103048154
 Rigidbody:
   m_ObjectHideFlags: 0
