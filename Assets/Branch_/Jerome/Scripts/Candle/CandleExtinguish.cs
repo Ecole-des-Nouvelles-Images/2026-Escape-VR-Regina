@@ -4,26 +4,36 @@ using UnityEngine;
 [RequireComponent(typeof(Renderer))]
 public class CandleExtinguish : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem _flame;
+    [SerializeField] private string _flameActiveProperty;
     [SerializeField] private ParticleSystem _extinguish;
     
     private bool _isExtinguished = false;
     private Collider _candleCollider;
     private Renderer _candleRenderer;
+    private Material _flameMaterial;
+    private int _flamePropertyId;
     private CandleManager _candleManager;
 
     private void Start()
     {
-        // Get the collider component on this game object
+        // Get components
         _candleCollider = GetComponent<Collider>();
-        
-        // Get the renderer component to change color
         _candleRenderer = GetComponent<Renderer>();
         
-        // Find the CandleManager in the scene
+        // Get the existing material (automatically becomes an instance when modified)
+        if (_candleRenderer)
+        {
+            _flameMaterial = _candleRenderer.material; // This creates a unique instance automatically
+            _flamePropertyId = Shader.PropertyToID(_flameActiveProperty);
+        }
+        else
+        {
+            Debug.LogError("Renderer not found on candle!");
+        }
+        
+        // Find the CandleManager
         _candleManager = FindAnyObjectByType<CandleManager>();
         
-        // Register this candle with the manager
         if (_candleManager)
         {
             _candleManager.RegisterCandle(this);
@@ -36,7 +46,6 @@ public class CandleExtinguish : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the entering object has the tag "CandleSnuffer" and the candle isn't already extinguished
         if (other.CompareTag("CandleSnuffer") && !_isExtinguished)
         {
             ExtinguishCandle();
@@ -45,26 +54,22 @@ public class CandleExtinguish : MonoBehaviour
 
     private void ExtinguishCandle()
     {
-        // Change color to green
-        if (_candleRenderer) _candleRenderer.material.color = Color.green;
+        // Turn off the flame via shader property
+        if (_flameMaterial)
+        {
+            _flameMaterial.SetFloat(_flamePropertyId, 0f);
+        }
         
-        // Set the boolean to true
         _isExtinguished = true;
         
-        // Turn off the collider
         if (_candleCollider) _candleCollider.enabled = false;
         
-        // Turn off the continuous flame VFX
-        if (_flame) _flame.Stop();
-    
-        // Play the one-shot extinguish VFX
         if (_extinguish)
         {
             _extinguish.Play();
             Destroy(_extinguish.gameObject, _extinguish.main.duration);
         }
         
-        // Notify the manager that this candle has been extinguished
         if (_candleManager) _candleManager.CandleExtinguished(this);
         
         Debug.Log($"Candle {gameObject.name} extinguished!");

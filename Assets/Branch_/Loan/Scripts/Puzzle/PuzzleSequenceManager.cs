@@ -1,18 +1,20 @@
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
+
 
 public class PuzzleSequenceManager : MonoBehaviour
 {
     public static PuzzleSequenceManager Instance;
     
     [Header("===== Ordered Puzzles =====")]
-    [SerializeField] private List<Puzzle> _puzzles;
-
+    public ChapterData CurrentChapter;
+    [SerializeField] private int _currentChapterIndex;
     [SerializeField] private int _currentPuzzleIndex = 0;
     [SerializeField] private int _currentHintIndex = 0;
     private CameraHandler _cameraHandler;
-    public Puzzle CurrentPuzzle => _puzzles[_currentPuzzleIndex];
+    private SceneTransitionManager _sceneTransitionManager;
+    public Puzzle CurrentPuzzle => CurrentChapter.Puzzles[_currentPuzzleIndex];
     
     private void Awake()
     {
@@ -24,19 +26,32 @@ public class PuzzleSequenceManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
+       
+        
+        _currentChapterIndex = 0;
+        
         _cameraHandler = FindAnyObjectByType<CameraHandler>();
+        _sceneTransitionManager = FindAnyObjectByType<SceneTransitionManager>();
     }
 
     private void Start()
     {
         EventBus.OnPuzzleSolved += HandlePuzzleSolved;
-        StartPuzzle();
     }
 
     private void OnDestroy()
     {
         EventBus.OnPuzzleSolved -= HandlePuzzleSolved;
+    }
+    
+    public void InjectCurrentChapter(ChapterData chapter)
+    {
+        CurrentChapter = chapter;
+        _currentChapterIndex++;
+        _currentPuzzleIndex = 0;
+        
+        Debug.Log($"Nouveau chapitre injecté : {chapter.ChapterNumber}");
+        StartPuzzle();
     }
 
     private void StartPuzzle()
@@ -61,10 +76,11 @@ public class PuzzleSequenceManager : MonoBehaviour
     {
         _currentPuzzleIndex++;
 
-        if (_currentPuzzleIndex >= _puzzles.Count)
+        if (_currentPuzzleIndex >= CurrentChapter.Puzzles.Count)
         {
             Debug.Log("All puzzles completed!");
-            // _cameraHandler.Blink();
+            StartCoroutine(SceneSwitching(CurrentChapter.TimeToSwitch));
+            CurrentChapter = null;
             return;
         }
 
@@ -91,5 +107,11 @@ public class PuzzleSequenceManager : MonoBehaviour
         _currentHintIndex++;
 
         return hint;
+    }
+    
+    private IEnumerator SceneSwitching(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _sceneTransitionManager.LoadActScene(_currentChapterIndex + 1);
     }
 }
