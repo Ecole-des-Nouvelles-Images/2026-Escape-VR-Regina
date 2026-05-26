@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class AssemblyManager : Puzzle
 {
@@ -39,19 +40,13 @@ public class AssemblyManager : Puzzle
             CompleteAssembly();
         }
     }
-    
-    void CompleteAssembly()
+
+    private void CompleteAssembly()
     {
         Debug.Log("All pieces assembled! Completing assembly...");
         
         // Call CompletedPuzzle on all socket handlers to animate each piece
-        foreach (SocketSnapHandler handler in _socketHandlers)
-        {
-            if (handler != null)
-            {
-                handler.CompletedPuzzle();
-            }
-        }
+        foreach (SocketSnapHandler handler in _socketHandlers.Where(handler => handler)) handler.CompletedPuzzle();
         
         // Wait for animations to complete before showing the reconstructed object
         StartCoroutine(WaitForAnimationsAndComplete());
@@ -61,28 +56,18 @@ public class AssemblyManager : Puzzle
     {
         // Wait for all animations to complete (adjust timing as needed)
         // Since we don't have a direct way to check all animations, we'll use a delay
-        // Alternatively, you could add a flag in SocketSnapHandler to track when animation completes
         
-        float maxAnimationTime = 1f; // Same as lerp duration
+        const float maxAnimationTime = 1f; // Same as lerp duration
         yield return new WaitForSeconds(maxAnimationTime + 0.1f); // Small buffer
         
         // Remove all snapped pieces
-        foreach (GameObject piece in _snappedPieces)
-        {
-            if (piece != null)
-            {
-                Destroy(piece);
-            }
-        }
+        foreach (GameObject piece in _snappedPieces.Where(piece => piece)) Destroy(piece);
         
         // Clear the list
         _snappedPieces.Clear();
         
         // Show reconstructed object
-        if (_reconstructedObject != null)
-        {
-            _reconstructedObject.SetActive(true);
-        }
+        if (_reconstructedObject) _reconstructedObject.SetActive(true);
         
         Solve();
         Debug.Log("Assembly complete! Final object revealed.");
