@@ -6,38 +6,40 @@ using UnityEngine;
 public class RotaryPhoneButton : MonoBehaviour
 {
     [SerializeField] private Rigidbody _rbDial;
-    [SerializeField] private List<float> _numberAngles; // Manually assign angles for numbers 0-9
+    [Tooltip("11 numbers expected 0-9 + home")]
+    [SerializeField] private List<float> _numberAngles; // Index 0-9 for numbers, index 10 for home rotation
     [SerializeField] private RotaryPhoneInputHandler2 _inputHandler;
-    
+
     [SerializeField] private float _returnDelay = 0.5f;
-    [SerializeField] private float _rotateSpeed = 360f; // Degrees per second
-    [SerializeField] private float _returnSpeed = 180f; // Degrees per second
+    [SerializeField] private float _rotateSpeed = 360f; // Degrees per second (clockwise)
+    [SerializeField] private float _returnSpeed = 180f; // Degrees per second (anti-clockwise)
     
-    private Queue<int> _numbers = new();
+    private readonly Queue<int> _numbers = new();
     private bool _isProcessing = false;
-    private Quaternion _homeRotation;
+    private float _homeAngle;
     
     private void Start()
     {
         if (!_rbDial) 
             _rbDial = GetComponent<Rigidbody>();
         
-        // Store the initial rotation as the home position
-        _homeRotation = _rbDial.transform.localRotation;
-        
-        // Ensure the Rigidbody is kinematic for precise rotation control
-        _rbDial.isKinematic = true;
-        
-        // Validate number angles
-        if (_numberAngles.Count != 10)
+        // Home angle is at index 10 (the 11th element)
+        if (_numberAngles.Count > 10)
         {
-            Debug.LogWarning($"Number angles count is {_numberAngles.Count}, but should be 10 (0-9)");
+            _homeAngle = _numberAngles[10];
         }
+        else
+        {
+            Debug.LogError("NumberAngles list must have 11 elements (0-9 for numbers, 10 for home)");
+            _homeAngle = _rbDial.transform.localEulerAngles.z;
+        }
+        
+        // Ensure the Rigidbody is kinematic
+        _rbDial.isKinematic = true;
     }
     
     private void Update()
     {
-        // Continuously try to process the queue
         if (!_isProcessing && _numbers.Count > 0)
         {
             StartCoroutine(ProcessRotationQueue());
@@ -54,6 +56,7 @@ public class RotaryPhoneButton : MonoBehaviour
             yield return StartCoroutine(RotateToNumber(number));
             yield return new WaitForSeconds(_returnDelay);
             yield return StartCoroutine(ReturnToHome());
+            yield return new WaitForSeconds(_returnDelay);
         }
         
         _isProcessing = false;
@@ -63,11 +66,7 @@ public class RotaryPhoneButton : MonoBehaviour
     {
         float targetAngle = _numberAngles[number];
         float startAngle = _rbDial.transform.localEulerAngles.z;
-        Quaternion testAngle = _rbDial.transform.rotation;
-        float testAngle2 = _rbDial.transform.rotation.eulerAngles.z;
-        Debug.Log($"Rotate from {startAngle} or {testAngle} or {testAngle2}");
         
-        // Calculate clockwise rotation needed
         float angleDelta;
         if (targetAngle >= startAngle)
         {
@@ -75,11 +74,8 @@ public class RotaryPhoneButton : MonoBehaviour
         }
         else
         {
-            // Wrap around 360 degrees
             angleDelta = (360 - startAngle) + targetAngle;
         }
-        
-        Debug.Log($"Rotating to number {number}: from {startAngle}° to {targetAngle}° (delta: {angleDelta}°)");
         
         float rotatedThisFrame = 0f;
         
@@ -89,39 +85,30 @@ public class RotaryPhoneButton : MonoBehaviour
             float remaining = angleDelta - rotatedThisFrame;
             float rotateAmount = Mathf.Min(step, remaining);
             
-            // Rotate around local Z axis
             _rbDial.transform.Rotate(0, 0, rotateAmount, Space.Self);
             rotatedThisFrame += rotateAmount;
             
             yield return null;
         }
         
-        // Ensure we hit the exact angle
-        Vector3 exactRotation = _rbDial.transform.localEulerAngles;
-        exactRotation.z = targetAngle;
-        _rbDial.transform.localRotation = Quaternion.Euler(exactRotation);
-        
-        // Notify the input handler that a number has been dialed
         OnNumberDialed(number);
     }
     
     private IEnumerator ReturnToHome()
     {
-        float startAngle = _rbDial.transform.localEulerAngles.z;
-        float homeAngle = _homeRotation.eulerAngles.z;
+        float currentAngle = _rbDial.transform.localEulerAngles.z;
+        float targetAngle = _homeAngle;
         
-        // Calculate clockwise rotation back home
+        // Calculate anti-clockwise delta (going backwards)
         float angleDelta;
-        if (homeAngle >= startAngle)
+        if (currentAngle >= targetAngle)
         {
-            angleDelta = homeAngle - startAngle;
+            angleDelta = currentAngle - targetAngle;
         }
         else
         {
-            angleDelta = (360 - startAngle) + homeAngle;
+            angleDelta = currentAngle + (360 - targetAngle);
         }
-        
-        Debug.Log($"Returning home: from {startAngle}° to {homeAngle}° (delta: {angleDelta}°)");
         
         float rotatedThisFrame = 0f;
         
@@ -131,15 +118,17 @@ public class RotaryPhoneButton : MonoBehaviour
             float remaining = angleDelta - rotatedThisFrame;
             float rotateAmount = Mathf.Min(step, remaining);
             
-            // Rotate around local Z axis back to home
+            // Rotate anti-clockwise (negative)
             _rbDial.transform.Rotate(0, 0, -rotateAmount, Space.Self);
             rotatedThisFrame += rotateAmount;
             
             yield return null;
         }
         
-        // Ensure we end exactly at home rotation
-        _rbDial.transform.localRotation = _homeRotation;
+        // Snap to exact home angle
+        Vector3 exactRotation = _rbDial.transform.localEulerAngles;
+        exactRotation.z = _homeAngle;
+        _rbDial.transform.localRotation = Quaternion.Euler(exactRotation);
     }
     
     private void OnNumberDialed(int number)
@@ -156,10 +145,9 @@ public class RotaryPhoneButton : MonoBehaviour
     
     public void OnClick(int number)
     {
-        // Validate number range
-        if (number < 0 || number >= _numberAngles.Count)
+        if (number < 0 || number > 9)
         {
-            Debug.LogError($"Number {number} is out of range (0-{_numberAngles.Count - 1})");
+            Debug.LogError($"Number {number} is out of range (0-9)");
             return;
         }
         
@@ -167,19 +155,14 @@ public class RotaryPhoneButton : MonoBehaviour
         Debug.Log($"Number {number} added to queue. Queue size: {_numbers.Count}");
     }
     
-    // Optional: Reset method for testing or restarting
     public void ResetDial()
     {
         StopAllCoroutines();
         _numbers.Clear();
         _isProcessing = false;
-        _rbDial.transform.localRotation = _homeRotation;
-        Debug.Log("Dial reset to home position");
-    }
-    
-    // Optional: Check if dial is currently rotating
-    public bool IsRotating()
-    {
-        return _isProcessing;
+        
+        Vector3 homeRotation = _rbDial.transform.localEulerAngles;
+        homeRotation.z = _homeAngle;
+        _rbDial.transform.localRotation = Quaternion.Euler(homeRotation);
     }
 }
