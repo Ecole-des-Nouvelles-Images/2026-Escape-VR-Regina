@@ -519,6 +519,7 @@ GameObject:
   - component: {fileID: 193231985}
   - component: {fileID: 193231984}
   - component: {fileID: 193231983}
+  - component: {fileID: 193231986}
   m_Layer: 0
   m_Name: Slot 3
   m_TagString: Untagged
@@ -569,7 +570,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 193231981}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: efe4739c59944304b85fbfa9d2c7dfb7, type: 3}
   m_Name: 
@@ -623,6 +624,20 @@ MonoBehaviour:
   m_SocketScaleMode: 0
   m_FixedScale: {x: 1, y: 1, z: 1}
   m_TargetBoundsSize: {x: 1, y: 1, z: 1}
+--- !u!114 &193231986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193231981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 913d1ccff4b89844aa127e3aef1e4bff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlackBoardHandler
+  _objectPrefab: {fileID: 39308031}
+  IsOccuped: 0
 --- !u!1 &333452105
 GameObject:
   m_ObjectHideFlags: 0
@@ -632,6 +647,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 333452106}
+  - component: {fileID: 333452107}
   m_Layer: 0
   m_Name: BlackBoard
   m_TagString: Untagged
@@ -655,6 +671,22 @@ Transform:
   - {fileID: 997247875}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &333452107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333452105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdecd66c43644065a8ee4cec4508a223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlackBoardManager
+  _socketsBlackBoard:
+  - {fileID: 681181064}
+  - {fileID: 1664817461}
+  - {fileID: 193231986}
 --- !u!1001 &471419412
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -666,6 +698,10 @@ PrefabInstance:
     - target: {fileID: 2764110663979845784, guid: 05901cf45b90450469a1bc05fa67836d, type: 3}
       propertyPath: m_Name
       value: Prf_Act3_Managers
+      objectReference: {fileID: 0}
+    - target: {fileID: 2764110663979845784, guid: 05901cf45b90450469a1bc05fa67836d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6526282282029837693, guid: 05901cf45b90450469a1bc05fa67836d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -724,6 +760,7 @@ GameObject:
   - component: {fileID: 681181063}
   - component: {fileID: 681181062}
   - component: {fileID: 681181061}
+  - component: {fileID: 681181064}
   m_Layer: 0
   m_Name: Slot 1
   m_TagString: Untagged
@@ -774,7 +811,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 681181059}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: efe4739c59944304b85fbfa9d2c7dfb7, type: 3}
   m_Name: 
@@ -828,6 +865,20 @@ MonoBehaviour:
   m_SocketScaleMode: 0
   m_FixedScale: {x: 1, y: 1, z: 1}
   m_TargetBoundsSize: {x: 1, y: 1, z: 1}
+--- !u!114 &681181064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681181059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 913d1ccff4b89844aa127e3aef1e4bff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlackBoardHandler
+  _objectPrefab: {fileID: 2038138491}
+  IsOccuped: 0
 --- !u!1 &705003960
 GameObject:
   m_ObjectHideFlags: 0
@@ -1587,6 +1638,7 @@ GameObject:
   - component: {fileID: 1664817460}
   - component: {fileID: 1664817459}
   - component: {fileID: 1664817458}
+  - component: {fileID: 1664817461}
   m_Layer: 0
   m_Name: Slot 2
   m_TagString: Untagged
@@ -1637,7 +1689,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664817456}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: efe4739c59944304b85fbfa9d2c7dfb7, type: 3}
   m_Name: 
@@ -1691,6 +1743,20 @@ MonoBehaviour:
   m_SocketScaleMode: 0
   m_FixedScale: {x: 1, y: 1, z: 1}
   m_TargetBoundsSize: {x: 1, y: 1, z: 1}
+--- !u!114 &1664817461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664817456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 913d1ccff4b89844aa127e3aef1e4bff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlackBoardHandler
+  _objectPrefab: {fileID: 1985169272}
+  IsOccuped: 0
 --- !u!1 &1985169272
 GameObject:
   m_ObjectHideFlags: 0
@@ -2430,7 +2496,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &2138423470
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2518,7 +2584,7 @@ Transform:
   m_GameObject: {fileID: 2138423469}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.018, y: 1.476, z: 1.932}
+  m_LocalPosition: {x: 0.018, y: 1.476, z: 3.281}
   m_LocalScale: {x: 0.1, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
