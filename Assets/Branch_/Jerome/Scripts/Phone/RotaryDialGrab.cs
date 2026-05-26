@@ -7,31 +7,26 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public class RotaryDialGrab : XRBaseInteractable
 {
     [Header("Rotation Settings")]
-    [SerializeField] private float _maxRotationAngle = 330f;  // Match push script's max rotation
-    [SerializeField] private float _returnSpeed = 300f;       // Match push script's return speed (degrees/sec)
-    [SerializeField] private float _returnDelay = 0.2f;       // Match push script's return delay
+    [SerializeField] private float _maxRotationAngle = 330f;
+    [SerializeField] private float _returnSpeed = 300f;
+    [SerializeField] private float _returnDelay = 0.2f;
     
     [Header("References")]
     [SerializeField] private Transform _dialToRotate;
     [SerializeField] private RotaryPhoneInputHandler _inputHandler;
     
-    [Header("Rotation Axis")]
-    [SerializeField] private bool _rotateOnZAxis = true;      // Rotary phones typically rotate on Z axis
-    [SerializeField] private Vector3 _customRotationAxis = Vector3.forward;
-    
     // Rotation tracking (similar to push script)
     private Quaternion _initialRotation;
-    private float _currentRotationDelta = 0f;
-    private bool _isDialing = false;
-    private bool _isReturning = false;
-    private float _returnTimer = 0f;
+    private float _currentRotationDelta;
+    private bool _isDialing;
+    private bool _isReturning;
+    private float _returnTimer;
     
     // 1:1 tracking variables
     private IXRSelectInteractor _currentInteractor;
-    private Vector3 _lastInteractorDirection;
-    private float _rotationStartDelta = 0f;
+    private float _rotationStartDelta;
     private Vector3 _rotationStartDirection;
-    private bool _hasStartedRotation = false;
+    private bool _hasStartedRotation;
     
     protected override void Awake()
     {
@@ -78,8 +73,7 @@ public class RotaryDialGrab : XRBaseInteractable
             
             // Project onto rotation plane
             handDirection = ProjectOntoRotationPlane(handDirection);
-            
-            _lastInteractorDirection = handDirection;
+
             _rotationStartDirection = handDirection;
             _rotationStartDelta = _currentRotationDelta;
             _hasStartedRotation = true;
@@ -129,7 +123,7 @@ public class RotaryDialGrab : XRBaseInteractable
         currentHandDirection = ProjectOntoRotationPlane(currentHandDirection);
         
         // Calculate the signed angle from start direction to current direction
-        float angleDelta = Vector3.SignedAngle(_rotationStartDirection, currentHandDirection, GetRotationAxis());
+        float angleDelta = Vector3.SignedAngle(_rotationStartDirection, currentHandDirection, Vector3.forward);
         
         // Calculate new rotation delta based on start delta + delta movement
         float newDelta = _rotationStartDelta + angleDelta;
@@ -148,7 +142,7 @@ public class RotaryDialGrab : XRBaseInteractable
         {
             newDelta = _maxRotationAngle;
             // Optional: Add haptic feedback when hitting max
-            if (_currentInteractor is XRBaseControllerInteractor controllerInteractor && newDelta >= _maxRotationAngle)
+            if (_currentInteractor is XRBaseInputInteractor controllerInteractor && newDelta >= _maxRotationAngle)
             {
                 controllerInteractor.SendHapticImpulse(0.2f, 0.05f);
             }
@@ -156,9 +150,6 @@ public class RotaryDialGrab : XRBaseInteractable
         
         // Apply 1:1 rotation
         _currentRotationDelta = newDelta;
-        
-        // Store for next frame
-        _lastInteractorDirection = currentHandDirection;
     }
     
     private void UpdateRotationMechanics()
@@ -211,12 +202,8 @@ public class RotaryDialGrab : XRBaseInteractable
         if (_dialToRotate == null) return;
         
         // Create the delta rotation from the current accumulated angle
-        Quaternion deltaRotation;
-        if (_rotateOnZAxis)
-            deltaRotation = Quaternion.Euler(0f, 0f, _currentRotationDelta);
-        else
-            deltaRotation = Quaternion.AngleAxis(_currentRotationDelta, _customRotationAxis);
-        
+        Quaternion deltaRotation = Quaternion.Euler(0f, 0f, _currentRotationDelta);
+
         // Combine the initial rotation with the delta rotation
         _dialToRotate.rotation = _initialRotation * deltaRotation;
     }
@@ -228,14 +215,9 @@ public class RotaryDialGrab : XRBaseInteractable
         return pivotTransform.position;
     }
     
-    private Vector3 GetRotationAxis()
-    {
-        return _rotateOnZAxis ? Vector3.forward : _customRotationAxis.normalized;
-    }
-    
     private Vector3 ProjectOntoRotationPlane(Vector3 direction)
     {
-        Vector3 axis = GetRotationAxis();
+        Vector3 axis = Vector3.forward;
         
         // Remove component along rotation axis to project onto rotation plane
         float axisComponent = Vector3.Dot(direction, axis);
@@ -276,51 +258,4 @@ public class RotaryDialGrab : XRBaseInteractable
         _currentRotationDelta = Mathf.Clamp(deltaDegrees, 0f, _maxRotationAngle);
         ApplyRotation();
     }
-    
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        if (_dialToRotate == null)
-            Debug.LogWarning("Dial To Rotate reference is missing!", this);
-        
-        if (_maxRotationAngle <= 0)
-            _maxRotationAngle = 330f;
-        
-        if (_returnSpeed <= 0)
-            _returnSpeed = 300f;
-        
-        if (_returnDelay < 0)
-            _returnDelay = 0.2f;
-    }
-    
-    private void OnDrawGizmosSelected()
-    {
-        if (_dialToRotate == null) return;
-        
-        // Draw rotation arc
-        Gizmos.color = Color.green;
-        Vector3 center = GetDialCenter();
-        Vector3 axis = GetRotationAxis();
-        
-        // Find a reference direction for drawing
-        Vector3 referenceDir;
-        if (_rotateOnZAxis)
-            referenceDir = _dialToRotate.right;
-        else
-            referenceDir = Vector3.Cross(axis, Vector3.up);
-        
-        // Draw start and end angles
-        Quaternion startRot = Quaternion.AngleAxis(0, axis);
-        Quaternion endRot = Quaternion.AngleAxis(-_maxRotationAngle, axis); // Negative for clockwise
-        
-        Vector3 startDir = startRot * referenceDir;
-        Vector3 endDir = endRot * referenceDir;
-        
-        Gizmos.DrawRay(center, startDir * 0.5f);
-        Gizmos.DrawRay(center, endDir * 0.5f);
-        
-        // Draw arc
-        UnityEditor.Handles.DrawWireArc(center, axis, startDir, -_maxRotationAngle, 0.5f);
-    }
-#endif
 }
