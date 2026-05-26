@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_FlytShader
+  m_Name: M_FlyWingFlap
   m_Shader: {fileID: -6465566751694194690, guid: 5a723426f3223334999a1d60158299a3, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -38,18 +38,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FlapAmount: 50
-    - _FlyDistance: 0.05
-    - _FlyFrequency: 5
-    - _FlySpeed: 500
+    - _FlapAmount: 10
+    - _FlapLength: 0.05
+    - _FlyDistance: 0.23
+    - _FlyFrequency: 11.8
+    - _FlySpeed: 2.34
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _XRMotionVectorsPass: 1
     m_Colors:
-    - _Control: {r: 0, g: 0.05, b: 0, a: 0}
+    - _Control: {r: 0, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &7925994600289378271
+--- !u!114 &8204908428100830916
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
