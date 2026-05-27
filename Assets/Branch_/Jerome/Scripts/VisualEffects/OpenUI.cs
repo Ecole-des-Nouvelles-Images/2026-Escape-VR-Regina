@@ -19,7 +19,7 @@ public class OpenUI : MonoBehaviour
 
     private void OnPuzzleSolved(Puzzle obj)
     {
-        if (obj.PuzzleID == 100)
+        if (obj.PuzzleID == 5) // Whatever the previous puzzle ID was. Maybe make it dependent on a specific event?
         {
             ScaleToFullHeight();
         }
