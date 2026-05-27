@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class OpenUI : MonoBehaviour
@@ -9,6 +10,25 @@ public class OpenUI : MonoBehaviour
     private float startTime;
     private Vector3 originalScale;
     private Vector3 targetScale;
+
+    private void OnEnable()
+    {
+        ScaleToZeroHeight();
+        EventBus.OnPuzzleSolved += OnPuzzleSolved;
+    }
+
+    private void OnPuzzleSolved(Puzzle obj)
+    {
+        if (obj.PuzzleID == 100)
+        {
+            ScaleToFullHeight();
+        }
+    }
+
+    private void OnDisable()
+    {
+        EventBus.OnPuzzleSolved -= OnPuzzleSolved;
+    }
 
     // Public method to start scaling from current scale to Y = 1
     [ContextMenu("Scale up")]

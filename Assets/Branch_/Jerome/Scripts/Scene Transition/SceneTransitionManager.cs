@@ -14,7 +14,7 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private string _act2 = "SC_Act2";
     [SerializeField] private string _act3 = "SC_Act3";
     [SerializeField] private string _win = "SC_Win";
-    [SerializeField] private string _loose = "SC_Loose";
+    [SerializeField] private string _lose = "SC_Loose";
     
     private static string _currentSideScene = "";
     private static Vector3 _savedPosition;
@@ -93,7 +93,7 @@ public class SceneTransitionManager : MonoBehaviour
     
     private void LoadLooseScene()
     {
-        StartCoroutine(LoadSceneCoroutine(_loose));
+        StartCoroutine(LoadSceneCoroutine(_lose));
     }
     
     private void LoadSideScene(string sceneName)

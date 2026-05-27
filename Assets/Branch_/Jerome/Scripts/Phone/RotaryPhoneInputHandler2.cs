@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
 public class RotaryPhoneInputHandler2 : Puzzle
 {
     [Tooltip("7 digit numbers")]
