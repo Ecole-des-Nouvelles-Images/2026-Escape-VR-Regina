@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 862955858418894045}
   - component: {fileID: 2379174316581805489}
+  - component: {fileID: 6210071156892226937}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -44,7 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8bd8a191b2c8b646ae424c216f1a154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PuzzleSequenceManager
-  _lockFixedTime: 1
   CurrentChapter:
     ChapterNumber: 0
     TimeToSwitch: 0
@@ -52,3 +52,17 @@ MonoBehaviour:
   _currentChapterIndex: 0
   _currentPuzzleIndex: 0
   _currentHintIndex: 0
+--- !u!114 &6210071156892226937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7811223231722126317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df49cd9e9d9455f8238957d323aeafd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FpsManager
+  _fps: 72
+  _isFpsLock: 1
