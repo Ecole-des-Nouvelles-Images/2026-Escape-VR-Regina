@@ -1,15 +1,12 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
 
 
 public class PuzzleSequenceManager : MonoBehaviour
 {
     public static PuzzleSequenceManager Instance;
-
-    [SerializeField] private bool _lockFixedTime;
+    
     [Header("===== Ordered Puzzles =====")]
     public ChapterData CurrentChapter;
     [SerializeField] private int _currentChapterIndex;
@@ -29,25 +26,6 @@ public class PuzzleSequenceManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        if (_lockFixedTime)
-        {
-             //Cast Speed of Physique
-                    float refreshRate = XRDevice.refreshRate;
-                    
-                    if (refreshRate <= 0)
-                        refreshRate = 72f;
-                    
-                    float timeFixed = 1 / refreshRate;
-            
-                    if (timeFixed <= 0.006)
-                    {
-                        timeFixed = 1f / 72f;
-                    }
-                    
-                    Time.fixedDeltaTime = 1f / timeFixed;
-                    Application.targetFrameRate = Mathf.RoundToInt(refreshRate);
-        }
        
         
         _currentChapterIndex = 0;
@@ -59,11 +37,15 @@ public class PuzzleSequenceManager : MonoBehaviour
     private void Start()
     {
         EventBus.OnPuzzleSolved += HandlePuzzleSolved;
+        EventBus.OnGameLoose += ResetManager;
+        EventBus.OnGameStarted += ResetManager;
     }
 
     private void OnDestroy()
     {
         EventBus.OnPuzzleSolved -= HandlePuzzleSolved;
+        EventBus.OnGameLoose -= ResetManager;
+        EventBus.OnGameStarted -= ResetManager;
     }
     
     public void InjectCurrentChapter(ChapterData chapter)
@@ -129,6 +111,14 @@ public class PuzzleSequenceManager : MonoBehaviour
         _currentHintIndex++;
 
         return hint;
+    }
+
+    private void ResetManager()
+    {
+        CurrentChapter = null;
+        _currentChapterIndex++;
+        _currentPuzzleIndex = 0;
+        _currentHintIndex = 0;
     }
     
     private IEnumerator SceneSwitching(float time)
