@@ -174,30 +174,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7811223231722126317, guid: 929853876f669d94d9741cad2ffe4a72, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 81668590}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 929853876f669d94d9741cad2ffe4a72, type: 3}
---- !u!1 &81668589 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7811223231722126317, guid: 929853876f669d94d9741cad2ffe4a72, type: 3}
-  m_PrefabInstance: {fileID: 81668588}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &81668590
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 81668589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1df49cd9e9d9455f8238957d323aeafd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FpsManager
-  _fps: 72
-  _isFpsLock: 1
 --- !u!1001 &149587161
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -846,8 +824,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7927219556923129142, guid: e3abcb2f87443484ebcaa4d2a300cedf, type: 3}
-      propertyPath: _act1
+      propertyPath: _win
       value: SC_Loan_FirstInt
+      objectReference: {fileID: 0}
+    - target: {fileID: 7927219556923129142, guid: e3abcb2f87443484ebcaa4d2a300cedf, type: 3}
+      propertyPath: _act1
+      value: SC_Act3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7927219556923129142, guid: e3abcb2f87443484ebcaa4d2a300cedf, type: 3}
+      propertyPath: _loose
+      value: SC_Loan_TestHub
       objectReference: {fileID: 0}
     - target: {fileID: 7927219556923129142, guid: e3abcb2f87443484ebcaa4d2a300cedf, type: 3}
       propertyPath: _playerTransform

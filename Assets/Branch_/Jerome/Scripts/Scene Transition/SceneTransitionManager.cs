@@ -13,6 +13,8 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private string _act1 = "SC_Act1";
     [SerializeField] private string _act2 = "SC_Act2";
     [SerializeField] private string _act3 = "SC_Act3";
+    [SerializeField] private string _win = "SC_Win";
+    [SerializeField] private string _loose = "SC_Loose";
     
     private static string _currentSideScene = "";
     private static Vector3 _savedPosition;
@@ -25,6 +27,8 @@ public class SceneTransitionManager : MonoBehaviour
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
+        EventBus.OnGameLoose += LoadLooseScene;
+        EventBus.OnGameWin += LoadWinScene;
         EventBus.OnGameStarted += LoadAct1Scene;
         EventBus.OnCloseEyes?.Invoke();
         StartCoroutine(LoadSceneCoroutine(_hub));
@@ -32,6 +36,8 @@ public class SceneTransitionManager : MonoBehaviour
 
     private void OnDisable()
     {
+        EventBus.OnGameLoose -= LoadLooseScene;
+        EventBus.OnGameWin -= LoadWinScene;
         EventBus.OnGameStarted -= LoadAct1Scene;
     }
 
@@ -78,6 +84,16 @@ public class SceneTransitionManager : MonoBehaviour
     public void LoadAct3Scene()
     {
         StartCoroutine(LoadSceneCoroutine(_act3));
+    }
+
+    private void LoadWinScene()
+    {
+        StartCoroutine(LoadSceneCoroutine(_win));
+    }
+    
+    private void LoadLooseScene()
+    {
+        StartCoroutine(LoadSceneCoroutine(_loose));
     }
     
     private void LoadSideScene(string sceneName)
