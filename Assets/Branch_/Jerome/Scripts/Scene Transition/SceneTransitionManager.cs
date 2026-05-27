@@ -62,7 +62,7 @@ public class SceneTransitionManager : MonoBehaviour
             
             default:
                 {
-                    Debug.LogError("Invalid scene index");
+                    Debug.Log("Invalid scene index");
                 } break;
         }
     }
@@ -94,6 +94,11 @@ public class SceneTransitionManager : MonoBehaviour
     private void LoadLooseScene()
     {
         StartCoroutine(LoadSceneCoroutine(_lose));
+    }
+
+    public void LoadMenu()
+    {
+        StartCoroutine(LoadSceneCoroutine(_hub));
     }
     
     private void LoadSideScene(string sceneName)
