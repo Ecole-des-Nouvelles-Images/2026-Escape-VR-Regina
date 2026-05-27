@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class BlackBoardManager : MonoBehaviour
+public class BlackBoardManager : Puzzle
 {
     [Header("===== Settings =====")] [SerializeField]
     private List<BlackBoardHandler> _socketsBlackBoard = new List<BlackBoardHandler>();
@@ -37,12 +37,18 @@ public class BlackBoardManager : MonoBehaviour
 
         if (CorrectSocket == _socketsBlackBoard.Count)
         {
-            EventBus.OnGameWin?.Invoke();
+            Solve();
         }
         else
         {
             EventBus.OnGameLoose?.Invoke();
         }
         
+    }
+    
+    public override void Solve()
+    {
+        base.Solve();
+        EventBus.OnGameWin?.Invoke();
     }
 }
