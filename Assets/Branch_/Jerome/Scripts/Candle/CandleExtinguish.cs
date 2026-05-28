@@ -4,9 +4,10 @@ using UnityEngine;
 [RequireComponent(typeof(Renderer))]
 public class CandleExtinguish : MonoBehaviour
 {
-    [SerializeField] private string _flameActiveProperty;
     [SerializeField] private ParticleSystem _extinguish;
     
+    // I'm leaving this as hardcoded as I assume we won't just change the property name randomly.
+    private const string FLAME_ACTIVE_PROPERTY = "_Used";
     private bool _isExtinguished = false;
     private Collider _candleCollider;
     private Renderer _candleRenderer;
@@ -24,7 +25,7 @@ public class CandleExtinguish : MonoBehaviour
         if (_candleRenderer)
         {
             _flameMaterial = _candleRenderer.material; // This creates a unique instance automatically
-            _flamePropertyId = Shader.PropertyToID(_flameActiveProperty);
+            _flamePropertyId = Shader.PropertyToID(FLAME_ACTIVE_PROPERTY);
         }
         else
         {
