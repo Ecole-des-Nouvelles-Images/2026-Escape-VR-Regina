@@ -8393,6 +8393,7 @@ GameObject:
   - component: {fileID: 8140347993680095940}
   - component: {fileID: 8140347993680095939}
   - component: {fileID: 8140347993680095938}
+  - component: {fileID: 8140347993680095941}
   m_Layer: 0
   m_Name: RondInteractif_low
   m_TagString: Untagged
@@ -9056,6 +9057,30 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 476.31085
   m_Center: {x: 4.990265, y: -3.095352, z: -42.163097}
+--- !u!114 &8140347993680095941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7279327411895191111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcea0a1ad0ac1b94cb9bf30203dc26d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FixedRotationAxisLockGrabTransformer
+  m_PermittedDisplacementAxes: 7
+  m_ConstrainedAxisDisplacementMode: 1
+  m_TwoHandedRotationMode: 1
+  m_AllowOneHandedScaling: 1
+  m_AllowTwoHandedScaling: 0
+  m_OneHandedScaleSpeed: 0.5
+  m_ThresholdMoveRatioForScale: 0.05
+  m_ClampScaling: 1
+  m_MinimumScaleRatio: 0.25
+  m_MaximumScaleRatio: 2
+  m_ScaleMultiplier: 0.25
+  PermittedRotationAxes: 4
 --- !u!136 &8210603588683650880
 CapsuleCollider:
   m_ObjectHideFlags: 0
