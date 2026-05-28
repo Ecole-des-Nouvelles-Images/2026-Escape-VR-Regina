@@ -129,6 +129,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RotaryPhoneInputHandler
   Data: {fileID: 11400000, guid: 972b7b75b387c364bb1aad0935195945, type: 2}
   PuzzleID: 4
+  _validNumbers:
+  - 1234567
+  - 7654321
 --- !u!114 &2666860763410032368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,7 +225,7 @@ MonoBehaviour:
     m_UseConstant: 1
     m_ConstantValue:
       m_PokeDirection: 6
-      m_InteractionDepthOffset: 0.011
+      m_InteractionDepthOffset: 0.017
       m_EnablePokeAngleThreshold: 1
       m_PokeAngleThreshold: 89.9
     m_Variable: {fileID: 0}
@@ -238,8 +241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24e39f6b343fd8949add6acfd99a0ceb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotaryDialPush
-  _rotationSpeed: 8
-  _returnSpeed: 16
+  _rotationSpeed: 120
+  _returnSpeed: 240
   _maxRotation: 230
   _returnDelay: 0.4
   _dialToRotate: {fileID: 2527938855214638673}
@@ -405,7 +408,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 75.87
+  m_Radius: 111.92
   m_Center: {x: 0, y: 0, z: 100}
 --- !u!1 &4486865230222312753
 GameObject:
@@ -792,37 +795,6 @@ CapsuleCollider:
   m_Height: 25
   m_Direction: 1
   m_Center: {x: 0, y: 3.8, z: 0}
---- !u!1 &9173470975972668315
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 363105791620386896}
-  m_Layer: 0
-  m_Name: Endpoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &363105791620386896
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9173470975972668315}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -221.9, y: 296.6, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2527938855214638673}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8964433878869787536
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -964,9 +936,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1071686180888402007, guid: cae50ed7dea854f488901c64dfda7805, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2905302772275846155}
-    - targetCorrespondingSourceObject: {fileID: -2342685578979760703, guid: cae50ed7dea854f488901c64dfda7805, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 363105791620386896}
     - targetCorrespondingSourceObject: {fileID: -2342685578979760703, guid: cae50ed7dea854f488901c64dfda7805, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8407145637639160121}

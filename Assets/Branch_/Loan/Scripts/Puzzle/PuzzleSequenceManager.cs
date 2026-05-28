@@ -37,11 +37,15 @@ public class PuzzleSequenceManager : MonoBehaviour
     private void Start()
     {
         EventBus.OnPuzzleSolved += HandlePuzzleSolved;
+        EventBus.OnGameLoose += ResetManager;
+        EventBus.OnGameStarted += ResetManager;
     }
 
     private void OnDestroy()
     {
         EventBus.OnPuzzleSolved -= HandlePuzzleSolved;
+        EventBus.OnGameLoose -= ResetManager;
+        EventBus.OnGameStarted -= ResetManager;
     }
     
     public void InjectCurrentChapter(ChapterData chapter)
@@ -107,6 +111,14 @@ public class PuzzleSequenceManager : MonoBehaviour
         _currentHintIndex++;
 
         return hint;
+    }
+
+    private void ResetManager()
+    {
+        CurrentChapter = null;
+        _currentChapterIndex++;
+        _currentPuzzleIndex = 0;
+        _currentHintIndex = 0;
     }
     
     private IEnumerator SceneSwitching(float time)

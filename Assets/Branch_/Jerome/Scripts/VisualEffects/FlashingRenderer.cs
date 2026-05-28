@@ -5,24 +5,24 @@ public class FlashingRenderer : MonoBehaviour
 {
     [Header("References")]
     [Tooltip("Renderer to flash (will auto-find if empty)")]
-    [SerializeField] private Renderer targetRenderer;
+    [SerializeField] private Renderer _targetRenderer;
     
     [Header("Flash Settings")]
-    [SerializeField] private Material flashMaterial;
-    [SerializeField] private float flashDuration = 0.5f;      // time for one complete flash cycle
-    [SerializeField] private AnimationCurve flashCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+    [SerializeField] private Material _flashMaterial;
+    [SerializeField] private float _flashDuration = 0.5f;      // time for one complete flash cycle
+    [SerializeField] private AnimationCurve _flashCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
     
-    private Material originalMaterial;
-    private bool isFlashing = false;
-    private Coroutine flashCoroutine;
-    private float currentFlashAlpha = 0f;
+    private Material _originalMaterial;
+    private bool _isFlashing = false;
+    private Coroutine _flashCoroutine;
+    private float _currentFlashAlpha = 0f;
 
     void Awake()
     {
-        if (targetRenderer == null)
-            targetRenderer = GetComponent<Renderer>();
+        if (_targetRenderer == null)
+            _targetRenderer = GetComponent<Renderer>();
         
-        if (targetRenderer == null)
+        if (_targetRenderer == null)
         {
             Debug.LogError($"No Renderer found on {gameObject.name}");
             enabled = false;
@@ -30,11 +30,11 @@ public class FlashingRenderer : MonoBehaviour
         }
 
         // Store original material
-        originalMaterial = targetRenderer.material;
+        _originalMaterial = _targetRenderer.material;
         
         // Create instance of flash material so we can modify it safely
-        if (flashMaterial != null)
-            flashMaterial = new Material(flashMaterial);
+        if (_flashMaterial != null)
+            _flashMaterial = new Material(_flashMaterial);
         else
             Debug.LogWarning($"No flash material assigned on {gameObject.name}");
     }
@@ -42,52 +42,52 @@ public class FlashingRenderer : MonoBehaviour
     [ContextMenu("Flash")]
     public void StartFlashing()
     {
-        if (isFlashing) return;
-        if (targetRenderer == null || flashMaterial == null) return;
+        if (_isFlashing) return;
+        if (_targetRenderer == null || _flashMaterial == null) return;
         
-        isFlashing = true;
-        if (flashCoroutine != null)
-            StopCoroutine(flashCoroutine);
-        flashCoroutine = StartCoroutine(FlashRoutine());
+        _isFlashing = true;
+        if (_flashCoroutine != null)
+            StopCoroutine(_flashCoroutine);
+        _flashCoroutine = StartCoroutine(FlashRoutine());
     }
 
     [ContextMenu("StopFlashing")]
     public void StopFlashing()
     {
-        isFlashing = false;
-        if (flashCoroutine != null)
+        _isFlashing = false;
+        if (_flashCoroutine != null)
         {
-            StopCoroutine(flashCoroutine);
-            flashCoroutine = null;
+            StopCoroutine(_flashCoroutine);
+            _flashCoroutine = null;
         }
         
         // Restore original material
-        if (targetRenderer != null && originalMaterial != null)
-            targetRenderer.material = originalMaterial;
+        if (_targetRenderer != null && _originalMaterial != null)
+            _targetRenderer.material = _originalMaterial;
     }
 
     private IEnumerator FlashRoutine()
     {
         float timer = 0f;
         
-        while (isFlashing)
+        while (_isFlashing)
         {
             timer += Time.deltaTime;
-            float t = (timer % flashDuration) / flashDuration;
+            float t = (timer % _flashDuration) / _flashDuration;
             
             // Get alpha value between 0 and 1 based on curve
-            float alpha = flashCurve.Evaluate(Mathf.PingPong(t, 1f));
-            currentFlashAlpha = alpha;
+            float alpha = _flashCurve.Evaluate(Mathf.PingPong(t, 1f));
+            _currentFlashAlpha = alpha;
             
             // Apply flash material with current alpha
-            if (flashMaterial != null)
+            if (_flashMaterial != null)
             {
                 // Set alpha on flash material
-                Color color = flashMaterial.color;
+                Color color = _flashMaterial.color;
                 color.a = alpha;
-                flashMaterial.color = color;
+                _flashMaterial.color = color;
                 
-                targetRenderer.material = flashMaterial;
+                _targetRenderer.material = _flashMaterial;
                 
             }
             
@@ -98,6 +98,6 @@ public class FlashingRenderer : MonoBehaviour
     // Optional: Public method to change flash material at runtime
     public void SetFlashMaterial(Material newFlashMaterial)
     {
-        flashMaterial = newFlashMaterial;
+        _flashMaterial = newFlashMaterial;
     }
 }
