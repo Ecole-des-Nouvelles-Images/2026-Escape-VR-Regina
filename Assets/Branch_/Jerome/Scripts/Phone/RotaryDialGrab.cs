@@ -253,7 +253,7 @@ public class RotaryDialGrab : XRBaseInteractable
             _currentRotationDelta = Mathf.Clamp(_currentRotationDelta, 0, _maxRotationAngle);
         }
         
-        if (_inputHandler != null)
+        if (_inputHandler)
             _inputHandler.ReleaseDial();
     }
     
