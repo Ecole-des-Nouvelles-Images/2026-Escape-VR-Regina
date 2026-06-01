@@ -25,15 +25,13 @@ public class RotaryPhoneInputHandler : Puzzle
     private void CompareNumber(List<char> phoneNumber)
     {
         string number = new(phoneNumber.ToArray());
-        
+        Debug.Log(number);
         int index = _validNumbers.IndexOf(number);
-        if (index == -1) return;
         
         // Define what number corresponds to what action/event
         switch (index)
         {
             case 0:
-                
                 Solve();
                 break;
             case 1:
@@ -41,6 +39,7 @@ public class RotaryPhoneInputHandler : Puzzle
             case 2:
                 break;
         }
+        _phoneNumber.Clear();
     }
 
     public void ReleaseDial()
@@ -52,7 +51,6 @@ public class RotaryPhoneInputHandler : Puzzle
         if (_phoneNumber.Count == 7) CompareNumber(_phoneNumber);
 
         _numberStack.Clear();
-        _numberStack.Push('0'); // Edge Case : Player releases dial immediately
     }
     public void InputNumber()
     {
