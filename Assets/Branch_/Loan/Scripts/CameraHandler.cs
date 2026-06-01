@@ -66,9 +66,6 @@ public class CameraHandler : MonoBehaviour
             .DOAnchorPosY(_downStartPos.y + _closedOffset, duration)
             .SetEase(Ease.InOutSine)
             .SetDelay(_microDelay);
-
-        // réouverture automatique
-        // DOVirtual.DelayedCall(duration + Random.Range(0.02f, 0.06f), OpenEyes);
     }
 
     [ContextMenu("Open Eyes")]
@@ -104,8 +101,7 @@ public class CameraHandler : MonoBehaviour
     {
         if (other.CompareTag("Player"))
             return;
-
-        //Test clein d'oeils
+        
         if (other.CompareTag("Test"))
         {
             Blink();
