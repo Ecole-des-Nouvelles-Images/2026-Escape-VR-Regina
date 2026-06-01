@@ -7,7 +7,9 @@ public class DrawerHandler : Puzzle
 {
    [SerializeField] private GameObject _drawer01;
    [SerializeField] private GameObject _drawer02;
-   [SerializeField] private XRGrabInteractable _grabDrawer; 
+   [SerializeField] private XRGrabInteractable _grabDrawer;
+   [SerializeField] private Rigidbody _rbGrabDrawer;
+   [SerializeField] private XRGrabInteractable _journalGrab;
    [SerializeField]private XRSocketInteractor  _grabSocket;
    [SerializeField]private XRSocketInteractor  _grabSocket1;
 
@@ -17,8 +19,10 @@ public class DrawerHandler : Puzzle
    private void Awake()
    {
       _grabDrawer.enabled = false;
+      _journalGrab.enabled = false;
       _grabSocket.selectEntered.AddListener(OnSocket);
       _grabSocket1.selectEntered.AddListener(OnSocket1);
+      _rbGrabDrawer.constraints = RigidbodyConstraints.FreezeAll;
    }
 
    private void Update()
@@ -57,6 +61,10 @@ public class DrawerHandler : Puzzle
       base.Solve();
       
       _grabDrawer.enabled = true;
+      _journalGrab.enabled = true;
+      _rbGrabDrawer.constraints = RigidbodyConstraints.FreezePositionY | 
+                       RigidbodyConstraints.FreezePositionZ | 
+                       RigidbodyConstraints.FreezeRotation;
       _isEnabled = true;
    }
 }

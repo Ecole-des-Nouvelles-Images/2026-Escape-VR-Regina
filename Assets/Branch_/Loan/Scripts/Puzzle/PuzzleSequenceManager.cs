@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class PuzzleSequenceManager : MonoBehaviour
 {
@@ -26,6 +26,8 @@ public class PuzzleSequenceManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+       
+        
         _currentChapterIndex = 0;
         
         _cameraHandler = FindAnyObjectByType<CameraHandler>();
@@ -35,11 +37,15 @@ public class PuzzleSequenceManager : MonoBehaviour
     private void Start()
     {
         EventBus.OnPuzzleSolved += HandlePuzzleSolved;
+        EventBus.OnGameLoose += ResetManager;
+        EventBus.OnGameStarted += ResetManager;
     }
 
     private void OnDestroy()
     {
         EventBus.OnPuzzleSolved -= HandlePuzzleSolved;
+        EventBus.OnGameLoose -= ResetManager;
+        EventBus.OnGameStarted -= ResetManager;
     }
     
     public void InjectCurrentChapter(ChapterData chapter)
@@ -105,6 +111,14 @@ public class PuzzleSequenceManager : MonoBehaviour
         _currentHintIndex++;
 
         return hint;
+    }
+
+    private void ResetManager()
+    {
+        CurrentChapter = null;
+        //_currentChapterIndex++;
+        _currentPuzzleIndex = 0;
+        _currentHintIndex = 0;
     }
     
     private IEnumerator SceneSwitching(float time)

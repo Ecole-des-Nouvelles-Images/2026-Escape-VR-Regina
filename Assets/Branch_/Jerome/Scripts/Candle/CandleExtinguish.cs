@@ -1,12 +1,15 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(Renderer))]
 public class CandleExtinguish : MonoBehaviour
 {
-    [SerializeField] private string _flameActiveProperty;
     [SerializeField] private ParticleSystem _extinguish;
+    [SerializeField] private GameObject _lightSource;
     
+    // I'm leaving this as hardcoded as I assume we won't just change the property name randomly.
+    private const string FLAME_ACTIVE_PROPERTY = "_Used";
     private bool _isExtinguished = false;
     private Collider _candleCollider;
     private Renderer _candleRenderer;
@@ -24,7 +27,7 @@ public class CandleExtinguish : MonoBehaviour
         if (_candleRenderer)
         {
             _flameMaterial = _candleRenderer.material; // This creates a unique instance automatically
-            _flamePropertyId = Shader.PropertyToID(_flameActiveProperty);
+            _flamePropertyId = Shader.PropertyToID(FLAME_ACTIVE_PROPERTY);
         }
         else
         {
@@ -42,6 +45,30 @@ public class CandleExtinguish : MonoBehaviour
         {
             Debug.LogWarning("No CandleManager found in the scene!");
         }
+        
+        // Turn off the Candles at the start.
+        _candleCollider.enabled = false;
+        _candleRenderer.enabled = false;
+        _lightSource.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        EventBus.OnPuzzleSolved += OnPuzzleSolved;
+    }
+
+    private void OnPuzzleSolved(Puzzle obj)
+    {
+        if (obj.PuzzleID != 2) return;
+        
+        _candleCollider.enabled = true;
+        _candleRenderer.enabled = true;
+        _lightSource.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.OnPuzzleSolved -= OnPuzzleSolved;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -59,6 +86,7 @@ public class CandleExtinguish : MonoBehaviour
         {
             _flameMaterial.SetFloat(_flamePropertyId, 0f);
         }
+        _lightSource.gameObject.SetActive(false); // Turn off the light source
         
         _isExtinguished = true;
         
