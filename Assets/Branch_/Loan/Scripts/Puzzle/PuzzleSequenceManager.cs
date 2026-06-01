@@ -38,14 +38,14 @@ public class PuzzleSequenceManager : MonoBehaviour
     {
         EventBus.OnPuzzleSolved += HandlePuzzleSolved;
         EventBus.OnGameLoose += ResetManager;
-        EventBus.OnGameStarted += ResetManager;
+        // EventBus.OnGameStarted += ResetManager;
     }
 
     private void OnDestroy()
     {
         EventBus.OnPuzzleSolved -= HandlePuzzleSolved;
         EventBus.OnGameLoose -= ResetManager;
-        EventBus.OnGameStarted -= ResetManager;
+        // EventBus.OnGameStarted -= ResetManager;
     }
     
     public void InjectCurrentChapter(ChapterData chapter)
