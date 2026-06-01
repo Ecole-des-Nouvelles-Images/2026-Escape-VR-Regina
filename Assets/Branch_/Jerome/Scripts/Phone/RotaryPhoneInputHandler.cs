@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
 public class RotaryPhoneInputHandler : Puzzle
 {
     [Tooltip("7 digit numbers")]
     [SerializeField] private List<string> _validNumbers = new() {"1234567", "7654321"};
+    
     private readonly Stack<char> _numberStack = new();
     private readonly List<char> _phoneNumber = new();
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Number")) _numberStack.Push(Convert.ToChar(other.gameObject.name));
-    }
 
     private void Start()
     {
-        _numberStack.Push('0'); // Edge Case : Player releases dial immediately
-
         foreach (string number in _validNumbers.Where(number => number.Length != 7)) _validNumbers.Remove(number);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Number")) _numberStack.Push(Convert.ToChar(other.gameObject.name));
     }
 
     // No-OP for now, but it would compare the number to any we have listed as correct otherwise empty the number
@@ -46,13 +45,14 @@ public class RotaryPhoneInputHandler : Puzzle
 
     public void ReleaseDial()
     {
+        if (_numberStack.Count == 0)  return;
+        
         // take from the top of the stack
         _phoneNumber.Add(_numberStack.Pop());
         if (_phoneNumber.Count == 7) CompareNumber(_phoneNumber);
 
         _numberStack.Clear();
         _numberStack.Push('0'); // Edge Case : Player releases dial immediately
-        
     }
     public void InputNumber()
     {

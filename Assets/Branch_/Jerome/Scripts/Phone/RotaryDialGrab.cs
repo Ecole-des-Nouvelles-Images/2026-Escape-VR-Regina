@@ -11,38 +11,64 @@ public class RotaryDialGrab : XRBaseInteractable
     [SerializeField] private float _returnSpeed = 300f;
     [SerializeField] private float _returnDelay = 0.2f;
     
+    [Header("Sensitivity & Smoothing")]
+    [SerializeField] private float _rotationSensitivity = 2.5f; // Multiplier for rotation sensitivity
+    [SerializeField] private float _smoothingFactor = 0.15f; // Lower = smoother but more lag
+    [SerializeField] private float _angularVelocityLimit = 720f; // Max degrees per second
+    
+    [Header("Haptics")]
+    [SerializeField] private float _hapticOnStart = 0.1f;
+    [SerializeField] private float _hapticOnStop = 0.15f;
+    [SerializeField] private float _hapticOnMaxRotation = 0.2f;
+    
     [Header("References")]
     [SerializeField] private Transform _dialToRotate;
     [SerializeField] private RotaryPhoneInputHandler _inputHandler;
     
-    // Rotation tracking (similar to push script)
+    // Rotation tracking
     private Quaternion _initialRotation;
     private float _currentRotationDelta;
     private bool _isDialing;
     private bool _isReturning;
     private float _returnTimer;
     
-    // 1:1 tracking variables
+    // Enhanced 1:1 tracking variables
     private IXRSelectInteractor _currentInteractor;
-    private float _rotationStartDelta;
-    private Vector3 _rotationStartDirection;
+    private Vector3 _lastHandPosition;
+    private Vector3 _lastHandDirection;
+    private float _lastAngleDelta;
+    private float _smoothRotationDelta;
+    private float _angularVelocity;
     private bool _hasStartedRotation;
+    
+    // For better sensitivity calculation
+    private float _dialRadius = 0.1f; // Approximate radius of the dial in meters
+    private Vector3 _dialCenter;
     
     protected override void Awake()
     {
         base.Awake();
         
-        // Find input handler if not assigned
         if (!_inputHandler)
             _inputHandler = FindFirstObjectByType<RotaryPhoneInputHandler>();
     }
     
     private void Start()
     {
-        // Store the initial rotation of the dial
         if (_dialToRotate != null)
         {
             _initialRotation = _dialToRotate.rotation;
+            _dialCenter = GetDialCenter();
+            
+            // Estimate dial radius from collider or mesh bounds
+            if (TryGetComponent<Collider>(out var col))
+            {
+                _dialRadius = Mathf.Max(col.bounds.extents.x, col.bounds.extents.y);
+            }
+            else if (_dialToRotate.TryGetComponent<MeshRenderer>(out var renderer))
+            {
+                _dialRadius = Mathf.Max(renderer.bounds.extents.x, renderer.bounds.extents.y);
+            }
         }
         else
         {
@@ -56,27 +82,23 @@ public class RotaryDialGrab : XRBaseInteractable
     {
         base.OnSelectEntered(args);
         
-        // Cancel any pending return
         _returnTimer = 0;
         _isReturning = false;
         _isDialing = true;
         _currentInteractor = args.interactorObject;
         _hasStartedRotation = false;
+        _angularVelocity = 0f;
+        _smoothRotationDelta = _currentRotationDelta;
         
-        // Get initial hand position for 1:1 tracking
+        // Get initial hand position
         Transform attachTransform = args.interactorObject.GetAttachTransform(this);
         if (attachTransform != null)
         {
-            Vector3 dialCenter = GetDialCenter();
-            Vector3 handPosition = attachTransform.position;
-            Vector3 handDirection = (handPosition - dialCenter).normalized;
+            _lastHandPosition = attachTransform.position;
+            _lastHandDirection = ProjectOntoRotationPlane((_lastHandPosition - _dialCenter).normalized);
             
-            // Project onto rotation plane
-            handDirection = ProjectOntoRotationPlane(handDirection);
-
-            _rotationStartDirection = handDirection;
-            _rotationStartDelta = _currentRotationDelta;
-            _hasStartedRotation = true;
+            // Provide haptic feedback on grab
+            SendHapticFeedback(_hapticOnStart);
         }
     }
     
@@ -86,11 +108,17 @@ public class RotaryDialGrab : XRBaseInteractable
         
         if (_isDialing)
         {
-            StopDialing();
+            // Calculate momentum for natural release feel
+            float momentum = Mathf.Clamp(Mathf.Abs(_angularVelocity) / _angularVelocityLimit, 0f, 0.5f);
+            _currentRotationDelta = _smoothRotationDelta;
+            StopDialing(momentum);
+            
+            SendHapticFeedback(_hapticOnStop);
         }
         
         _currentInteractor = null;
         _hasStartedRotation = false;
+        _angularVelocity = 0f;
     }
     
     public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
@@ -99,83 +127,108 @@ public class RotaryDialGrab : XRBaseInteractable
         
         if (updatePhase == XRInteractionUpdateOrder.UpdatePhase.Dynamic)
         {
-            if (_isDialing && _currentInteractor != null && _hasStartedRotation)
+            if (_isDialing && _currentInteractor != null)
             {
-                UpdateRotation1To1();
+                UpdateRotationEnhanced();
             }
             
             UpdateRotationMechanics();
         }
     }
     
-    private void UpdateRotation1To1()
+    private void UpdateRotationEnhanced()
     {
-        // Safely get the attach transform
         Transform attachTransform = _currentInteractor.GetAttachTransform(this);
         if (attachTransform == null) return;
         
-        // Get dial center and current hand position
-        Vector3 dialCenter = GetDialCenter();
-        Vector3 handPosition = attachTransform.position;
-        Vector3 currentHandDirection = (handPosition - dialCenter).normalized;
-        
-        // Project onto rotation plane
+        Vector3 currentHandPosition = attachTransform.position;
+        Vector3 currentHandDirection = (currentHandPosition - _dialCenter).normalized;
         currentHandDirection = ProjectOntoRotationPlane(currentHandDirection);
         
-        // Calculate the signed angle from start direction to current direction
-        float angleDelta = Vector3.SignedAngle(_rotationStartDirection, currentHandDirection, Vector3.forward);
-        
-        // Calculate new rotation delta based on start delta + delta movement
-        float newDelta = _rotationStartDelta + angleDelta;
-        
-        // Apply constraints (clockwise only - from 0 to max, never below 0)
-        if (newDelta < 0)
+        if (!_hasStartedRotation)
         {
-            newDelta = 0;
-            // Reset start position when hitting the stop (gives mechanical feel)
-            _rotationStartDelta = 0;
-            _rotationStartDirection = currentHandDirection;
+            // Initialize tracking
+            _lastHandDirection = currentHandDirection;
+            _lastAngleDelta = 0f;
+            _hasStartedRotation = true;
+            return;
         }
         
-        // Clamp to max rotation (like physical stop)
-        if (newDelta > _maxRotationAngle)
+        // Calculate angle using cross product for better sensitivity
+        Vector3 cross = Vector3.Cross(_lastHandDirection, currentHandDirection);
+        float signedAngle = Vector3.SignedAngle(_lastHandDirection, currentHandDirection, Vector3.forward);
+        
+        // Alternative more sensitive calculation using arc length
+        float angularDistance = Vector3.Angle(_lastHandDirection, currentHandDirection);
+        float handMovementDistance = Vector3.Distance(_lastHandPosition, currentHandPosition);
+        
+        // Enhanced sensitivity: use both angular change and hand arc movement
+        float adjustedAngle = signedAngle * _rotationSensitivity;
+        
+        // If hand moves significantly, boost sensitivity
+        if (handMovementDistance > 0.02f && angularDistance < 30f)
         {
-            newDelta = _maxRotationAngle;
-            // Optional: Add haptic feedback when hitting max
-            if (_currentInteractor is XRBaseInputInteractor controllerInteractor && newDelta >= _maxRotationAngle)
-            {
-                controllerInteractor.SendHapticImpulse(0.2f, 0.05f);
-            }
+            float arcBoost = Mathf.Lerp(1f, 2f, handMovementDistance / 0.1f);
+            adjustedAngle *= arcBoost;
         }
         
-        // Apply 1:1 rotation
-        _currentRotationDelta = newDelta;
+        // Calculate angular velocity for smoothing
+        _angularVelocity = adjustedAngle / Time.deltaTime;
+        _angularVelocity = Mathf.Clamp(_angularVelocity, -_angularVelocityLimit, _angularVelocityLimit);
+        
+        // Apply smoothing to reduce jitter
+        float targetDelta = _currentRotationDelta + adjustedAngle;
+        
+        // Apply constraints (clockwise only)
+        if (targetDelta < 0)
+        {
+            targetDelta = 0;
+            SendHapticFeedback(_hapticOnStop * 0.5f);
+        }
+        
+        if (targetDelta > _maxRotationAngle)
+        {
+            targetDelta = _maxRotationAngle;
+            SendHapticFeedback(_hapticOnMaxRotation);
+        }
+        
+        // Smooth the rotation delta
+        _smoothRotationDelta = Mathf.Lerp(_smoothRotationDelta, targetDelta, 1f - _smoothingFactor);
+        _currentRotationDelta = _smoothRotationDelta;
+        
+        // Update tracking for next frame
+        _lastHandPosition = currentHandPosition;
+        _lastHandDirection = currentHandDirection;
+        _lastAngleDelta = adjustedAngle;
     }
     
     private void UpdateRotationMechanics()
     {
         if (_isDialing)
         {
-            // Apply rotation while dialing (1:1 already set in UpdateRotation1To1)
             ApplyRotation();
         }
         else if (_isReturning)
         {
-            // Decrease the rotation delta back to zero (using same speed as push script)
-            _currentRotationDelta -= _returnSpeed * Time.deltaTime;
-            
-            // Clamp to zero
-            if (_currentRotationDelta <= 0)
+            // Add easing for smoother return
+            float returnAmount = _returnSpeed * Time.deltaTime;
+            if (_currentRotationDelta < returnAmount)
             {
                 _currentRotationDelta = 0;
                 _isReturning = false;
+            }
+            else
+            {
+                // Ease out for natural feel
+                float t = _currentRotationDelta / _maxRotationAngle;
+                float easedReturn = returnAmount * (1f + t * 0.5f);
+                _currentRotationDelta -= easedReturn;
             }
             
             ApplyRotation();
         }
         else if (_returnTimer > 0)
         {
-            // Count down the return delay
             _returnTimer -= Time.deltaTime;
             if (_returnTimer <= 0)
             {
@@ -185,15 +238,22 @@ public class RotaryDialGrab : XRBaseInteractable
         }
     }
     
-    private void StopDialing()
+    private void StopDialing(float momentum = 0f)
     {
         if (!_isDialing) return;
         
         _isDialing = false;
         _returnTimer = _returnDelay;
         
-        // Notify the input handler that dialing has stopped (same logic as push script)
-        if (_inputHandler != null)
+        // Optionally add momentum to the return
+        if (momentum > 0.05f && _currentRotationDelta < _maxRotationAngle * 0.8f)
+        {
+            // Add slight momentum before returning
+            _currentRotationDelta += momentum * 30f;
+            _currentRotationDelta = Mathf.Clamp(_currentRotationDelta, 0, _maxRotationAngle);
+        }
+        
+        if (_inputHandler)
             _inputHandler.ReleaseDial();
     }
     
@@ -201,61 +261,71 @@ public class RotaryDialGrab : XRBaseInteractable
     {
         if (_dialToRotate == null) return;
         
-        // Create the delta rotation from the current accumulated angle
+        // Use local rotation for better compatibility with parent transforms
         Quaternion deltaRotation = Quaternion.Euler(0f, 0f, _currentRotationDelta);
-
-        // Combine the initial rotation with the delta rotation
         _dialToRotate.rotation = _initialRotation * deltaRotation;
     }
     
     private Vector3 GetDialCenter()
     {
-        // Use parent as pivot point if available, otherwise use dial position
+        // Better pivot detection - use the center of the dial's visual
         Transform pivotTransform = _dialToRotate.parent != null ? _dialToRotate.parent : _dialToRotate;
+        
+        // Get the actual center of the dial mesh or collider
+        if (_dialToRotate.TryGetComponent<Collider>(out var col))
+            return col.bounds.center;
+        
         return pivotTransform.position;
     }
     
     private Vector3 ProjectOntoRotationPlane(Vector3 direction)
     {
-        Vector3 axis = Vector3.forward;
+        // Use the dial's up vector for proper orientation
+        Vector3 axis = _dialToRotate.parent != null ? _dialToRotate.parent.up : Vector3.forward;
         
-        // Remove component along rotation axis to project onto rotation plane
         float axisComponent = Vector3.Dot(direction, axis);
         Vector3 projected = direction - (axis * axisComponent);
         
-        // Normalize and handle zero vector
         if (projected.magnitude < 0.001f)
         {
-            // Find a perpendicular vector to the axis
-            if (Mathf.Abs(Vector3.Dot(axis, Vector3.right)) < 0.9f)
-                return Vector3.Cross(axis, Vector3.right).normalized;
-            else
-                return Vector3.Cross(axis, Vector3.up).normalized;
+            // Find perpendicular vector
+            Vector3 perp = Vector3.Cross(axis, Vector3.right);
+            if (perp.magnitude < 0.001f)
+                perp = Vector3.Cross(axis, Vector3.up);
+            return perp.normalized;
         }
         
         return projected.normalized;
     }
     
-    // Public methods for external use (matching push script interface)
+    private void SendHapticFeedback(float intensity)
+    {
+        if (_currentInteractor is XRBaseInputInteractor controllerInteractor && intensity > 0)
+        {
+            controllerInteractor.SendHapticImpulse(intensity, 0.05f);
+        }
+    }
+    
     public bool IsDialing() => _isDialing;
     public bool IsReturning() => _isReturning;
     public float GetCurrentRotation() => _currentRotationDelta;
     
-    // Reset the dial to its initial position (same as push script)
     public void ResetDial()
     {
         _currentRotationDelta = 0;
+        _smoothRotationDelta = 0;
         _isDialing = false;
         _isReturning = false;
         _returnTimer = 0;
         _hasStartedRotation = false;
+        _angularVelocity = 0f;
         ApplyRotation();
     }
     
-    // Manually set the rotation delta (for external control)
     public void SetRotationDelta(float deltaDegrees)
     {
         _currentRotationDelta = Mathf.Clamp(deltaDegrees, 0f, _maxRotationAngle);
+        _smoothRotationDelta = _currentRotationDelta;
         ApplyRotation();
     }
 }
