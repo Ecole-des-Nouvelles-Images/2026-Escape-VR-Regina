@@ -13,7 +13,8 @@ public class RotaryPhoneInputHandler : Puzzle
 
     private void Start()
     {
-        foreach (string number in _validNumbers.Where(number => number.Length != 7)) _validNumbers.Remove(number);
+        foreach (string number in _validNumbers.Where(number => number.Length != 7).ToList()) 
+            _validNumbers.Remove(number);
         
         // TODO : During Polish if we want to add some more easter eggs we could still allow the phone to be used
         // TODO : but just disable the wining number.
@@ -31,6 +32,7 @@ public class RotaryPhoneInputHandler : Puzzle
         
         GetComponent<Collider>().enabled = true;
     }
+    
     private void OnDisable()
     {
         EventBus.OnPuzzleSolved -= OnPuzzleSolved;
@@ -38,14 +40,13 @@ public class RotaryPhoneInputHandler : Puzzle
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Number")) _numberStack.Push(Convert.ToChar(other.gameObject.name));
+        if (other.CompareTag("Number")) 
+            _numberStack.Push(Convert.ToChar(other.gameObject.name));
     }
 
-    // No-OP for now, but it would compare the number to any we have listed as correct otherwise empty the number
     private void CompareNumber(List<char> phoneNumber)
     {
         string number = new(phoneNumber.ToArray());
-        Debug.Log(number);
         int index = _validNumbers.IndexOf(number);
         
         // Define what number corresponds to what action/event
@@ -58,29 +59,68 @@ public class RotaryPhoneInputHandler : Puzzle
                 break;
             case 2:
                 break;
+            default:
+                WrongNumber();
+                break;
         }
         _phoneNumber.Clear();
     }
 
-    public void ReleaseDial()
+    private void CheckCurrentSequence()
     {
-        if (_numberStack.Count == 0)  return;
+        if (_phoneNumber.Count == 0) return;
         
-        // take from the top of the stack
-        _phoneNumber.Add(_numberStack.Pop());
-        if (_phoneNumber.Count == 7) CompareNumber(_phoneNumber);
-
-        _numberStack.Clear();
-    }
-    public void InputNumber()
-    {
-        _phoneNumber.Add(_numberStack.Pop());
-        _numberStack.Clear();
-
-        if (_phoneNumber.Count >= 7)
+        string currentSequence = new(_phoneNumber.ToArray());
+        
+        // Check if the current sequence matches the start of any valid number
+        bool isValidPrefix = _validNumbers.Any(validNumber => validNumber.StartsWith(currentSequence));
+        
+        // If it's not a valid prefix, and we've entered at least one digit, it's wrong
+        if (!isValidPrefix && _phoneNumber.Count > 0)
         {
-            CompareNumber(_phoneNumber);
+            WrongNumber();
+            _phoneNumber.Clear();
+            _numberStack.Clear();
+        }
+        // If we have a complete 7-digit number, check if it exactly matches any valid number
+        else if (_phoneNumber.Count == 7)
+        {
+            string fullNumber = new(_phoneNumber.ToArray());
+            if (_validNumbers.Contains(fullNumber))
+            {
+                Solve();
+                _phoneNumber.Clear();
+            }
+            else
+            {
+                WrongNumber();
+                _phoneNumber.Clear();
+                _numberStack.Clear();
+            }
         }
     }
 
+    private void WrongNumber()
+    {
+        // TODO: Add error feedback here (sound, visual effect, etc.)
+    }
+
+    public void ReleaseDial()
+    {
+        if (_numberStack.Count == 0) return;
+        
+        // take from the top of the stack
+        _phoneNumber.Add(_numberStack.Pop());
+        
+        // Check the current sequence after adding the digit
+        CheckCurrentSequence();
+        
+        _numberStack.Clear();
+    }
+    
+    public void ClearSequence()
+    {
+        _phoneNumber.Clear();
+        _numberStack.Clear();
+    }
 }
