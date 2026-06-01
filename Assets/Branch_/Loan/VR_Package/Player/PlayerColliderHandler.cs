@@ -1,10 +1,16 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class PlayerColliderHandler : MonoBehaviour
 {
    [Header("General Settings")]
    [SerializeField] private Transform _targetTransform;
    [SerializeField] private CharacterController _characterController;
+   [FormerlySerializedAs("interactor")] [SerializeField] private XRBaseInteractor _rightBaseInteractor;
+   [SerializeField] private XRBaseInteractor _leftBaseInteractor;
    
    [Header("Height collider Settings")]
    [SerializeField] private float _minHeight;
@@ -12,6 +18,26 @@ public class PlayerColliderHandler : MonoBehaviour
    
    private Quaternion _initialRotation;
    private Transform _enemieTransform;
+   public bool _islockGrab;
+   [SerializeField]private LockManager _lockManager;
+
+   private void OnEnable()
+   {
+      if (_rightBaseInteractor != null)
+      {
+         _rightBaseInteractor.selectEntered.AddListener(OnObjectGrabbed);
+         _leftBaseInteractor.selectEntered.AddListener(OnObjectGrabbed);
+      }
+   }
+
+   private void OnDisable()
+   {
+      if (_rightBaseInteractor != null)
+      {
+         _rightBaseInteractor.selectEntered.RemoveListener(OnObjectGrabbed);
+         _leftBaseInteractor.selectEntered.RemoveListener(OnObjectGrabbed);
+      }
+   }
 
    private void Update()
    {
@@ -24,5 +50,35 @@ public class PlayerColliderHandler : MonoBehaviour
       _characterController.center =
          new Vector3(_characterController.center.x, newHeight / 2f, _characterController.center.z);
    }
-   
+
+   private void OnObjectGrabbed(SelectEnterEventArgs args)
+   {
+      if (!_islockGrab)
+      {
+         GameObject grabbedObject = args.interactableObject.transform.gameObject;
+         if (grabbedObject.CompareTag("Lock"))
+         {
+            _lockManager = grabbedObject.GetComponent<LockManager>();
+            _islockGrab = true;
+         }
+      }
+      else
+      {
+         GameObject grabbedObject = args.interactableObject.transform.gameObject;
+         if (grabbedObject.CompareTag("Lock"))
+         {
+            _lockManager = null;
+            _islockGrab = false;
+            Debug.Log("Helloz");
+         }
+         
+         if (_lockManager != null)
+         {
+            _lockManager.OnGrab(args);
+            Debug.Log("HellozZZZZ");
+            _islockGrab = false;
+            _lockManager = null;
+         }
+      }
+   }
 }

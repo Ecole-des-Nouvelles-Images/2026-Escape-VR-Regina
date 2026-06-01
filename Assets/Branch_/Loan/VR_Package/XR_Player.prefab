@@ -1196,8 +1196,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerColliderHandler
   _targetTransform: {fileID: 8819943966943791160}
   _characterController: {fileID: 9215874499040370378}
+  _rightBaseInteractor: {fileID: 0}
+  _leftBaseInteractor: {fileID: 0}
   _minHeight: 0.6
   _maxHeight: 1.44
+  _islockGrab: 0
+  _lockManager: {fileID: 0}
 --- !u!1 &3502668491200357688
 GameObject:
   m_ObjectHideFlags: 0
