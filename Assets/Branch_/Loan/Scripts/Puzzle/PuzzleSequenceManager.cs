@@ -116,7 +116,7 @@ public class PuzzleSequenceManager : MonoBehaviour
     private void ResetManager()
     {
         CurrentChapter = null;
-        _currentChapterIndex++;
+        //_currentChapterIndex++;
         _currentPuzzleIndex = 0;
         _currentHintIndex = 0;
     }
