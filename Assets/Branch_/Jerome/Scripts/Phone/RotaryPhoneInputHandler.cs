@@ -14,6 +14,26 @@ public class RotaryPhoneInputHandler : Puzzle
     private void Start()
     {
         foreach (string number in _validNumbers.Where(number => number.Length != 7)) _validNumbers.Remove(number);
+        
+        // TODO : During Polish if we want to add some more easter eggs we could still allow the phone to be used
+        // TODO : but just disable the wining number.
+        GetComponent<Collider>().enabled = false; // Won't accept inputs until the puzzle has started
+    }
+
+    private void OnEnable()
+    {
+        EventBus.OnPuzzleSolved += OnPuzzleSolved;
+    }
+
+    private void OnPuzzleSolved(Puzzle obj)
+    {
+        if (obj.PuzzleID != 1) return;
+        
+        GetComponent<Collider>().enabled = true;
+    }
+    private void OnDisable()
+    {
+        EventBus.OnPuzzleSolved -= OnPuzzleSolved;
     }
 
     private void OnTriggerEnter(Collider other)

@@ -159,6 +159,7 @@ public class LockManager : Puzzle
         Solve();
     }
 
+    [ContextMenu("Solve")]
     public override void Solve()
     {
         base.Solve();

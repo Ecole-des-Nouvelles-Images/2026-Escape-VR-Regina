@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -44,6 +45,30 @@ public class CandleExtinguish : MonoBehaviour
         {
             Debug.LogWarning("No CandleManager found in the scene!");
         }
+        
+        // Turn off the Candles at the start.
+        _candleCollider.enabled = false;
+        _candleRenderer.enabled = false;
+        _lightSource.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        EventBus.OnPuzzleSolved += OnPuzzleSolved;
+    }
+
+    private void OnPuzzleSolved(Puzzle obj)
+    {
+        if (obj.PuzzleID != 2) return;
+        
+        _candleCollider.enabled = true;
+        _candleRenderer.enabled = true;
+        _lightSource.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.OnPuzzleSolved -= OnPuzzleSolved;
     }
 
     private void OnTriggerEnter(Collider other)
