@@ -1466,6 +1466,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1910881095851426125, guid: 235e0872436395145b66e44ffde28553, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 2876598478365453865, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.5
@@ -1620,8 +1624,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 555797037}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.03223157, y: 0.000000070780516, z: 0.000000022351742, w: 0.9994805}
+  m_LocalPosition: {x: -15, y: -1, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1636,7 +1640,7 @@ Transform:
   - {fileID: 1297890905}
   - {fileID: 1318195819}
   m_Father: {fileID: 2527938855090826177}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 3.694, y: 0, z: 0}
 --- !u!1 &563036196
 GameObject:
   m_ObjectHideFlags: 0
@@ -2062,6 +2066,8 @@ GameObject:
   m_Component:
   - component: {fileID: 734505949}
   - component: {fileID: 734505950}
+  - component: {fileID: 734505951}
+  - component: {fileID: 734505952}
   m_Layer: 0
   m_Name: 6
   m_TagString: Number
@@ -2094,7 +2100,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2107,6 +2113,46 @@ CapsuleCollider:
   m_Height: 25
   m_Direction: 1
   m_Center: {x: 0, y: 3.8, z: 0}
+--- !u!114 &734505951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734505948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
+  _maxRotationDegrees: 215
+--- !u!54 &734505952
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734505948}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &734582676
 GameObject:
   m_ObjectHideFlags: 0
@@ -2552,6 +2598,82 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 857932874}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &888103505
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 888103506}
+  - component: {fileID: 888103508}
+  - component: {fileID: 888103507}
+  - component: {fileID: 888103509}
+  m_Layer: 0
+  m_Name: Cylinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &888103506
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888103505}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.42254448, y: -0, z: -0.000000029802322, w: 0.90634227}
+  m_LocalPosition: {x: 0.00132, y: 0.09807, z: 0.07084}
+  m_LocalScale: {x: 0.08422907, y: 0.008507944, z: 0.08647937}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8926882554647079403}
+  m_LocalEulerAnglesHint: {x: 49.991, y: 0, z: 0}
+--- !u!64 &888103507
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888103505}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!33 &888103508
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888103505}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &888103509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888103505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cf7c4cd2cc39c6448d112d6368857f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OuterZoneExit
 --- !u!1 &915703073
 GameObject:
   m_ObjectHideFlags: 0
@@ -2938,6 +3060,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1085839433}
   - component: {fileID: 1085839434}
+  - component: {fileID: 1085839435}
+  - component: {fileID: 1085839436}
   m_Layer: 0
   m_Name: 1
   m_TagString: Number
@@ -2970,7 +3094,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2983,6 +3107,46 @@ CapsuleCollider:
   m_Height: 25
   m_Direction: 1
   m_Center: {x: 0, y: 3.8, z: 0}
+--- !u!114 &1085839435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085839432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
+  _maxRotationDegrees: 80
+--- !u!54 &1085839436
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085839432}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1099483878
 GameObject:
   m_ObjectHideFlags: 0
@@ -3977,6 +4141,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1282604519}
   - component: {fileID: 1282604520}
+  - component: {fileID: 1282604521}
+  - component: {fileID: 1282604522}
   m_Layer: 0
   m_Name: 0
   m_TagString: Number
@@ -4009,7 +4175,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4022,6 +4188,46 @@ CapsuleCollider:
   m_Height: 25
   m_Direction: 1
   m_Center: {x: 0, y: 3.8, z: 0}
+--- !u!114 &1282604521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1282604518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
+  _maxRotationDegrees: 310
+--- !u!54 &1282604522
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1282604518}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1284906948 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7630088443825957319, guid: 235e0872436395145b66e44ffde28553, type: 3}
@@ -4037,12 +4243,12 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -4060,6 +4266,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1297890905}
   - component: {fileID: 1297890906}
+  - component: {fileID: 1297890907}
+  - component: {fileID: 1297890908}
   m_Layer: 0
   m_Name: 8
   m_TagString: Number
@@ -4092,7 +4300,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4105,6 +4313,46 @@ CapsuleCollider:
   m_Height: 25
   m_Direction: 1
   m_Center: {x: 0, y: 3.8, z: 0}
+--- !u!114 &1297890907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297890904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
+  _maxRotationDegrees: 265
+--- !u!54 &1297890908
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297890904}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1318195817
 GameObject:
   m_ObjectHideFlags: 0
@@ -4115,6 +4363,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1318195819}
   - component: {fileID: 1318195818}
+  - component: {fileID: 1318195820}
+  - component: {fileID: 1318195821}
   m_Layer: 0
   m_Name: 9
   m_TagString: Number
@@ -4132,7 +4382,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4160,6 +4410,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 555797038}
   m_LocalEulerAnglesHint: {x: -45, y: 0, z: 180}
+--- !u!114 &1318195820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318195817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
+  _maxRotationDegrees: 290
+--- !u!54 &1318195821
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318195817}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1389806550
 GameObject:
   m_ObjectHideFlags: 0
@@ -4313,6 +4603,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1437402979}
   - component: {fileID: 1437402980}
+  - component: {fileID: 1437402981}
+  - component: {fileID: 1437402982}
   m_Layer: 0
   m_Name: 7
   m_TagString: Number
@@ -4345,7 +4637,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4358,6 +4650,46 @@ CapsuleCollider:
   m_Height: 25
   m_Direction: 1
   m_Center: {x: 0, y: 3.8, z: 0}
+--- !u!114 &1437402981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437402978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
+  _maxRotationDegrees: 240
+--- !u!54 &1437402982
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437402978}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1449670124
 GameObject:
   m_ObjectHideFlags: 0
@@ -4458,6 +4790,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1503312787}
   - component: {fileID: 1503312788}
+  - component: {fileID: 1503312789}
+  - component: {fileID: 1503312790}
   m_Layer: 0
   m_Name: 4
   m_TagString: Number
@@ -4490,7 +4824,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4503,6 +4837,46 @@ CapsuleCollider:
   m_Height: 25
   m_Direction: 1
   m_Center: {x: 0, y: 3.8, z: 0}
+--- !u!114 &1503312789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503312786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
+  _maxRotationDegrees: 160
+--- !u!54 &1503312790
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503312786}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1548251155
 GameObject:
   m_ObjectHideFlags: 0
@@ -5065,7 +5439,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1655584785
 Transform:
   m_ObjectHideFlags: 0
@@ -5100,6 +5474,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1680945621}
   - component: {fileID: 1680945622}
+  - component: {fileID: 1680945623}
+  - component: {fileID: 1680945624}
   m_Layer: 0
   m_Name: 3
   m_TagString: Number
@@ -5132,7 +5508,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5145,6 +5521,46 @@ CapsuleCollider:
   m_Height: 25
   m_Direction: 1
   m_Center: {x: 0, y: 3.8, z: 0}
+--- !u!114 &1680945623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680945620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
+  _maxRotationDegrees: 135
+--- !u!54 &1680945624
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680945620}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1703568385
 GameObject:
   m_ObjectHideFlags: 0
@@ -5475,6 +5891,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1916727238}
   - component: {fileID: 1916727239}
+  - component: {fileID: 1916727240}
+  - component: {fileID: 1916727241}
   m_Layer: 0
   m_Name: 2
   m_TagString: Number
@@ -5507,7 +5925,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5520,6 +5938,46 @@ CapsuleCollider:
   m_Height: 25
   m_Direction: 1
   m_Center: {x: 0, y: 3.8, z: 0}
+--- !u!114 &1916727240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916727237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
+  _maxRotationDegrees: 110
+--- !u!54 &1916727241
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916727237}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1946275161 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5475849649248276298, guid: 235e0872436395145b66e44ffde28553, type: 3}
@@ -5785,6 +6243,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1964565912}
   - component: {fileID: 1964565913}
+  - component: {fileID: 1964565914}
+  - component: {fileID: 1964565915}
   m_Layer: 0
   m_Name: 5
   m_TagString: Number
@@ -5817,7 +6277,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5830,6 +6290,46 @@ CapsuleCollider:
   m_Height: 25
   m_Direction: 1
   m_Center: {x: 0, y: 3.8, z: 0}
+--- !u!114 &1964565914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964565911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
+  _maxRotationDegrees: 185
+--- !u!54 &1964565915
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964565911}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &2001820133
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7322,7 +7822,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &2541551102920865284
 GameObject:
   m_ObjectHideFlags: 0
@@ -9437,7 +9937,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8926882554647079403}
   - component: {fileID: 8926882554647079405}
-  - component: {fileID: 8926882554647079404}
+  - component: {fileID: 8926882554647079406}
   m_Layer: 0
   m_Name: Telephone_low Poke
   m_TagString: Untagged
@@ -9773,82 +10273,9 @@ Transform:
   - {fileID: 8266205354198554199}
   - {fileID: 2527938855090826177}
   - {fileID: 6784577535372149522}
+  - {fileID: 888103506}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &8926882554647079404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8118152636448813905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24e39f6b343fd8949add6acfd99a0ceb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RotaryDialMechanism
-  _maxRotation: 330
-  _returnSpeed: 300
-  _returnCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  _dialTransform: {fileID: 2527938855090826177}
-  _dialCenter: {fileID: 2527938855090826177}
-  _fingerLayer:
-    serializedVersion: 2
-    m_Bits: 536870912
-  _holes:
-  - triggerCollider: {fileID: 1282604520}
-    initialLocalAngle: -10
-    digit: 0
-  - triggerCollider: {fileID: 1085839434}
-    initialLocalAngle: 270
-    digit: 1
-  - triggerCollider: {fileID: 1916727239}
-    initialLocalAngle: 240
-    digit: 2
-  - triggerCollider: {fileID: 1680945622}
-    initialLocalAngle: 210
-    digit: 3
-  - triggerCollider: {fileID: 1503312788}
-    initialLocalAngle: 180
-    digit: 4
-  - triggerCollider: {fileID: 1964565913}
-    initialLocalAngle: 150
-    digit: 5
-  - triggerCollider: {fileID: 734505950}
-    initialLocalAngle: 120
-    digit: 6
-  - triggerCollider: {fileID: 1437402980}
-    initialLocalAngle: 80
-    digit: 7
-  - triggerCollider: {fileID: 1297890906}
-    initialLocalAngle: 50
-    digit: 8
-  - triggerCollider: {fileID: 1318195818}
-    initialLocalAngle: 20
-    digit: 9
 --- !u!135 &8926882554647079405
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -9859,17 +10286,36 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 536870912
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.25
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.045
+  m_Center: {x: 0, y: 0.08, z: 0.05}
+--- !u!114 &8926882554647079406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8118152636448813905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 476ff571bfbfff649b2bee013babad98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RotaryDialManager
+  _dialTransform: {fileID: 2527938855090826177}
+  _returnSpeed: 300
+  _returnDelay: 0.2
+  _fingerLayerMask:
+    serializedVersion: 2
+    m_Bits: 536870912
+  _outerZoneCollider: {fileID: 888103507}
 --- !u!136 &8963055184446704703
 CapsuleCollider:
   m_ObjectHideFlags: 0
