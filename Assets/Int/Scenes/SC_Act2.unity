@@ -3909,7 +3909,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8411371063372122353, guid: 00a7d3b6feb55e547a12276018702ccd, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4298,6 +4298,9 @@ MonoBehaviour:
   _validNumbers:
   - 1234567
   - 7654321
+  _phoneHandle: {fileID: 0}
+  _incomingCallVibrationDuration: 3
+  _useWrongNumberPattern: 1
 --- !u!135 &1819126540
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4753,7 +4756,7 @@ MonoBehaviour:
       value: 1
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -4762,7 +4765,7 @@ MonoBehaviour:
       value: 1
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -4770,6 +4773,52 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _vibrationAxis: {x: 0, y: 0, z: 1}
+  _vibrationAngleWrong: 4
+  _vibrationFrequencyWrong: 90
+  _vibrationCurveWrong:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0024108887
+      value: 0.19525146
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.06745021
+      value: 0.650939
+      inSlope: 4.5838137
+      outSlope: 4.5838137
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.27790612
+      value: 0.72687244
+      inSlope: -5.9191036
+      outSlope: -5.9191036
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.07113926
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _vibrationAxisWrong: {x: 0, y: 1, z: 0}
+  _wrongNumberDuration: 1
   _addRandomness: 1
   _randomnessAmount: 0.3
 --- !u!1001 &1963193504
