@@ -1,160 +1,243 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Filtering;
-using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-[RequireComponent(typeof(XRSimpleInteractable))]
-[RequireComponent(typeof(XRPokeFilter))]
-public class RotaryDialPush : MonoBehaviour
+[RequireComponent(typeof(Collider))]
+public class RotaryDialMechanism : MonoBehaviour
 {
     [Header("Rotation Settings")]
-    [SerializeField] private float _rotationSpeed = 200f;     // degrees/sec while pushing
-    [SerializeField] private float _returnSpeed = 300f;       // degrees/sec while returning
-    [SerializeField] private float _maxRotation = 330f;
-    [SerializeField] private float _returnDelay = 0.2f;
+    [SerializeField] private float _maxRotation = 330f;      // degrees from rest to stop
+    [SerializeField] private float _returnSpeed = 300f;      // degrees/sec during spring return
+    [SerializeField] private AnimationCurve _returnCurve = AnimationCurve.EaseInOut(0,0,1,1);
     
     [Header("References")]
-    [SerializeField] private Transform _dialToRotate;
-    [SerializeField] private RotaryPhoneInputHandler _inputHandler;
+    [SerializeField] private Transform _dialTransform;        // the rotating part
+    [SerializeField] private Transform _dialCenter;           // pivot point (center of dial)
+    [SerializeField] private LayerMask _fingerLayer;
     
-    private XRSimpleInteractable _interactable;
-    private Quaternion _initialRotation;      // Store the dial's starting rotation
-    private float _currentRotationDelta = 0f; // How much rotation has been added (in degrees)
-    private bool _isDialing = false;
-    private bool _isReturning = false;
-    private float _returnTimer = 0f;
+    [Header("Rotation Axis")]
+    [SerializeField] private Vector3 _rotationAxis = Vector3.forward; // Local axis to rotate around
     
-    private void Awake()
+    public LayerMask FingerLayer => _fingerLayer;
+    
+    [System.Serializable]
+    public class HoleInfo
     {
-        _interactable = GetComponent<XRSimpleInteractable>();
-        
-        if (!_inputHandler) _inputHandler = FindFirstObjectByType<RotaryPhoneInputHandler>();
-        
-        // Set up interactable events
-        _interactable.selectEntered.AddListener(OnPokeEnter);
-        _interactable.selectExited.AddListener(OnPokeExit);
+        public Collider triggerCollider;
+        public float initialLocalAngle;   // angle of this hole when dial rotation = 0 (degrees)
+        public int digit;
     }
+    [SerializeField] private List<HoleInfo> _holes;
+    
+    // State
+    private Quaternion _initialLocalRotation;  // Store the dial's starting local rotation
+    private float _currentRotationDelta = 0f;   // How much ADDITIONAL rotation has been applied (degrees)
+    private bool _isReturning = false;
+    private HoleInfo _activeHole = null;
+    private Transform _activeFinger = null;
+    private Coroutine _returnCoroutine = null;
+    
+    // Events
+    public System.Action<int> OnDigitDialed;
+    public System.Action<float> OnRotationChanged;
     
     private void Start()
     {
-        // Store the initial rotation of the dial
-        if (_dialToRotate != null)
-        {
-            _initialRotation = _dialToRotate.rotation;
-        }
-        else
-        {
-            Debug.LogError("Dial to rotate reference is missing!", this);
-        }
-    }
-    
-    private void OnDestroy()
-    {
-        if (!_interactable) return;
+        if (_dialTransform == null) _dialTransform = transform;
+        if (_dialCenter == null) _dialCenter = _dialTransform;
         
-        _interactable.selectEntered.RemoveListener(OnPokeEnter);
-        _interactable.selectExited.RemoveListener(OnPokeExit);
+        // Store the initial local rotation of the dial
+        _initialLocalRotation = _dialTransform.localRotation;
+        
+        // Register trigger events for each hole
+        foreach (var hole in _holes)
+        {
+            if (hole.triggerCollider != null)
+            {
+                var triggerEvent = hole.triggerCollider.gameObject.AddComponent<HoleTriggerHandler>();
+                triggerEvent.Init(this, hole);
+            }
+            else
+            {
+                Debug.LogError($"Hole {hole.digit} has no trigger collider!", this);
+            }
+        }
+        
+        ApplyRotation();
     }
     
-    private void Update()
+    public void OnFingerEnterHole(HoleInfo hole, Transform finger)
     {
-        if (_isDialing)
-        {
-            // Increase the rotation delta while being poked
-            _currentRotationDelta += _rotationSpeed * Time.deltaTime;
-            
-            // Clamp to max rotation
-            if (_currentRotationDelta >= _maxRotation)
-            {
-                _currentRotationDelta = _maxRotation;
-                StopDialing();
-            }
-            
-            ApplyRotation();
-        }
-        else if (_isReturning)
-        {
-            // Decrease the rotation delta back to zero
-            _currentRotationDelta -= _returnSpeed * Time.deltaTime;
-            
-            // Clamp to zero
-            if (_currentRotationDelta <= 0)
-            {
-                _currentRotationDelta = 0;
-                _isReturning = false;
-            }
-            
-            ApplyRotation();
-        }
-        else if (_returnTimer > 0)
-        {
-            // Count down the return delay
-            _returnTimer -= Time.deltaTime;
-            if (_returnTimer <= 0)
-            {
-                _isReturning = true;
-                _returnTimer = 0;
-            }
-        }
-    }
-    
-    private void OnPokeEnter(SelectEnterEventArgs args)
-    {
-        // Cancel any pending return
-        _returnTimer = 0;
+        if (_isReturning || _activeHole != null || finger == null) return;
+        
+        _activeHole = hole;
+        _activeFinger = finger;
         _isReturning = false;
-        _isDialing = true;
+        
+        if (_returnCoroutine != null)
+            StopCoroutine(_returnCoroutine);
     }
     
-    private void OnPokeExit(SelectExitEventArgs args)
+    public void OnFingerStayHole(HoleInfo hole, Transform finger)
     {
-        StopDialing();
+        if (_activeHole != hole || _isReturning) return;
+        
+        // Project finger position onto dial plane
+        Vector3 toFinger = finger.position - _dialCenter.position;
+        Vector3 dialForward = _dialTransform.forward;
+        Vector3 projected = Vector3.ProjectOnPlane(toFinger, dialForward);
+        
+        if (projected.sqrMagnitude < 0.001f) return;
+        
+        // Get local axes of the dial
+        Vector3 dialRight = _dialTransform.right;
+        Vector3 dialUp = _dialTransform.up;
+        
+        // Compute angle of finger relative to dial's local axes
+        float fingerAngle = Mathf.Atan2(Vector3.Dot(projected, dialUp), 
+                                        Vector3.Dot(projected, dialRight)) * Mathf.Rad2Deg;
+        
+        // Calculate target delta rotation (finger angle - hole's rest angle)
+        float targetDelta = fingerAngle - hole.initialLocalAngle;
+        
+        // Normalize angle to range [-180, 180]
+        if (targetDelta < -180f) targetDelta += 360f;
+        if (targetDelta > 180f) targetDelta -= 360f;
+        
+        // Clamp to allowed range [0, _maxRotation]
+        targetDelta = Mathf.Clamp(targetDelta, 0f, _maxRotation);
+        
+        // Update the current rotation delta
+        _currentRotationDelta = targetDelta;
+        ApplyRotation();
     }
     
-    private void StopDialing()
+    public void OnFingerExitHole(HoleInfo hole, Transform finger)
     {
-        if (!_isDialing) return;
+        if (_activeHole != hole) return;
         
-        _isDialing = false;
-        _returnTimer = _returnDelay;
+        // Determine which digit was dialed based on how far we rotated
+        int dialedDigit = GetDigitForRotation(_currentRotationDelta);
+        if (dialedDigit >= 0)
+            OnDigitDialed?.Invoke(dialedDigit);
         
-        // Notify the input handler that dialing has stopped
-        if (_inputHandler != null)
-            _inputHandler.ReleaseDial();
+        // Start return sequence
+        _activeHole = null;
+        _activeFinger = null;
+        _returnCoroutine = StartCoroutine(ReturnToRest());
+    }
+    
+    private IEnumerator ReturnToRest()
+    {
+        _isReturning = true;
+        float startDelta = _currentRotationDelta;
+        float elapsed = 0f;
+        float duration = startDelta / _returnSpeed;
+        
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = _returnCurve.Evaluate(elapsed / duration);
+            _currentRotationDelta = Mathf.Lerp(startDelta, 0f, t);
+            ApplyRotation();
+            yield return null;
+        }
+        
+        _currentRotationDelta = 0f;
+        ApplyRotation();
+        _isReturning = false;
+        _returnCoroutine = null;
     }
     
     private void ApplyRotation()
     {
-        if (_dialToRotate == null) return;
+        if (_dialTransform == null) return;
         
-        // Create the delta rotation from the current accumulated angle
-        // Negative sign to rotate clockwise (adjust sign as needed for your setup)
-        Quaternion deltaRotation = Quaternion.Euler(0f, 0f, _currentRotationDelta);
+        // Create a local rotation delta based on the accumulated angle
+        // Multiply the initial rotation by the delta rotation (additive)
+        Quaternion deltaRotation = Quaternion.AngleAxis(_currentRotationDelta, _rotationAxis);
         
-        // Combine the initial rotation with the delta rotation
-        // Using multiplication applies the delta rotation on top of the initial rotation
-        _dialToRotate.rotation = _initialRotation * deltaRotation;
+        // Apply additive rotation on top of the initial local rotation
+        _dialTransform.localRotation = _initialLocalRotation * deltaRotation;
+        
+        OnRotationChanged?.Invoke(_currentRotationDelta);
     }
     
-    // Public methods for external use
-    public bool IsDialing() => _isDialing;
-    public bool IsReturning() => _isReturning;
-    public float GetCurrentRotation() => _currentRotationDelta;
+    private int GetDigitForRotation(float rotation)
+    {
+        if (rotation < 5f) return -1; // Threshold to ignore tiny rotations
+        
+        // Map rotation angle to digit (0-9)
+        // Typically: full rotation (330°) = digit 0, 33° = digit 1, 66° = digit 2, etc.
+        float step = _maxRotation / 10f;
+        int digit = Mathf.FloorToInt(rotation / step);
+        
+        // Adjust: 0 is the last digit (full rotation)
+        if (digit >= 10) digit = 0;
+        
+        return digit;
+    }
     
-    // Optional: Reset the dial to its initial position
+    // Public API
     public void ResetDial()
     {
-        _currentRotationDelta = 0;
-        _isDialing = false;
+        if (_returnCoroutine != null)
+            StopCoroutine(_returnCoroutine);
+        
+        _activeHole = null;
+        _activeFinger = null;
         _isReturning = false;
-        _returnTimer = 0;
+        _currentRotationDelta = 0f;
         ApplyRotation();
     }
     
-    // Optional: Manually set the rotation delta (for external control)
-    public void SetRotationDelta(float deltaDegrees)
+    public bool IsDialing() => _activeHole != null;
+    public bool IsReturning() => _isReturning;
+    public float GetCurrentRotation() => _currentRotationDelta;
+}
+
+// Helper component remains the same
+public class HoleTriggerHandler : MonoBehaviour
+{
+    private RotaryDialMechanism _mechanism;
+    private RotaryDialMechanism.HoleInfo _hole;
+    private Transform _currentFinger = null;
+    
+    public void Init(RotaryDialMechanism mechanism, RotaryDialMechanism.HoleInfo hole)
     {
-        _currentRotationDelta = Mathf.Clamp(deltaDegrees, 0f, _maxRotation);
-        ApplyRotation();
+        _mechanism = mechanism;
+        _hole = hole;
+        var col = GetComponent<Collider>();
+        if (col != null) col.isTrigger = true;
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (_currentFinger != null) return;
+        if (!IsFinger(other)) return;
+        
+        _currentFinger = other.transform;
+        _mechanism.OnFingerEnterHole(_hole, _currentFinger);
+    }
+    
+    private void OnTriggerStay(Collider other)
+    {
+        if (_currentFinger == null || other.transform != _currentFinger) return;
+        _mechanism.OnFingerStayHole(_hole, _currentFinger);
+    }
+    
+    private void OnTriggerExit(Collider other)
+    {
+        if (_currentFinger == null || other.transform != _currentFinger) return;
+        _mechanism.OnFingerExitHole(_hole, _currentFinger);
+        _currentFinger = null;
+    }
+    
+    private bool IsFinger(Collider other)
+    {
+        return other.GetComponent<XRDirectInteractor>() != null ||
+               (1 << other.gameObject.layer & _mechanism.FingerLayer) != 0;
     }
 }
