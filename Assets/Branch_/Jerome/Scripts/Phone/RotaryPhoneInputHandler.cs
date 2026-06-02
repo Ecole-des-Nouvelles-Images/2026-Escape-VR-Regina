@@ -117,8 +117,8 @@ public class RotaryPhoneInputHandler : Puzzle
         
         Debug.Log("Phone puzzle solved! Correct number entered.");
     }
-    
-    public void StartIncomingCall()
+
+    private void StartIncomingCall()
     {
         if (_hasIncomingCall) return;
         
@@ -151,6 +151,7 @@ public class RotaryPhoneInputHandler : Puzzle
         if (obj.PuzzleID != 1) return;
         
         GetComponent<Collider>().enabled = true;
+        StartIncomingCall();
     }
     
     private void OnDisable()
