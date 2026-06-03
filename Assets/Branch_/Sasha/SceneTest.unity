@@ -8505,7 +8505,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &99617409
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -66408,8 +66408,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 920164718797594982, guid: ea4f6b8edf12fc14a99fc6c96062de4e, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 920164718797594982, guid: ea4f6b8edf12fc14a99fc6c96062de4e, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
       value: -0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 920164718797594982, guid: ea4f6b8edf12fc14a99fc6c96062de4e, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 920164718797594982, guid: ea4f6b8edf12fc14a99fc6c96062de4e, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 920164718797594982, guid: ea4f6b8edf12fc14a99fc6c96062de4e, type: 3}
       propertyPath: InitialModule.startSpeed.minScalar
