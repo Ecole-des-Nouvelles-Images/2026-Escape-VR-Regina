@@ -7,7 +7,16 @@ public class ChestHandler : MonoBehaviour
 {
     [SerializeField ] private GameObject _topChest;
     [SerializeField] private float _duration;
-    
+
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _audioClip;
+    [SerializeField] private float _delay;
+
+    private void Start()
+    {
+       _audioSource = GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>();
+    }
+
     [ContextMenu("Open Chest")]
     public void OpenChest()
     {
@@ -39,6 +48,8 @@ public class ChestHandler : MonoBehaviour
         // puis le faire revenir se stabiliser à -140° avec un effet de rebond lourd très réaliste.
         openSequence.Append(_topChest.transform.DOLocalRotate(targetRotation, 1.2f, RotateMode.FastBeyond360).SetEase(Ease.OutBack));
         
+        _audioSource.clip = _audioClip;
+        _audioSource.PlayDelayed(_delay);
 
         // Magie DOTween : On attend que toute la séquence soit terminée avant de couper la coroutine
         yield return openSequence.WaitForCompletion();

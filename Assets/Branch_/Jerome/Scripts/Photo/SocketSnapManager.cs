@@ -94,7 +94,7 @@ public class SocketSnapHandler : MonoBehaviour
         if (rb != null)
             rb.isKinematic = true;
         // Turn off any colliders
-        Collider cl = GetComponent<Collider>();
+        Collider cl = _savePiece.GetComponent<Collider>();
         if (cl != null)
             cl.enabled = false;
         

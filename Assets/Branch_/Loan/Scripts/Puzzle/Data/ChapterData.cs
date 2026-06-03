@@ -11,4 +11,7 @@ public class ChapterData
     
     [Header("===== Puzzle In Chapter =====")]
     public List<Puzzle> Puzzles;
+    
+    [Header("===== Sound In Chapter =====")]
+    public List<AudioClip> Sounds;
 }

@@ -14,7 +14,23 @@ public class RotaryHandleVibrator : MonoBehaviour
     [SerializeField] private AnimationCurve _vibrationCurve = AnimationCurve.EaseInOut(0, 1, 1, 1);
     
     [Tooltip("Which local rotation axis to vibrate on (usually Z for rotary handles)")]
-    [SerializeField] private Vector3 _vibrationAxis = new Vector3(0, 0, 1);
+    [SerializeField] private Vector3 _vibrationAxis = new(0, 0, 1);
+    
+    [Header("Wrong Number Settings")]
+    [Tooltip("Maximum rotation angle in degrees during wrong number feedback")]
+    [SerializeField] private float _vibrationAngleWrong = 4f;
+    
+    [Tooltip("Speed/frequency of the wrong number vibration (higher = faster shaking)")]
+    [SerializeField] private float _vibrationFrequencyWrong = 90f;
+    
+    [Tooltip("Controls the intensity pattern for wrong number feedback")]
+    [SerializeField] private AnimationCurve _vibrationCurveWrong = AnimationCurve.EaseInOut(0, 1, 1, 1);
+    
+    [Tooltip("Which local rotation axis to vibrate on for wrong number (usually Y for shaking)")]
+    [SerializeField] private Vector3 _vibrationAxisWrong = new(0, 1, 0);
+    
+    [Tooltip("Duration of the wrong number vibration in seconds")]
+    [SerializeField] private float _wrongNumberDuration = 0.3f;
     
     [Header("Optional Features")]
     [Tooltip("Randomize the vibration pattern slightly for more realism")]
@@ -29,6 +45,12 @@ public class RotaryHandleVibrator : MonoBehaviour
     private float _randomSeed;
     private Coroutine _vibrationCoroutine;
     
+    // Current vibration parameters (can be overridden by special effects)
+    private float _currentAngle;
+    private float _currentFrequency;
+    private AnimationCurve _currentCurve;
+    private Vector3 _currentAxis;
+    
     private void Awake()
     {
         // Store the original rotation
@@ -36,6 +58,25 @@ public class RotaryHandleVibrator : MonoBehaviour
         
         // Generate a random seed for this instance
         _randomSeed = Random.Range(0f, 100f);
+        
+        // Set default vibration parameters
+        SetDefaultVibrationParameters();
+    }
+    
+    private void SetDefaultVibrationParameters()
+    {
+        _currentAngle = _vibrationAngle;
+        _currentFrequency = _vibrationFrequency;
+        _currentCurve = _vibrationCurve;
+        _currentAxis = _vibrationAxis;
+    }
+    
+    private void SetWrongNumberParameters()
+    {
+        _currentAngle = _vibrationAngleWrong;
+        _currentFrequency = _vibrationFrequencyWrong;
+        _currentCurve = _vibrationCurveWrong;
+        _currentAxis = _vibrationAxisWrong;
     }
     
     private void OnEnable()
@@ -67,6 +108,9 @@ public class RotaryHandleVibrator : MonoBehaviour
     /// <param name="duration">Duration in seconds (-1 for infinite)</param>
     public void StartVibration(float duration)
     {
+        // Reset to default parameters
+        SetDefaultVibrationParameters();
+        
         // Stop any existing vibration
         if (_vibrationCoroutine != null)
             StopCoroutine(_vibrationCoroutine);
@@ -76,6 +120,31 @@ public class RotaryHandleVibrator : MonoBehaviour
         
         if (duration > 0)
             _vibrationCoroutine = StartCoroutine(StopVibrationAfterDelay(duration));
+    }
+    
+    /// <summary>
+    /// Quick animation to show the wrong number was input
+    /// Uses the wrong number vibration settings for a distinct feedback feel
+    /// </summary>
+    [ContextMenu("Wrong Number")]
+    public void WrongNumber()
+    {
+        // Stop any current vibration
+        if (_vibrationCoroutine != null)
+        {
+            StopCoroutine(_vibrationCoroutine);
+            _vibrationCoroutine = null;
+        }
+        
+        // Set wrong number parameters
+        SetWrongNumberParameters();
+        
+        // Start vibration with wrong number duration
+        _isVibrating = true;
+        _vibrationTime = 0f;
+        
+        // Auto-stop after wrong number duration
+        _vibrationCoroutine = StartCoroutine(StopVibrationAfterDelay(_wrongNumberDuration));
     }
     
     /// <summary>
@@ -97,6 +166,9 @@ public class RotaryHandleVibrator : MonoBehaviour
             StartCoroutine(ReturnToOriginalRotation());
         else
             transform.localRotation = _originalRotation;
+        
+        // Reset to default parameters for next vibration
+        SetDefaultVibrationParameters();
     }
     
     /// <summary>
@@ -141,7 +213,7 @@ public class RotaryHandleVibrator : MonoBehaviour
     /// </summary>
     public void SetVibrationIntensity(float intensity)
     {
-        _vibrationAngle = Mathf.Clamp(intensity, 0f, 10f);
+        _currentAngle = Mathf.Clamp(intensity, 0f, 10f);
     }
     
     /// <summary>
@@ -149,7 +221,7 @@ public class RotaryHandleVibrator : MonoBehaviour
     /// </summary>
     public void SetVibrationFrequency(float frequency)
     {
-        _vibrationFrequency = Mathf.Clamp(frequency, 1f, 100f);
+        _currentFrequency = Mathf.Clamp(frequency, 1f, 100f);
     }
     
     private void Update()
@@ -157,30 +229,30 @@ public class RotaryHandleVibrator : MonoBehaviour
         if (!_isVibrating) return;
         
         // Increment vibration time
-        _vibrationTime += Time.deltaTime * _vibrationFrequency;
+        _vibrationTime += Time.deltaTime * _currentFrequency;
         
         // Calculate base vibration value
         float vibrationValue = Mathf.Sin(_vibrationTime);
         
         // Apply animation curve modulation
         float curveTime = Mathf.PingPong(_vibrationTime * 0.5f, 1f);
-        float intensityMultiplier = _vibrationCurve.Evaluate(curveTime);
+        float intensityMultiplier = _currentCurve.Evaluate(curveTime);
         
         // Calculate final angle
-        float angleOffset = vibrationValue * _vibrationAngle * intensityMultiplier;
+        float angleOffset = vibrationValue * _currentAngle * intensityMultiplier;
         
         // Add randomness if enabled
         if (_addRandomness)
         {
             float randomOffset = Mathf.PerlinNoise(_randomSeed, _vibrationTime * 2f) - 0.5f;
-            angleOffset += randomOffset * _randomnessAmount * _vibrationAngle;
+            angleOffset += randomOffset * _randomnessAmount * _currentAngle;
         }
         
-        // Create rotation based on vibration axis
+        // Create rotation based on current vibration axis
         Quaternion vibrationRotation = Quaternion.Euler(
-            _vibrationAxis.x * angleOffset,
-            _vibrationAxis.y * angleOffset,
-            _vibrationAxis.z * angleOffset
+            _currentAxis.x * angleOffset,
+            _currentAxis.y * angleOffset,
+            _currentAxis.z * angleOffset
         );
         
         // Apply the rotation
