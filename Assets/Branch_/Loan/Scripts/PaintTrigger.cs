@@ -14,9 +14,14 @@ public class PaintTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")|| other.CompareTag("FingerTip") && !_isPlay)
+        if (!_isPlay)
         {
-            _audio.PlayOneShot(_audioClip);
+            if (other.CompareTag("Player")|| other.CompareTag("FingerTip") && !_isPlay)
+            {
+                _audio.PlayOneShot(_audioClip);
+                _isPlay = true;
+            } 
         }
+        
     }
 }
