@@ -10,6 +10,8 @@ public static class EventBus
     public static Action OnGameStarted;
     public static Action OnGamePaused;
     public static Action OnGameResumed;
+    public static Action OnGameLoose;
+    public static Action OnGameWin;
     
     // =========================
     // PUZZLE EVENTS

@@ -7,7 +7,16 @@ public class ChestHandler : MonoBehaviour
 {
     [SerializeField ] private GameObject _topChest;
     [SerializeField] private float _duration;
-    
+
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _audioClip;
+    [SerializeField] private float _delay;
+
+    private void Start()
+    {
+       _audioSource = GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>();
+    }
+
     [ContextMenu("Open Chest")]
     public void OpenChest()
     {
@@ -23,10 +32,7 @@ public class ChestHandler : MonoBehaviour
 
         // Target de rotation pour le couvercle (sur l'axe Z)
         Vector3 targetRotation = new Vector3(_topChest.transform.localEulerAngles.x, _topChest.transform.localEulerAngles.y, -140f);
-
-        // ==========================================
-        // ÉTAPE 1 : ANTICIPATION (0.4 seconde)
-        // ==========================================
+        
         // A. Le coffre entier vibre légèrement (effet mécanique/magique)
         Transform shakeTarget = gameObject != null ? gameObject.transform : transform;
         openSequence.Append(shakeTarget.DOShakeRotation(0.4f, new Vector3(2f, 2f, 2f), 30));
@@ -36,16 +42,14 @@ public class ChestHandler : MonoBehaviour
 
         // On attend que cette phase de tremblement soit finie
         openSequence.AppendInterval(0.1f);
-
-
-        // ==========================================
-        // ÉTAPE 2 : L'OUVERTURE (1.2 seconde)
-        // ==========================================
+        
         // Le couvercle tourne vers -140° en Z.
         // L'Ease "OutBack" va faire s'ouvrir le coffre un peu trop grand (ex: -145°) 
         // puis le faire revenir se stabiliser à -140° avec un effet de rebond lourd très réaliste.
         openSequence.Append(_topChest.transform.DOLocalRotate(targetRotation, 1.2f, RotateMode.FastBeyond360).SetEase(Ease.OutBack));
         
+        _audioSource.clip = _audioClip;
+        _audioSource.PlayDelayed(_delay);
 
         // Magie DOTween : On attend que toute la séquence soit terminée avant de couper la coroutine
         yield return openSequence.WaitForCompletion();

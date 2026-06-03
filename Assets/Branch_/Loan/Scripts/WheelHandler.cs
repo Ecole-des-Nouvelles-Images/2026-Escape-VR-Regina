@@ -21,8 +21,7 @@ public class WheelHandler : MonoBehaviour
     private Transform _activeFinger;
     private bool _isInteracting;
     private bool _isGrabbing;
-
-    // SÉCURITÉ DOTWEEN : On stocke le scale de départ pour éviter les déformations en boucle
+    
     private Vector3 _startScale;
 
     #endregion
@@ -93,9 +92,6 @@ public class WheelHandler : MonoBehaviour
         { 
             _lastValue = _currentValue;
             
-            // ==========================================
-            // EFFET 1 : LE CLIQUETIS (PUNCH ROTATION)
-            // ==========================================
             // Au lieu de toucher à la POSITION (qui décalait ta roulette en Z), 
             // on fait un punch de ROTATION sur l'axe Y. La roulette va "sauter" d'un coup sec.
             _visual.DOPunchRotation(new Vector3(0f, 15f, 0f), 0.08f, 5, 1f);
@@ -119,15 +115,11 @@ public class WheelHandler : MonoBehaviour
             .SetEase(Ease.OutBack)
             .OnComplete(() => 
             {
-                // ==========================================
-                // EFFET 3 : L'ENCLENCHEMENT (PUNCH SCALE SÉCURISÉ)
-                // ==========================================
                 // On fait un punch d'échelle UNIQUEMENT sur X et Z pour simuler le "clac".
                 // Si ton pivot bouge encore, c'est que le centre (Center/Pivot) de ton modèle 3D 
                 // dans Unity n'est pas bien aligné au milieu de la roulette.
                 _visual.DOPunchScale(new Vector3(0.08f, 0f, 0.08f), 0.12f, 8, 1f);
             });
-        // _visual.localRotation = Quaternion.Euler(0f, -snappedAngle, 0f);
         
         // C'est bien ici et seulement ici que le code est envoyé
         EventBus.OnResendCode?.Invoke(_lastValue, _index);
