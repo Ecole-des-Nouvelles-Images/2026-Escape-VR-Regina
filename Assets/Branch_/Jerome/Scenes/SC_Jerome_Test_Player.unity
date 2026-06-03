@@ -2125,7 +2125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
-  _maxRotationDegrees: 215
+  _maxRotationDegrees: 220
 --- !u!54 &734505952
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2616,7 +2616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &888103506
 Transform:
   m_ObjectHideFlags: 0
@@ -2626,8 +2626,8 @@ Transform:
   m_GameObject: {fileID: 888103505}
   serializedVersion: 2
   m_LocalRotation: {x: 0.42254448, y: -0, z: -0.000000029802322, w: 0.90634227}
-  m_LocalPosition: {x: 0.00132, y: 0.09807, z: 0.07084}
-  m_LocalScale: {x: 0.08422907, y: 0.008507944, z: 0.08647937}
+  m_LocalPosition: {x: 0.00028, y: 0.09116, z: 0.05223}
+  m_LocalScale: {x: 0.13769758, y: 0.054601543, z: 0.14455159}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8926882554647079403}
@@ -3119,7 +3119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
-  _maxRotationDegrees: 80
+  _maxRotationDegrees: 85
 --- !u!54 &1085839436
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4200,7 +4200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
-  _maxRotationDegrees: 310
+  _maxRotationDegrees: 315
 --- !u!54 &1282604522
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4325,7 +4325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
-  _maxRotationDegrees: 265
+  _maxRotationDegrees: 270
 --- !u!54 &1297890908
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4422,7 +4422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
-  _maxRotationDegrees: 290
+  _maxRotationDegrees: 295
 --- !u!54 &1318195821
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4662,7 +4662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
-  _maxRotationDegrees: 240
+  _maxRotationDegrees: 245
 --- !u!54 &1437402982
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4849,7 +4849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
-  _maxRotationDegrees: 160
+  _maxRotationDegrees: 165
 --- !u!54 &1503312790
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5533,7 +5533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
-  _maxRotationDegrees: 135
+  _maxRotationDegrees: 140
 --- !u!54 &1680945624
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5950,7 +5950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
-  _maxRotationDegrees: 110
+  _maxRotationDegrees: 115
 --- !u!54 &1916727241
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6302,7 +6302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0856693381d154045a09c27e33f128b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoleTrigger
-  _maxRotationDegrees: 185
+  _maxRotationDegrees: 190
 --- !u!54 &1964565915
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9936,7 +9936,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8926882554647079403}
-  - component: {fileID: 8926882554647079405}
   - component: {fileID: 8926882554647079406}
   m_Layer: 0
   m_Name: Telephone_low Poke
@@ -10276,27 +10275,6 @@ Transform:
   - {fileID: 888103506}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!135 &8926882554647079405
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8118152636448813905}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 536870912
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.045
-  m_Center: {x: 0, y: 0.08, z: 0.05}
 --- !u!114 &8926882554647079406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10311,11 +10289,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RotaryDialManager
   _dialTransform: {fileID: 2527938855090826177}
   _returnSpeed: 300
-  _returnDelay: 0.2
+  _returnDelay: 0.4
   _fingerLayerMask:
     serializedVersion: 2
     m_Bits: 536870912
   _outerZoneCollider: {fileID: 888103507}
+  _showGizmos: 0
+  _gizmoPlaneRadius: 1
+  _gizmoPlaneColor: {r: 0, g: 0.3587625, b: 1, a: 0.3}
+  _gizmoFingerProjectionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _gizmoAngleLineColor: {r: 1, g: 0, b: 0.5904732, a: 1}
+  _gizmoAngleArcColor: {r: 1, g: 0.45808098, b: 0, a: 0.3}
 --- !u!136 &8963055184446704703
 CapsuleCollider:
   m_ObjectHideFlags: 0
