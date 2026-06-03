@@ -284,6 +284,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: XR_Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5355581807570165429, guid: 235e0872436395145b66e44ffde28553, type: 3}
+      propertyPath: _leftBaseInteractor
+      value: 
+      objectReference: {fileID: 1782208092}
+    - target: {fileID: 5355581807570165429, guid: 235e0872436395145b66e44ffde28553, type: 3}
+      propertyPath: _rightBaseInteractor
+      value: 
+      objectReference: {fileID: 1328557797}
     - target: {fileID: 7540578162621230075, guid: 235e0872436395145b66e44ffde28553, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -424,6 +432,17 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1328557797 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3052459447901858141, guid: 235e0872436395145b66e44ffde28553, type: 3}
+  m_PrefabInstance: {fileID: 927995919}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4253f32900bcc4d499d675566142ded0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactors.XRDirectInteractor
 --- !u!1001 &1555801162
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -493,6 +512,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3abcb2f87443484ebcaa4d2a300cedf, type: 3}
+--- !u!114 &1782208092 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6217624276227296016, guid: 235e0872436395145b66e44ffde28553, type: 3}
+  m_PrefabInstance: {fileID: 927995919}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4253f32900bcc4d499d675566142ded0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactors.XRDirectInteractor
 --- !u!1 &1783572213
 GameObject:
   m_ObjectHideFlags: 0

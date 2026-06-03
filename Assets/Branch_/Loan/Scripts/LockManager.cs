@@ -33,9 +33,10 @@ public class LockManager : Puzzle
     [SerializeField]private Vector3 _startScale;
     [SerializeField]private Transform _startParent;
 
-    private bool _isInspecting;
+    [SerializeField]private bool _isInspecting;
     private bool _isUnlocked;
-    private ChestHandler _chestHandler; 
+    private ChestHandler _chestHandler;
+    [SerializeField] private PlayerColliderHandler _player;
 
     #endregion
 
@@ -68,6 +69,8 @@ public class LockManager : Puzzle
             _chestHandler = GetComponentInParent<ChestHandler>(); 
             _startParent = transform.parent;
         }
+
+        _player = FindAnyObjectByType<PlayerColliderHandler>();
         _inspectPoint = GameObject.FindWithTag("InspectPoints").GetComponent<Transform>();
     }
 
@@ -76,8 +79,9 @@ public class LockManager : Puzzle
        Debug.Log("Grabbed");
         if (_isInspecting || _isUnlocked)
         {
+            _player._islockGrab = false;
             _isInspecting = false;
-    
+            
             // 1. On remet le parent d'origine d'abord
             transform.SetParent(_startParent);
             transform.localScale = _startScale; // Assure-toi de l'avoir setup dans le Start() !
@@ -111,8 +115,9 @@ public class LockManager : Puzzle
                 wheel.IsReleaseGrab();
             }
         }
-        else 
+        else
         {
+            _player._islockGrab = true;
             _isInspecting = true;
         
             _rb.isKinematic = true;
@@ -208,7 +213,7 @@ public class LockManager : Puzzle
 
     #region XR Interaction
 //===================================================================================================================================================================================================
-    private void OnGrab(SelectEnterEventArgs args)
+    public void OnGrab(SelectEnterEventArgs args)
     {
         if (_isInspecting || _isUnlocked)
         {
