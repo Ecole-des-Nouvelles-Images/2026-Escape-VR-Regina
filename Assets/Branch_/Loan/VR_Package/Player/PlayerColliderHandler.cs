@@ -16,6 +16,10 @@ public class PlayerColliderHandler : MonoBehaviour
    [SerializeField] private float _minHeight;
    [SerializeField] private float _maxHeight;
    
+   [SerializeField] private LayerMask _layerMask;
+   [SerializeField] private AudioSource _audioSource;
+   [SerializeField]  private AudioClip _audioClip;
+   private bool _eg1;
    private Quaternion _initialRotation;
    private Transform _enemieTransform;
    public bool _islockGrab;
@@ -69,16 +73,23 @@ public class PlayerColliderHandler : MonoBehaviour
          {
             _lockManager = null;
             _islockGrab = false;
-            Debug.Log("Helloz");
          }
          
          if (_lockManager != null)
          {
             _lockManager.OnGrab(args);
-            Debug.Log("HellozZZZZ");
             _islockGrab = false;
             _lockManager = null;
          }
+      }
+      
+      GameObject obj = args.interactableObject.transform.gameObject;
+
+      if (((1 << obj.layer) & _layerMask.value) != 0 && !_eg1)
+      {
+         _audioSource.Stop();
+         _audioSource.PlayOneShot(_audioClip);
+         _eg1 = true;
       }
    }
 }
