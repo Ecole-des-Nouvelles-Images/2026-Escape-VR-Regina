@@ -13,6 +13,9 @@ public class HintController : MonoBehaviour
    [SerializeField]  private float _timeToPuzzleChange;
    [Header("===== Hint Object =====")]
    [SerializeField] private GameObject _hint;
+   [Header("===== Audio Source =====")]
+   [SerializeField] private AudioSource _audioSource;
+   [SerializeField] private AudioClip _audioClip;
 
    private Vector3 _startHintGrabPause = new Vector3();
    private Rigidbody _hintGrabRb;
@@ -45,6 +48,7 @@ public class HintController : MonoBehaviour
       
       string hint = PuzzleSequenceManager.Instance.GiveStringHint();
       Debug.Log(hint);
+      _audioSource.PlayOneShot(_audioClip);
       
       Hide();
    }

@@ -13,6 +13,11 @@ public class WheelHandler : MonoBehaviour
     
     [Header("===== Settings =====")]
     [SerializeField] private float _sensitivity = 5f;
+    
+    [Header("===== Audio =====")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _audioClip;
+    
 
     private float _currentAngle;
     private int _lastValue = -1;
@@ -104,6 +109,7 @@ public class WheelHandler : MonoBehaviour
     {
         // Sécurité pour s'assurer que _lastValue ne vaut pas -1 au premier clic
         if (_lastValue == -1) _lastValue = _currentValue;
+        _audioSource.PlayOneShot(_audioClip);
         float snappedAngle = (10 - _lastValue) % 10 * 36f;
         _currentAngle = snappedAngle;
         
