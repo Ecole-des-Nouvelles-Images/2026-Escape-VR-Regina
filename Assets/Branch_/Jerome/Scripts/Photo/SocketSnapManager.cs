@@ -81,8 +81,8 @@ public class SocketSnapHandler : MonoBehaviour
         _hasSnappedCorrectly = true;
         
         // Force exact position
-        piece.transform.position = _socket.transform.position;
-        piece.transform.rotation = Quaternion.Euler(0, -90, 0);
+        // piece.transform.position = _socket.transform.position;
+        // piece.transform.rotation = Quaternion.Euler(0, -90, 0);
         
         // Disable interaction
         XRGrabInteractable grabInteractable = piece.GetComponent<XRGrabInteractable>();
