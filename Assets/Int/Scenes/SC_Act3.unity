@@ -697,12 +697,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 193231981}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: efe4739c59944304b85fbfa9d2c7dfb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HologramSnapManager
-  _expectedPiece: {fileID: 4867647400629841688, guid: f64b6ad7861a10940ad62f0d6a55fb77, type: 3}
+  _expectedPiece: {fileID: 546144387}
 --- !u!114 &193231985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -954,6 +954,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f64b6ad7861a10940ad62f0d6a55fb77, type: 3}
+--- !u!1 &546144387 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4867647400629841688, guid: f64b6ad7861a10940ad62f0d6a55fb77, type: 3}
+  m_PrefabInstance: {fileID: 546144386}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &603897607
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1110,12 +1115,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 681181059}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: efe4739c59944304b85fbfa9d2c7dfb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HologramSnapManager
-  _expectedPiece: {fileID: 5276344094442082185, guid: 5488014c7f003af4795ddfdc57a31f58, type: 3}
+  _expectedPiece: {fileID: 1047377137}
 --- !u!114 &681181063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1941,6 +1946,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c3052af2122aa014fbb1f11dd738f477, type: 3}
+--- !u!1 &980271943 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4986361540677059142, guid: c3052af2122aa014fbb1f11dd738f477, type: 3}
+  m_PrefabInstance: {fileID: 980271942}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &997247874
 GameObject:
   m_ObjectHideFlags: 0
@@ -2138,6 +2148,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5488014c7f003af4795ddfdc57a31f58, type: 3}
+--- !u!1 &1047377137 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5276344094442082185, guid: 5488014c7f003af4795ddfdc57a31f58, type: 3}
+  m_PrefabInstance: {fileID: 1047377136}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1074241476
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2654,12 +2669,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664817456}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: efe4739c59944304b85fbfa9d2c7dfb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HologramSnapManager
-  _expectedPiece: {fileID: 4986361540677059142, guid: c3052af2122aa014fbb1f11dd738f477, type: 3}
+  _expectedPiece: {fileID: 980271943}
 --- !u!114 &1664817460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3299,7 +3314,7 @@ PrefabInstance:
     - target: {fileID: 922635886512069781, guid: 87b124292c566ab45b70154143a2fe1c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: faa1bcc848475134687089c40ac70244, type: 2}
+      objectReference: {fileID: 2100000, guid: 728ce8a4df4afbc4388ea5ccbdf1ff06, type: 2}
     - target: {fileID: 945058308872229614, guid: 87b124292c566ab45b70154143a2fe1c, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -4155,7 +4170,7 @@ PrefabInstance:
     - target: {fileID: 4556379727764494083, guid: 87b124292c566ab45b70154143a2fe1c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: faa1bcc848475134687089c40ac70244, type: 2}
+      objectReference: {fileID: 2100000, guid: 728ce8a4df4afbc4388ea5ccbdf1ff06, type: 2}
     - target: {fileID: 4573172180941964113, guid: 87b124292c566ab45b70154143a2fe1c, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -4407,7 +4422,7 @@ PrefabInstance:
     - target: {fileID: 5396320904783251140, guid: 87b124292c566ab45b70154143a2fe1c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: faa1bcc848475134687089c40ac70244, type: 2}
+      objectReference: {fileID: 2100000, guid: 728ce8a4df4afbc4388ea5ccbdf1ff06, type: 2}
     - target: {fileID: 5406254290560790347, guid: 87b124292c566ab45b70154143a2fe1c, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -4611,7 +4626,7 @@ PrefabInstance:
     - target: {fileID: 6183672620294214167, guid: 87b124292c566ab45b70154143a2fe1c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: faa1bcc848475134687089c40ac70244, type: 2}
+      objectReference: {fileID: 2100000, guid: 728ce8a4df4afbc4388ea5ccbdf1ff06, type: 2}
     - target: {fileID: 6199674334269954517, guid: 87b124292c566ab45b70154143a2fe1c, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
