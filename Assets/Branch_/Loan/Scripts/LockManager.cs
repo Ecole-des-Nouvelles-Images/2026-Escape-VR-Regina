@@ -22,6 +22,10 @@ public class LockManager : Puzzle
     [Header("===== Solve Settings =====")]
     [SerializeField] private GameObject _upLock;
     [SerializeField] private float _duration = 0.5f;
+    
+    [Header("===== Audio Settings =====")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _audioClip;
 
     private XRGrabInteractable _grabInteractable;
     private XRSimpleInteractable _simpleInteractable;
@@ -169,6 +173,7 @@ public class LockManager : Puzzle
     {
         base.Solve();
         _isUnlocked = true;
+        _audioSource.PlayOneShot(_audioClip);
         StartCoroutine(AnimateUpLock());
     }
     
