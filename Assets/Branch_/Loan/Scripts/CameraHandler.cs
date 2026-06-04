@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -11,6 +12,8 @@ public class CameraHandler : MonoBehaviour
     [SerializeField] private RectTransform _downPanel;
     [SerializeField] private CanvasGroup _fadePanel;
     [SerializeField] private float _fadeDuration;
+    [SerializeField] private CanvasGroup _panelStart;
+    [SerializeField] private float _panelDuration;
     
     [Header("===== Blink Settings =====")]
     [SerializeField] private float _closedOffset = 300f;
@@ -52,6 +55,11 @@ public class CameraHandler : MonoBehaviour
         _downStartPos = _downPanel.anchoredPosition;
         EventBus.OnCloseEyes += Blink;
         EventBus.OnOpenEyes += OpenEyes;
+    }
+
+    private void Start()
+    {
+        StartCoroutine(WaitAndFadeRoutine());
     }
 
     private void OnDestroy()
@@ -195,4 +203,30 @@ public class CameraHandler : MonoBehaviour
 
 //=========================================================================================================================================================================================================
     #endregion
+    
+    private IEnumerator WaitAndFadeRoutine()
+    {
+        // 1. On attend pendant 1.5 seconde
+        yield return new WaitForSeconds(_panelDuration);
+
+        // Désactive les interactions pour éviter que le joueur clique pendant le fondu
+        _panelStart.interactable = false;
+        _panelStart.blocksRaycasts = false;
+
+        // 2. Le Fondu enchaîné (Fade out)
+        float currentTime = 0f;
+        while (currentTime < _panelDuration)
+        {
+            currentTime += Time.deltaTime;
+            // On baisse l'alpha progressivement de 1 à 0
+            _panelStart.alpha = Mathf.Lerp(1f, 0f, currentTime /_panelDuration);
+            yield return null; // Attend la frame suivante
+        }
+
+        // Assure que l'alpha est bien à 0 pile à la fin
+        _panelStart.alpha = 0f;
+
+        // 3. Optionnel : Désactive l'objet pour optimiser les performances
+        _panelStart.gameObject.SetActive(false);
+    }
 }
