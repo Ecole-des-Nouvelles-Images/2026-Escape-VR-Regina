@@ -27,14 +27,7 @@ public class RotaryDialManager : Puzzle
 
     private void Start()
     {
-        // Strip any valid numbers that aren't exactly 7 digits
-        _validNumbers = _validNumbers.Where(n => n.Length == 7).ToList();
-
-        // Disable input until puzzle is unlocked by a prior puzzle
-        GetComponent<Collider>().enabled = false;
-
         SetupVibrator();
-        SubscribeToDialManager();
     }
 
     private void SetupVibrator()
@@ -102,8 +95,7 @@ public class RotaryDialManager : Puzzle
         }
 
         // Still a valid prefix of at least one number — keep going
-        if (_validNumbers.Any(n => n.StartsWith(current)))
-            return;
+        if (_validNumbers.Any(number => number.StartsWith(current))) return;
 
         // No match and no valid prefix — wrong number
         WrongNumber();
@@ -164,10 +156,6 @@ public class RotaryDialManager : Puzzle
     private void OnEnable()
     {
         EventBus.OnPuzzleSolved += OnPuzzleSolved;
-
-        // Re-subscribe to dial manager in case it was disabled and re-enabled
-        if (_dialController != null)
-            _dialController.OnDigitDialled += OnDigitDialled;
     }
 
     private void OnDisable()
@@ -191,7 +179,7 @@ public class RotaryDialManager : Puzzle
     {
         if (puzzle.PuzzleID != 1) return;
 
-        GetComponent<Collider>().enabled = true;
+        SubscribeToDialManager();
         StartIncomingCall();
     }
 }
