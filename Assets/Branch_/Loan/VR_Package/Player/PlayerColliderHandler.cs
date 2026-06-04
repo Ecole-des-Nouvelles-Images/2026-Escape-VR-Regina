@@ -111,7 +111,7 @@ public class PlayerColliderHandler : MonoBehaviour
       if (clip == null) return;
       
       _audioStepsSource.pitch = Random.Range(0.9f, 1.1f);
-      _audioSource.Stop();
+      _audioStepsSource.Stop();
       _audioStepsSource.PlayOneShot(clip);
    }
 
