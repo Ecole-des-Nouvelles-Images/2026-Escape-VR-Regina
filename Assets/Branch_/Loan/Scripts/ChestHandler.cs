@@ -29,7 +29,8 @@ public class ChestHandler : MonoBehaviour
     {
         if (_topChest == null) yield break;
 
-        _audioSource.PlayOneShot(_chestSound);
+        
+        _chestAudioSource.PlayOneShot(_chestSound);
         // On crée notre conteneur d'animations
         Sequence openSequence = DOTween.Sequence();
 

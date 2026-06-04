@@ -413,6 +413,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6381819194499432790, guid: e839185b8286b7540b0004de1022846f, type: 3}
+      propertyPath: Priority
+      value: 210
+      objectReference: {fileID: 0}
+    - target: {fileID: 6381819194499432790, guid: e839185b8286b7540b0004de1022846f, type: 3}
+      propertyPath: m_Volume
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 7260366729349128886, guid: e839185b8286b7540b0004de1022846f, type: 3}
       propertyPath: m_Name
       value: SM_SphereNoise Variant
@@ -698,6 +706,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 2715607216487267908, guid: eeac040c4a2c1494a86cb17270a1368e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3324940212722599970, guid: eeac040c4a2c1494a86cb17270a1368e, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -857,6 +869,18 @@ PrefabInstance:
     - target: {fileID: 8521199888309277646, guid: eeac040c4a2c1494a86cb17270a1368e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8676632056727306622, guid: eeac040c4a2c1494a86cb17270a1368e, type: 3}
+      propertyPath: Priority
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8676632056727306622, guid: eeac040c4a2c1494a86cb17270a1368e, type: 3}
+      propertyPath: m_Volume
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8676632056727306622, guid: eeac040c4a2c1494a86cb17270a1368e, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8859308375217199146, guid: eeac040c4a2c1494a86cb17270a1368e, type: 3}
       propertyPath: m_IsActive
@@ -1222,7 +1246,7 @@ AudioSource:
   m_GameObject: {fileID: 2147322843}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -2297039843617478484, guid: 34f5cefc1c7da1c41baabb34877200d9, type: 2}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 34f5cefc1c7da1c41baabb34877200d9, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
