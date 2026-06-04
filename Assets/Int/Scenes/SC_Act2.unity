@@ -194,7 +194,7 @@ MonoBehaviour:
     - {fileID: 1725630705}
     - {fileID: 1555801163}
     Sounds: []
-  _audioSource: {fileID: 0}
+  _audioSource: {fileID: 150630888}
   _audioClip: {fileID: 8300000, guid: 783251b0175eb23458ca2692d5ede9a6, type: 3}
 --- !u!4 &150630887
 Transform:
@@ -1101,6 +1101,10 @@ PrefabInstance:
       propertyPath: _dialAudioSource
       value: 
       objectReference: {fileID: 1780348450}
+    - target: {fileID: 600239418879793126, guid: ceed0948a3f45d244b7ef1ba0a7ae4a0, type: 3}
+      propertyPath: _minSpeedForSound
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 859859620135391333, guid: ceed0948a3f45d244b7ef1ba0a7ae4a0, type: 3}
       propertyPath: m_Name
       value: PF_SCENE_ACT2
@@ -1217,6 +1221,10 @@ PrefabInstance:
       propertyPath: _audioRing
       value: 
       objectReference: {fileID: 8300000, guid: 2a48a2b75ff7d0a4496cb87c0f832785, type: 3}
+    - target: {fileID: 4503558838583524766, guid: ceed0948a3f45d244b7ef1ba0a7ae4a0, type: 3}
+      propertyPath: _audioWrongNumber
+      value: 
+      objectReference: {fileID: 8300000, guid: c3b04c983f2856646a08c004a6838e28, type: 3}
     - target: {fileID: 4512828284014753954, guid: ceed0948a3f45d244b7ef1ba0a7ae4a0, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -2006,6 +2014,10 @@ PrefabInstance:
     - target: {fileID: 7220370146432214711, guid: 058486c3264759d4ba7e0faa5937a26d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7423536255101894198, guid: 058486c3264759d4ba7e0faa5937a26d, type: 3}
+      propertyPath: m_Volume
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
