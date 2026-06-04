@@ -16,6 +16,7 @@ public class HintController : MonoBehaviour
    [Header("===== Audio Source =====")]
    [SerializeField] private AudioSource _audioSource;
    [SerializeField] private AudioClip _audioClip;
+   [SerializeField] private AudioSource _audioSource2;
 
    private Vector3 _startHintGrabPause = new Vector3();
    private Rigidbody _hintGrabRb;
@@ -26,6 +27,7 @@ public class HintController : MonoBehaviour
    private void Start()
    {
       EventBus.OnPuzzleChanged += PuzzleChanged;
+      _audioSource2 = GameObject.FindGameObjectWithTag("Player").GetComponent<AudioSource>();
       PuzzleChanged();
    }
 
@@ -43,13 +45,15 @@ public class HintController : MonoBehaviour
 
    public void GivenHint()
    {
+      _audioSource.PlayOneShot(_audioClip);
       _currentTime = 0;
       _currentTimeToNextHint = _timeToNextHintGive;
       
       string hint = PuzzleSequenceManager.Instance.GiveStringHint();
-      Debug.Log(hint);
-      _audioSource.PlayOneShot(_audioClip);
+      AudioClip audioClip = PuzzleSequenceManager.Instance.GiveAudioClipHint();
       
+      _audioSource2.clip = audioClip;
+      _audioSource2.Play();
       Hide();
    }
 
@@ -69,8 +73,12 @@ public class HintController : MonoBehaviour
    
    public void Hide()
    {
-      _hint.SetActive(false);
-      _isRunning = true;
+      if (_audioSource2.isPlaying)
+      {
+         _hint.SetActive(false);
+         _isRunning = true;
+      }
+      
    }
 }
 
