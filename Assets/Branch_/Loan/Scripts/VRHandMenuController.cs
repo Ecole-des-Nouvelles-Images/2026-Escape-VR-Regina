@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 public class VRHandMenuController : MonoBehaviour
@@ -12,7 +13,8 @@ public class VRHandMenuController : MonoBehaviour
 
     [Header("VR Configuration")]
     [SerializeField] private Transform _vrCamera; 
-    [SerializeField] private float _spawnDistance = 1.2f; 
+    [SerializeField] private float _spawnDistance = 1.2f;
+    public InputActionProperty InputOpenMenu;
 
     [Header("Animation Settings")]
     [SerializeField] private float _duration = 0.5f;
@@ -36,8 +38,17 @@ public class VRHandMenuController : MonoBehaviour
         ResetMenuInstant();
     }
     
+    private void OnEnable()
+    {
+        InputOpenMenu.action.performed += ToggleMenu;
+    }
+    private void OnDisable()
+    {
+        InputOpenMenu.action.performed -= ToggleMenu;
+    }
+    
     [ContextMenu("MenuToggle")]
-    public void ToggleMenu()
+    public void ToggleMenu(InputAction.CallbackContext obj)
     {
         if (_isMenuOpen)
             CloseMenu();
@@ -90,8 +101,8 @@ public class VRHandMenuController : MonoBehaviour
 
         // C) Effet de scintillement (Glitch de mémoire)
         // On fait vibrer très légèrement la position locale pour simuler l'instabilité d'un hologramme mémoriel
-        _menuCanvas.DOShakePosition(_duration, new Vector3(0.02f, 0.02f, 0f), 15, 90f, false, false)
-            .SetUpdate(true);
+        // _menuCanvas.DOShakePosition(_duration, new Vector3(0.02f, 0.02f, 0f), 15, 90f, false, false)
+        //     .SetUpdate(true);
     }
 
     public void CloseMenu()
