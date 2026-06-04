@@ -93,6 +93,10 @@ public class SocketSnapHandler : MonoBehaviour
         Rigidbody rb = piece.GetComponent<Rigidbody>();
         if (rb != null)
             rb.isKinematic = true;
+        // Turn off any colliders
+        Collider cl = _savePiece.GetComponent<Collider>();
+        if (cl != null)
+            cl.enabled = false;
         
         // Optional: Hide or disable socket visuals
         _socket.enabled = false;
