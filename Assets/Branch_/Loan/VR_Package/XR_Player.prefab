@@ -462,6 +462,8 @@ MonoBehaviour:
   _downPanel: {fileID: 5367624709603168360}
   _fadePanel: {fileID: 475585212931661806}
   _fadeDuration: 0.3
+  _panelStart: {fileID: 0}
+  _panelDuration: 0
   _closedOffset: 1600
   _blinkIntervalRange: {x: 2, y: 6}
   _blinkDurationRange: {x: 1.3, y: 1.8}
@@ -1887,6 +1889,18 @@ MonoBehaviour:
   _menuCanvas: {fileID: 0}
   _vrCamera: {fileID: 8819943966943791160}
   _spawnDistance: 1.2
+  InputOpenMenu:
+    m_UseReference: 0
+    m_Action:
+      m_Name: 
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 4519afe9-6aa0-4f66-abf8-f4f6c1ecf171
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
   _duration: 1
   _startMoveOffset: -0.3
 --- !u!1 &5475849649248276298
