@@ -311,7 +311,7 @@ MonoBehaviour:
     TimeToSwitch: 10
     Puzzles:
     - {fileID: 1555801164}
-    - {fileID: 0}
+    - {fileID: 1725630705}
     - {fileID: 1555801163}
     Sounds: []
   _audioSource: {fileID: 0}
@@ -679,7 +679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9184245111465998079, guid: c2d7427a122e2004aa1519867c0ade30, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.137
+      value: 0.4112
       objectReference: {fileID: 0}
     - target: {fileID: 9184245111465998079, guid: c2d7427a122e2004aa1519867c0ade30, type: 3}
       propertyPath: m_LocalRotation.w
@@ -838,15 +838,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2647914330961709205, guid: 1fac20bd74b71f3448e97a7b57bc3c98, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.171
+      value: -1.3901
       objectReference: {fileID: 0}
     - target: {fileID: 2647914330961709205, guid: 1fac20bd74b71f3448e97a7b57bc3c98, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.324
+      value: -0.1202
       objectReference: {fileID: 0}
     - target: {fileID: 2647914330961709205, guid: 1fac20bd74b71f3448e97a7b57bc3c98, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.007
+      value: -0.1385
       objectReference: {fileID: 0}
     - target: {fileID: 2647914330961709205, guid: 1fac20bd74b71f3448e97a7b57bc3c98, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2392,15 +2392,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4286285745753475071, guid: 2c961af8c80b2f042b5addb1a118c30c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.001
+      value: -1.2406
       objectReference: {fileID: 0}
     - target: {fileID: 4286285745753475071, guid: 2c961af8c80b2f042b5addb1a118c30c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.412
+      value: -0.2613
       objectReference: {fileID: 0}
     - target: {fileID: 4286285745753475071, guid: 2c961af8c80b2f042b5addb1a118c30c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.049000025
+      value: -0.1782
       objectReference: {fileID: 0}
     - target: {fileID: 4286285745753475071, guid: 2c961af8c80b2f042b5addb1a118c30c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3912,6 +3912,17 @@ MonoBehaviour:
   m_SocketScaleMode: 1
   m_FixedScale: {x: 1, y: 1, z: 1}
   m_TargetBoundsSize: {x: 1, y: 1, z: 1}
+--- !u!114 &1725630705 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2428115889558640474, guid: f66bfe31926f98d46a974e578c26d0eb, type: 3}
+  m_PrefabInstance: {fileID: 1555801162}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da405c0f017b0f245923eab0f3cc89da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RotaryDialManager
 --- !u!1 &1748943137 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6179034420364071768, guid: ceed0948a3f45d244b7ef1ba0a7ae4a0, type: 3}
