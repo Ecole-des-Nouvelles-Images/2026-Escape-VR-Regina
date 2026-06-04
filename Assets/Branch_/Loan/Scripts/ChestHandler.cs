@@ -7,6 +7,8 @@ public class ChestHandler : MonoBehaviour
 {
     [SerializeField ] private GameObject _topChest;
     [SerializeField] private float _duration;
+    [SerializeField] private AudioSource _chestAudioSource;
+    [SerializeField] private AudioClip _chestSound;
 
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _audioClip;
@@ -27,6 +29,8 @@ public class ChestHandler : MonoBehaviour
     {
         if (_topChest == null) yield break;
 
+        
+        _chestAudioSource.PlayOneShot(_chestSound);
         // On crée notre conteneur d'animations
         Sequence openSequence = DOTween.Sequence();
 

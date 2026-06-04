@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 862955858418894045}
-  - component: {fileID: 2379174316581805489}
   - component: {fileID: 6210071156892226937}
+  - component: {fileID: 4417164279685897373}
+  - component: {fileID: 2379174316581805489}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -33,6 +34,34 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6210071156892226937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7811223231722126317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df49cd9e9d9455f8238957d323aeafd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FpsManager
+  _fps: 72
+  _isFpsLock: 1
+--- !u!114 &4417164279685897373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7811223231722126317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aec233416b482c4092d66889d77038a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  _myAudioMixer: {fileID: 0}
+  _volumeSliders: []
 --- !u!114 &2379174316581805489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49,20 +78,7 @@ MonoBehaviour:
     ChapterNumber: 0
     TimeToSwitch: 0
     Puzzles: []
+    Sounds: []
   _currentChapterIndex: 0
   _currentPuzzleIndex: 0
   _currentHintIndex: 0
---- !u!114 &6210071156892226937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7811223231722126317}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1df49cd9e9d9455f8238957d323aeafd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FpsManager
-  _fps: 72
-  _isFpsLock: 1
