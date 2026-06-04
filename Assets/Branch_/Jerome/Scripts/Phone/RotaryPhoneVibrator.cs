@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Audio;
 
 public class RotaryHandleVibrator : MonoBehaviour
 {
@@ -32,6 +33,11 @@ public class RotaryHandleVibrator : MonoBehaviour
     [Tooltip("Duration of the wrong number vibration in seconds")]
     [SerializeField] private float _wrongNumberDuration = 0.3f;
     
+    [Header("Audio")]
+    [SerializeField] private AudioClip _audioRing;
+    [SerializeField] private AudioClip _audioWrongNumber;
+    private AudioSource _audioSource;
+    
     [Header("Optional Features")]
     [Tooltip("Randomize the vibration pattern slightly for more realism")]
     [SerializeField] private bool _addRandomness = true;
@@ -50,6 +56,7 @@ public class RotaryHandleVibrator : MonoBehaviour
     private float _currentFrequency;
     private AnimationCurve _currentCurve;
     private Vector3 _currentAxis;
+    private float _currentVibrationDuration = -1f; // -1 means infinite
     
     private void Awake()
     {
@@ -58,6 +65,8 @@ public class RotaryHandleVibrator : MonoBehaviour
         
         // Generate a random seed for this instance
         _randomSeed = Random.Range(0f, 100f);
+        
+        _audioSource = GetComponent<AudioSource>();
         
         // Set default vibration parameters
         SetDefaultVibrationParameters();
@@ -117,6 +126,11 @@ public class RotaryHandleVibrator : MonoBehaviour
         
         _isVibrating = true;
         _vibrationTime = 0f;
+        _currentVibrationDuration = duration;
+     
+        _audioSource.Stop();
+        _audioSource.clip = _audioRing;
+        _audioSource.Play();
         
         if (duration > 0)
             _vibrationCoroutine = StartCoroutine(StopVibrationAfterDelay(duration));
@@ -142,6 +156,11 @@ public class RotaryHandleVibrator : MonoBehaviour
         // Start vibration with wrong number duration
         _isVibrating = true;
         _vibrationTime = 0f;
+        _currentVibrationDuration = _wrongNumberDuration;
+        
+        _audioSource.Stop();
+        _audioSource.clip = _audioWrongNumber;
+        _audioSource.Play();
         
         // Auto-stop after wrong number duration
         _vibrationCoroutine = StartCoroutine(StopVibrationAfterDelay(_wrongNumberDuration));
@@ -160,6 +179,7 @@ public class RotaryHandleVibrator : MonoBehaviour
         }
         
         _isVibrating = false;
+        _currentVibrationDuration = -1f;
         
         // Smoothly return to original rotation
         if (gameObject.activeInHierarchy)
@@ -224,6 +244,31 @@ public class RotaryHandleVibrator : MonoBehaviour
         _currentFrequency = Mathf.Clamp(frequency, 1f, 100f);
     }
     
+    /// <summary>
+    /// Gets normalized vibration time (0-1) for curve evaluation.
+    /// For infinite vibrations, returns a looping pattern.
+    /// For finite vibrations, returns progress percentage.
+    /// </summary>
+    private float GetNormalizedVibrationTime()
+    {
+        // Calculate real elapsed time (not affected by frequency multiplier)
+        float realTime = _vibrationTime / _currentFrequency;
+        
+        if (_currentVibrationDuration > 0)
+        {
+            // Finite vibration: evaluate curve based on progress (0 at start, 1 at end)
+            float progress = Mathf.Clamp01(realTime / _currentVibrationDuration);
+            return progress;
+        }
+        else
+        {
+            // Infinite vibration: loop through curve every 2 seconds
+            float loopDuration = 2f;
+            float normalizedLoop = (realTime % loopDuration) / loopDuration;
+            return normalizedLoop;
+        }
+    }
+    
     private void Update()
     {
         if (!_isVibrating) return;
@@ -231,12 +276,12 @@ public class RotaryHandleVibrator : MonoBehaviour
         // Increment vibration time
         _vibrationTime += Time.deltaTime * _currentFrequency;
         
-        // Calculate base vibration value
+        // Calculate base vibration value (sin wave for oscillation)
         float vibrationValue = Mathf.Sin(_vibrationTime);
         
-        // Apply animation curve modulation
-        float curveTime = Mathf.PingPong(_vibrationTime * 0.5f, 1f);
-        float intensityMultiplier = _currentCurve.Evaluate(curveTime);
+        // Get intensity multiplier from curve based on normalized time
+        float normalizedTime = GetNormalizedVibrationTime();
+        float intensityMultiplier = _currentCurve.Evaluate(normalizedTime);
         
         // Calculate final angle
         float angleOffset = vibrationValue * _currentAngle * intensityMultiplier;

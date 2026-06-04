@@ -13,6 +13,13 @@ public class RotaryDialController : MonoBehaviour
     [SerializeField] private LayerMask _fingerLayerMask = 1;   // Set to the layer of your fingertip collider
     [SerializeField] private Collider _outerZoneCollider;      // Large trigger covering the whole dial
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioSource _dialAudioSource;
+    [SerializeField] private float _minPitch = 0.8f;
+    [SerializeField] private float _maxPitch = 1.5f;
+    [SerializeField] private float _minSpeedForSound = 10f;      // degrees/sec minimum to start sound
+    [SerializeField] private float _maxSpeedForPitch = 120f;     // degrees/sec for max pitch
+    
     [Header("Gizmos Visualization")]
     [SerializeField] private bool _showGizmos = true;
     [SerializeField] private float _gizmoPlaneRadius = 1.0f;
@@ -37,6 +44,11 @@ public class RotaryDialController : MonoBehaviour
     
     // Quest hand-tracking jitter rejection
     private float _prevRawAngle;                 // raw angle from previous frame, for outlier rejection
+    
+    // Audio
+    private float _currentDialSpeed = 0f;
+    private float _lastRotationDelta = 0f;
+    private float _lastUpdateTime = 0f;
 
     // For Gizmos - store finger position and projection info
     private Vector3 _lastFingerWorldPosition;
@@ -101,7 +113,9 @@ public class RotaryDialController : MonoBehaviour
             StartReturnSequence();
             return;
         }
-
+        
+        UpdateDialAudio();
+        
         _lastFingerWorldPosition = _trackedFinger.position;
         float currentAngle = GetAngleFromCenter(_trackedFinger.position);
         _lastCalculatedAngle = currentAngle;
@@ -189,12 +203,44 @@ public class RotaryDialController : MonoBehaviour
             ApplyRotation();
         }
     }
+    private void UpdateDialAudio()
+    {
+        if (_dialAudioSource == null) return;
+
+        // Calculate current speed (degrees per second)
+        float currentTime = Time.time;
+        float deltaTime = currentTime - _lastUpdateTime;
+    
+        if (deltaTime > 0.01f && _currentState == State.Dialing)
+        {
+            float rotationChange = Mathf.Abs(_currentRotationDelta - _lastRotationDelta);
+            _currentDialSpeed = rotationChange / deltaTime;
+        
+            _lastRotationDelta = _currentRotationDelta;
+            _lastUpdateTime = currentTime;
+        }
+
+        // Handle audio playback based on speed
+        if (_currentState == State.Dialing && _currentDialSpeed > _minSpeedForSound)
+        {
+            if (!_dialAudioSource.isPlaying)
+                _dialAudioSource.Play();
+        
+            // Map speed to pitch (clamped between min and max)
+            float t = Mathf.InverseLerp(_minSpeedForSound, _maxSpeedForPitch, _currentDialSpeed);
+            _dialAudioSource.pitch = Mathf.Lerp(_minPitch, _maxPitch, t);
+        }
+    }
 
     private void StartReturnSequence()
     {
         if (_currentState == State.Returning)
             return;
 
+        // Stop dial audio immediately
+        if (_dialAudioSource != null && _dialAudioSource.isPlaying)
+            _dialAudioSource.Stop();
+        
         _currentState = State.Returning;
         _returnTimer = _returnDelay;
         _trackedFinger = null;
@@ -491,6 +537,10 @@ public class RotaryDialController : MonoBehaviour
         _returnTimer = 0f;
         _trackedFinger = null;
         _currentHole = null;
+        _currentDialSpeed = 0f;  // <-- ADD THIS LINE
         ApplyRotation();
+    
+        if (_dialAudioSource != null && _dialAudioSource.isPlaying)
+            _dialAudioSource.Stop();
     }
 }
