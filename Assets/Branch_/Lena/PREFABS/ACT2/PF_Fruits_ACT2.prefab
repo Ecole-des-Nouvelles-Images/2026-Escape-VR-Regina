@@ -463,16 +463,109 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Coupefruit_ACT2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -3331548975840108198, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
+    - {fileID: -2248484210357454783, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
+    - {fileID: -4800329672677492476, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -355418864968632347, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5441477590496414906}
+    - targetCorrespondingSourceObject: {fileID: 232109258591686414, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2621450737237698496}
+    - targetCorrespondingSourceObject: {fileID: -296607271200476868, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2182836404289543434}
   m_SourcePrefab: {fileID: 100100000, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
+--- !u!1 &3904285586229311187 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -296607271200476868, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
+  m_PrefabInstance: {fileID: 5606122045183887343}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &2182836404289543434
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3904285586229311187}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8880811488568130698, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
+--- !u!1 &3953525095934095370 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -355418864968632347, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
+  m_PrefabInstance: {fileID: 5606122045183887343}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &5441477590496414906
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3953525095934095370}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4001301431752613960, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
 --- !u!4 &5352047882345209860 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
   m_PrefabInstance: {fileID: 5606122045183887343}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5689291424244418785 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 232109258591686414, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
+  m_PrefabInstance: {fileID: 5606122045183887343}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &2621450737237698496
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5689291424244418785}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1762661871380212681, guid: d3847ba9d4282204b87511eaa028f4d2, type: 3}
 --- !u!1001 &7805572837325769683
 PrefabInstance:
   m_ObjectHideFlags: 0
