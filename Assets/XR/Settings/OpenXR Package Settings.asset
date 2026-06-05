@@ -174,8 +174,8 @@ MonoBehaviour:
   features:
   - {fileID: 8496859034846550563}
   - {fileID: 8385305018741752936}
-  - {fileID: -4884785572561728310}
-  - {fileID: 5676215017996334540}
+  - {fileID: -5453868082745710119}
+  - {fileID: -9132205352293095453}
   - {fileID: -2497353081092222998}
   - {fileID: 3907824499886530222}
   - {fileID: 1144478691046906174}
@@ -186,7 +186,7 @@ MonoBehaviour:
   - {fileID: 6590913627771920657}
   - {fileID: 1044391883686343357}
   - {fileID: -8562099288467219940}
-  - {fileID: 4581151588587511527}
+  - {fileID: 5005818630528986922}
   - {fileID: -7673038387223499304}
   - {fileID: -5354736332713650719}
   - {fileID: -8832327066424003842}
@@ -652,6 +652,31 @@ MonoBehaviour:
   targetOpenXRApiVersion: 
   required: 0
   customRuntimeLoaderName: 
+--- !u!114 &-5566517636225982197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90ae1e8c3c7a542bba339faf2e771c5a, type: 3}
+  m_Name: AndroidXRSupportFeature Standalone
+  m_EditorClassIdentifier: Unity.XR.AndroidOpenXR::UnityEngine.XR.OpenXR.Features.Android.AndroidXRSupportFeature
+  m_enabled: 0
+  nameUi: Android XR Support
+  version: 1.0.0
+  featureIdInternal: com.unity.openxr.feature.androidxr-support
+  openxrExtensionStrings: 
+  company: Unity Technologies
+  priority: 0
+  targetOpenXRApiVersion: 
+  required: 0
+  customRuntimeLoaderName: 
+  symmetricProjection: 0
+  optimizeBufferDiscards: 1
+  multiviewRenderRegionsOptimizationMode: 0
 --- !u!114 &-5453868082745710119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2096,6 +2121,28 @@ MonoBehaviour:
   required: 0
   customRuntimeLoaderName: 
   ignoreValidationErrors: 0
+--- !u!114 &6701700802634222619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c36843bac48b29469f79baf3c98f9b6, type: 3}
+  m_Name: AndroidXRHandMeshData Standalone
+  m_EditorClassIdentifier: Unity.XR.AndroidOpenXR::UnityEngine.XR.OpenXR.Features.Android.AndroidXRHandMeshData
+  m_enabled: 0
+  nameUi: 'Android XR: Hand Mesh Data'
+  version: 0.1.0
+  featureIdInternal: com.unity.openxr.feature.androidxr-hand-mesh-data
+  openxrExtensionStrings: XR_ANDROID_hand_mesh
+  company: Unity Technologies
+  priority: 0
+  targetOpenXRApiVersion: 
+  required: 0
+  customRuntimeLoaderName: 
 --- !u!114 &7004504838244439206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2411,8 +2458,8 @@ MonoBehaviour:
   features:
   - {fileID: -2788690878661918660}
   - {fileID: 1476468590178365600}
-  - {fileID: -4884785572561728310}
-  - {fileID: 5676215017996334540}
+  - {fileID: 8902961573241039647}
+  - {fileID: -5566517636225982197}
   - {fileID: 6140211173926868336}
   - {fileID: 4786780966168869149}
   - {fileID: -7735880637571897010}
@@ -2422,7 +2469,7 @@ MonoBehaviour:
   - {fileID: -814394965731859733}
   - {fileID: -9117295304103565934}
   - {fileID: 7473780877573106629}
-  - {fileID: 4581151588587511527}
+  - {fileID: 6701700802634222619}
   - {fileID: 5478115376406973124}
   - {fileID: -9066518413483526995}
   - {fileID: -7704825995149307127}
@@ -2489,6 +2536,28 @@ MonoBehaviour:
   featureIdInternal: com.unity.openxr.feature.input.handinteractionposes
   openxrExtensionStrings: XR_EXT_hand_interaction
   company: Unity
+  priority: 0
+  targetOpenXRApiVersion: 
+  required: 0
+  customRuntimeLoaderName: 
+--- !u!114 &8902961573241039647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12d3bf61b014a48a2b7564c61da9d7ad, type: 3}
+  m_Name: AndroidXRPerformanceMetrics Standalone
+  m_EditorClassIdentifier: Unity.XR.AndroidOpenXR::UnityEngine.XR.OpenXR.Features.Android.AndroidXRPerformanceMetrics
+  m_enabled: 0
+  nameUi: Android XR Performance Metrics
+  version: 0.1.0
+  featureIdInternal: com.unity.openxr.feature.androidxr-performance-metrics
+  openxrExtensionStrings: XR_ANDROID_performance_metrics
+  company: Unity Technologies
   priority: 0
   targetOpenXRApiVersion: 
   required: 0
