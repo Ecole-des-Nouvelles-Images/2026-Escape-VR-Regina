@@ -165,16 +165,16 @@ public class LockManager : Puzzle
                 return;
         }
 
-        Solve();
+        this.Solve();
     }
 
     [ContextMenu("Solve")]
     public override void Solve()
     {
-        base.Solve();
         _isUnlocked = true;
         _audioSource.PlayOneShot(_audioClip);
         StartCoroutine(AnimateUpLock());
+        base.Solve();
     }
     
     private IEnumerator AnimateUpLock()

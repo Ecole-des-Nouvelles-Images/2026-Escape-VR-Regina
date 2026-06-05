@@ -13,6 +13,8 @@ public class RotaryDialController : MonoBehaviour
     [SerializeField] private LayerMask _fingerLayerMask = 1;   // Set to the layer of your fingertip collider
     [SerializeField] private Collider _outerZoneCollider;      // Large trigger covering the whole dial
 
+    [Header("Vibrator")] [SerializeField] private RotaryHandleVibrator _handleVibrator;
+    
     [Header("Audio Settings")]
     [SerializeField] private AudioSource _dialAudioSource;
     [SerializeField] private float _minPitch = 0.8f;
@@ -98,7 +100,8 @@ public class RotaryDialController : MonoBehaviour
         {
             case State.Dialing:
                 if (_phoneAudioSource.isPlaying) _phoneAudioSource.Stop();
-
+                if (_handleVibrator) _handleVibrator.StopVibration();
+                
                 UpdateDialing();
                 break;
             case State.Returning:

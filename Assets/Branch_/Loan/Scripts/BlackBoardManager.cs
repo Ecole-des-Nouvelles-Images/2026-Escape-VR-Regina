@@ -9,7 +9,6 @@ public class BlackBoardManager : Puzzle
     public void SocketIsOccuped()
     {
         int correctNumber = 0;
-        bool _isCorrect = false;
         foreach (var socket in _socketsBlackBoard)
         {
             if (socket.IsOccuped)
@@ -43,7 +42,6 @@ public class BlackBoardManager : Puzzle
         {
             EventBus.OnGameLoose?.Invoke();
         }
-        
     }
     
     public override void Solve()
