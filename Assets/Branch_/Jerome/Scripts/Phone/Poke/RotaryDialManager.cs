@@ -5,7 +5,7 @@ using UnityEngine;
 public class RotaryDialManager : Puzzle
 {
     [Tooltip("7 digit numbers that solve the puzzle")]
-    [SerializeField] private List<string> _validNumbers = new() { "1234567", "7654321" };
+    [SerializeField] private List<string> _validNumbers;
 
     [Header("Vibration Integration")]
     [Tooltip("Reference to the rotary handle that should vibrate")]
@@ -20,6 +20,10 @@ public class RotaryDialManager : Puzzle
     [Header("Dial Reference")]
     [Tooltip("The RotaryDialController on the phone dial")]
     [SerializeField] private RotaryDialController _dialController;
+    
+    [Header("Audio")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _audioClip;
 
     private readonly List<char> _phoneNumber = new();
     private RotaryHandleVibrator _vibrator;
@@ -89,6 +93,9 @@ public class RotaryDialManager : Puzzle
         // Full match
         if (_validNumbers.Contains(current))
         {
+            _audioSource.Stop();
+            _audioSource.clip = _audioClip;
+            _audioSource.Play();
             Solve();
             _phoneNumber.Clear();
             return;
@@ -181,5 +188,18 @@ public class RotaryDialManager : Puzzle
 
         SubscribeToDialManager();
         StartIncomingCall();
+    }
+
+    [ContextMenu("Solve")]
+    public void DevSolve()
+    {
+        _phoneNumber.Clear();
+        _phoneNumber.Add('2');
+        _phoneNumber.Add('1');
+        _phoneNumber.Add('4');
+        _phoneNumber.Add('2');
+        _phoneNumber.Add('8');
+        _phoneNumber.Add('4');
+        ValidateCurrentSequence();
     }
 }

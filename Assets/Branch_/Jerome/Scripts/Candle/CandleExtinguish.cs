@@ -8,6 +8,11 @@ public class CandleExtinguish : MonoBehaviour
     [SerializeField] private ParticleSystem _extinguish;
     [SerializeField] private GameObject _lightSource;
     
+    [Header("Audio")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioSource _audioSource2;
+    [SerializeField] private AudioClip _audioClipLightOut;
+    
     // I'm leaving this as hardcoded as I assume we won't just change the property name randomly.
     private const string FLAME_ACTIVE_PROPERTY = "_Used";
     private bool _isExtinguished = false;
@@ -50,6 +55,8 @@ public class CandleExtinguish : MonoBehaviour
         _candleCollider.enabled = false;
         _candleRenderer.enabled = false;
         _lightSource.SetActive(false);
+        _audioSource.enabled = false;
+        _audioSource2.enabled = false;
     }
 
     private void OnEnable()
@@ -64,6 +71,10 @@ public class CandleExtinguish : MonoBehaviour
         _candleCollider.enabled = true;
         _candleRenderer.enabled = true;
         _lightSource.SetActive(true);
+        _audioSource.enabled = true;
+        _audioSource2.enabled = true;
+        _audioSource.Play();
+        _audioSource2.Play();
     }
 
     private void OnDisable()
@@ -91,6 +102,10 @@ public class CandleExtinguish : MonoBehaviour
         _isExtinguished = true;
         
         if (_candleCollider) _candleCollider.enabled = false;
+        
+        _audioSource.Stop();
+        _audioSource2.Stop();
+        _audioSource.PlayOneShot(_audioClipLightOut);
         
         if (_extinguish)
         {
