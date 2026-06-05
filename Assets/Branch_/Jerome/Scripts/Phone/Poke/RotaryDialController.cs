@@ -19,6 +19,7 @@ public class RotaryDialController : MonoBehaviour
     [SerializeField] private float _maxPitch = 1.5f;
     [SerializeField] private float _minSpeedForSound = 10f;      // degrees/sec minimum to start sound
     [SerializeField] private float _maxSpeedForPitch = 120f;     // degrees/sec for max pitch
+    [SerializeField] private AudioSource _phoneAudioSource;
     
     [Header("Gizmos Visualization")]
     [SerializeField] private bool _showGizmos = true;
@@ -96,6 +97,8 @@ public class RotaryDialController : MonoBehaviour
         switch (_currentState)
         {
             case State.Dialing:
+                if (_phoneAudioSource.isPlaying) _phoneAudioSource.Stop();
+
                 UpdateDialing();
                 break;
             case State.Returning:
