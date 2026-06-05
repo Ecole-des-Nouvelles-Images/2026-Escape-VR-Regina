@@ -1,196 +1,102 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
-using UnityEngine.XR.Interaction.Toolkit.Interactors;
-using System.Collections;
 
 public class SocketSnapHandler : MonoBehaviour
 {
     [SerializeField] private GameObject _expectedPiece;
     [SerializeField] private ParticleSystem _puzzleCompleted;
-    private GameObject _savePiece;
-    private XRSocketInteractor _socket;
-    private bool _isOccupied = false;
+    [SerializeField] private Transform _snapPoint;
+
     private AssemblyManager _manager;
-    private XRGrabInteractable _currentlyHoveredPiece;
-    private bool _hasSnappedCorrectly = false; // Track if this socket has completed its snap
-    
-    // Animation properties
-    private bool _isAnimating = false;
-   [SerializeField] private float _lerpDuration = 1f;
+    private Collider _socketCollider;
+    private bool _hasSnappedCorrectly = false;
 
     private void Start()
     {
-        _socket = GetComponent<XRSocketInteractor>();
         _manager = FindFirstObjectByType<AssemblyManager>();
-        
-        _socket.selectEntered.AddListener(OnSnapped);
-        _socket.hoverEntered.AddListener(OnHoverEntered);
-        _socket.hoverExited.AddListener(OnHoverExited);
-    }
+        _socketCollider = GetComponent<Collider>();
 
-    private void OnHoverEntered(HoverEnterEventArgs args)
-    {
-        if (_isOccupied || _hasSnappedCorrectly) return;
-        
-        GameObject hoveredPiece = args.interactableObject.transform.gameObject;
-        
-        // Only track the correct piece
-        if (hoveredPiece == _expectedPiece)
+        // Safety check: socket collider must be a trigger
+        if (_socketCollider != null && !_socketCollider.isTrigger)
         {
-            _currentlyHoveredPiece = hoveredPiece.GetComponent<XRGrabInteractable>();
+            Debug.LogWarning($"{gameObject.name}: Socket collider should be set to 'Is Trigger'.");
         }
     }
 
-    private void OnHoverExited(HoverExitEventArgs args)
+    private void OnTriggerEnter(Collider other)
     {
-        if (_isOccupied || _hasSnappedCorrectly) return;
-        
-        GameObject hoveredPiece = args.interactableObject.transform.gameObject;
-        
-        if (hoveredPiece == _expectedPiece)
-        {
-            _currentlyHoveredPiece = null;
-        }
-    }
+        // Only react to objects tagged "photograph"
+        if (!other.CompareTag("photograph")) return;
 
-    private void OnSnapped(SelectEnterEventArgs args)
-    {
-        if (_isOccupied || _hasSnappedCorrectly) return;
-        
-        GameObject snappedPiece = args.interactableObject.transform.gameObject;
-        
-        // Wrong piece - eject it
-        if (snappedPiece != _expectedPiece)
+        // Already snapped - ignore everything
+        if (_hasSnappedCorrectly) return;
+
+        GameObject incomingPiece = other.gameObject;
+
+        if (incomingPiece == _expectedPiece)
         {
-            _socket.interactionManager.SelectExit(args.interactorObject, args.interactableObject);
-            Rigidbody rb = snappedPiece.GetComponent<Rigidbody>();
-            if (rb != null)
-                rb.AddForce(_socket.transform.right * -2f, ForceMode.Impulse);
-            return;
+            AcceptCorrectPiece(incomingPiece);
         }
-        
-        // Correct piece - accept it
-        AcceptCorrectPiece(snappedPiece);
+        else
+        {
+            RejectWrongPiece(incomingPiece);
+        }
     }
 
     private void AcceptCorrectPiece(GameObject piece)
     {
-        _savePiece = piece;
-        _isOccupied = true;
         _hasSnappedCorrectly = true;
-        
-        // Force exact position
-        piece.transform.position = _socket.attachTransform.position;
-        piece.transform.rotation = _socket.attachTransform.rotation;
-        
-        // Disable interaction
+
+        // Snap to this socket's position and rotation
+        piece.transform.position = _snapPoint.transform.position;
+        piece.transform.rotation = _snapPoint.transform.rotation;
+
+        // Disable grab interaction
         XRGrabInteractable grabInteractable = piece.GetComponent<XRGrabInteractable>();
         if (grabInteractable != null)
             grabInteractable.enabled = false;
-        
-        // Make kinematic to prevent physics interference
+
+        // Make kinematic so physics doesn't interfere
         Rigidbody rb = piece.GetComponent<Rigidbody>();
         if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
-        // Turn off any colliders
-        Collider cl = _savePiece.GetComponent<Collider>();
-        if (cl != null)
-            cl.enabled = false;
-        
-        // Optional: Hide or disable socket visuals
-        _socket.enabled = false;
-        
-        // Notify the AssemblyManager that this piece has been snapped
+        }
+
+        // Disable this socket's collider so nothing else can trigger it
+        if (_socketCollider != null)
+            _socketCollider.enabled = false;
+
+        // Play completion effect
+        if (_puzzleCompleted != null)
+            _puzzleCompleted.Play();
+
+        // Notify the assembly manager
         if (_manager != null)
-        {
             _manager.PiecePlaced(piece, this);
-        }
         else
-        {
             Debug.LogError("AssemblyManager not found in scene!");
-        }
-        
+
         Debug.Log($"Piece {piece.name} successfully snapped to {gameObject.name}");
     }
 
-    private void Update()
+    private void RejectWrongPiece(GameObject piece)
     {
-        // If a correct piece is hovering AND player releases it
-        if (_currentlyHoveredPiece != null && !_isOccupied && !_hasSnappedCorrectly)
-        {
-            // Check if the piece is no longer being held
-            if (!_currentlyHoveredPiece.isSelected)
-            {
-                // Force it to snap into the socket
-                ForceSnap();
-            }
-        }
+        Rigidbody rb = piece.GetComponent<Rigidbody>();
+        if (rb != null)
+            rb.AddForce(-transform.forward * 2f, ForceMode.Impulse);
+
+        Debug.Log($"Wrong piece {piece.name} rejected by {gameObject.name}");
     }
 
-    private void ForceSnap()
-    {
-        if (!_currentlyHoveredPiece || _isOccupied || _hasSnappedCorrectly) return;
-        
-        GameObject piece = _currentlyHoveredPiece.gameObject;
-        
-        // Manually force the socket to select it
-        if (_socket is IXRSelectInteractor interactor && _currentlyHoveredPiece is IXRSelectInteractable interactable)
-        {
-            _socket.interactionManager.SelectEnter(interactor, interactable);
-        }
-    }
-
-    public void CompletedPuzzle()
-    {
-        if (_savePiece != null && !_isAnimating)
-        {
-            StartCoroutine(LerpToAttachTransform());
-        }
-    }
-    
-    private IEnumerator LerpToAttachTransform()
-    {
-        _isAnimating = true;
-        
-        // Get the attach transform or fallback to socket transform
-        Transform targetTransform = _socket.attachTransform != null ? _socket.attachTransform : _socket.transform;
-        Vector3 startPosition = _savePiece.transform.position;
-        Quaternion startRotation = _savePiece.transform.rotation;
-        Vector3 targetPosition = targetTransform.position;
-        Quaternion targetRotation = targetTransform.rotation;
-        
-        float elapsedTime = 0f;
-        
-        while (elapsedTime < _lerpDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / _lerpDuration;
-            
-            // Use SmoothStep for easing
-            float smoothT = Mathf.SmoothStep(0f, 1f, t);
-            
-            _savePiece.transform.position = Vector3.Lerp(startPosition, targetPosition, smoothT);
-            _savePiece.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, smoothT);
-            
-            yield return null;
-        }
-        if (_puzzleCompleted) _puzzleCompleted.Play();
-        // Ensure exact final position
-        _savePiece.transform.position = targetPosition;
-        _savePiece.transform.rotation = targetRotation;
-        
-        _isAnimating = false;
-        Debug.Log($"Piece {_savePiece.name} animated to attach point");
-    }
-    
-    // Method to reset the socket for testing/replay
+    // Call this if you need to reset the slot for testing or replay
     public void ResetSocket()
     {
-        _isOccupied = false;
         _hasSnappedCorrectly = false;
-        _currentlyHoveredPiece = null;
-        _isAnimating = false;
-        _socket.enabled = true;
+
+        if (_socketCollider != null)
+            _socketCollider.enabled = true;
     }
 }

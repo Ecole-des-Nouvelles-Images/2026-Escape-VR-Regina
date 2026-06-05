@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7716517461315216717}
-  - component: {fileID: 5196864333018168962}
   - component: {fileID: 8945567472151062652}
   - component: {fileID: 6647276716464455199}
   m_Layer: 0
@@ -35,54 +34,6 @@ Transform:
   - {fileID: 3960282025081346307}
   m_Father: {fileID: 7109415938782664531}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: -10}
---- !u!114 &5196864333018168962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 256837702284759817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60523e0647cc6ab43acc73cb266a32a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor
-  m_InteractionManager: {fileID: 0}
-  m_InteractionLayers:
-    m_Bits: 4294967295
-  m_Handedness: 0
-  m_AttachTransform: {fileID: 3960282025081346307}
-  m_KeepSelectedTargetValid: 1
-  m_DisableVisualsWhenBlockedInGroup: 1
-  m_StartingSelectedInteractable: {fileID: 0}
-  m_StartingTargetFilter: {fileID: 0}
-  m_AutoFindParentInteractableInHierarchy: 0
-  m_ParentInteractableObject: {fileID: 0}
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_StartingHoverFilters: []
-  m_StartingSelectFilters: []
-  m_ShowInteractableHoverMeshes: 0
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
-  m_SocketActive: 1
-  m_InteractableHoverScale: 1
-  m_RecycleDelayTime: 1
-  m_HoverSocketSnapping: 0
-  m_SocketSnappingRadius: 1.1
-  m_SocketScaleMode: 1
-  m_FixedScale: {x: 1, y: 1, z: 1}
-  m_TargetBoundsSize: {x: 1, y: 1, z: 1}
 --- !u!114 &8945567472151062652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,7 +48,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
   _expectedPiece: {fileID: 0}
   _puzzleCompleted: {fileID: 0}
-  _lerpDuration: 0.5
 --- !u!65 &6647276716464455199
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -128,7 +78,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8295203320787221276}
-  - component: {fileID: 7727438232226940957}
   - component: {fileID: 7452817653317115009}
   - component: {fileID: 4721532724921204978}
   m_Layer: 0
@@ -154,54 +103,6 @@ Transform:
   - {fileID: 631827594820516387}
   m_Father: {fileID: 7109415938782664531}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &7727438232226940957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2595359927731885303}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60523e0647cc6ab43acc73cb266a32a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor
-  m_InteractionManager: {fileID: 0}
-  m_InteractionLayers:
-    m_Bits: 4294967295
-  m_Handedness: 0
-  m_AttachTransform: {fileID: 631827594820516387}
-  m_KeepSelectedTargetValid: 1
-  m_DisableVisualsWhenBlockedInGroup: 1
-  m_StartingSelectedInteractable: {fileID: 0}
-  m_StartingTargetFilter: {fileID: 0}
-  m_AutoFindParentInteractableInHierarchy: 0
-  m_ParentInteractableObject: {fileID: 0}
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_StartingHoverFilters: []
-  m_StartingSelectFilters: []
-  m_ShowInteractableHoverMeshes: 0
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
-  m_SocketActive: 1
-  m_InteractableHoverScale: 1
-  m_RecycleDelayTime: 1
-  m_HoverSocketSnapping: 0
-  m_SocketSnappingRadius: 1.1
-  m_SocketScaleMode: 1
-  m_FixedScale: {x: 1, y: 1, z: 1}
-  m_TargetBoundsSize: {x: 1, y: 1, z: 1}
 --- !u!114 &7452817653317115009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,7 +117,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
   _expectedPiece: {fileID: 0}
   _puzzleCompleted: {fileID: 0}
-  _lerpDuration: 0.5
 --- !u!65 &4721532724921204978
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -309,7 +209,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5943949091220201402}
-  - component: {fileID: 1707717016885263413}
   - component: {fileID: 225797416174857244}
   - component: {fileID: 3552658299909207470}
   m_Layer: 0
@@ -335,54 +234,6 @@ Transform:
   - {fileID: 4225393352427003170}
   m_Father: {fileID: 7109415938782664531}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: -10}
---- !u!114 &1707717016885263413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3484874348002150503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60523e0647cc6ab43acc73cb266a32a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor
-  m_InteractionManager: {fileID: 0}
-  m_InteractionLayers:
-    m_Bits: 4294967295
-  m_Handedness: 0
-  m_AttachTransform: {fileID: 4225393352427003170}
-  m_KeepSelectedTargetValid: 1
-  m_DisableVisualsWhenBlockedInGroup: 1
-  m_StartingSelectedInteractable: {fileID: 0}
-  m_StartingTargetFilter: {fileID: 0}
-  m_AutoFindParentInteractableInHierarchy: 0
-  m_ParentInteractableObject: {fileID: 0}
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_StartingHoverFilters: []
-  m_StartingSelectFilters: []
-  m_ShowInteractableHoverMeshes: 0
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
-  m_SocketActive: 1
-  m_InteractableHoverScale: 1
-  m_RecycleDelayTime: 1
-  m_HoverSocketSnapping: 0
-  m_SocketSnappingRadius: 1.1
-  m_SocketScaleMode: 1
-  m_FixedScale: {x: 1, y: 1, z: 1}
-  m_TargetBoundsSize: {x: 1, y: 1, z: 1}
 --- !u!114 &225797416174857244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,7 +248,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
   _expectedPiece: {fileID: 0}
   _puzzleCompleted: {fileID: 0}
-  _lerpDuration: 0.5
 --- !u!65 &3552658299909207470
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -459,7 +309,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7617300647551900365}
-  - component: {fileID: 8307125308890148316}
   - component: {fileID: 5500666866692741482}
   - component: {fileID: 3293775610055011344}
   m_Layer: 0
@@ -485,54 +334,6 @@ Transform:
   - {fileID: 7539405369099887636}
   m_Father: {fileID: 7109415938782664531}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: -10}
---- !u!114 &8307125308890148316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5760677103164276423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60523e0647cc6ab43acc73cb266a32a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor
-  m_InteractionManager: {fileID: 0}
-  m_InteractionLayers:
-    m_Bits: 4294967295
-  m_Handedness: 0
-  m_AttachTransform: {fileID: 7539405369099887636}
-  m_KeepSelectedTargetValid: 1
-  m_DisableVisualsWhenBlockedInGroup: 1
-  m_StartingSelectedInteractable: {fileID: 0}
-  m_StartingTargetFilter: {fileID: 0}
-  m_AutoFindParentInteractableInHierarchy: 0
-  m_ParentInteractableObject: {fileID: 0}
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_StartingHoverFilters: []
-  m_StartingSelectFilters: []
-  m_ShowInteractableHoverMeshes: 0
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
-  m_SocketActive: 1
-  m_InteractableHoverScale: 1
-  m_RecycleDelayTime: 1
-  m_HoverSocketSnapping: 0
-  m_SocketSnappingRadius: 1.1
-  m_SocketScaleMode: 1
-  m_FixedScale: {x: 1, y: 1, z: 1}
-  m_TargetBoundsSize: {x: 1, y: 1, z: 1}
 --- !u!114 &5500666866692741482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,7 +348,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
   _expectedPiece: {fileID: 0}
   _puzzleCompleted: {fileID: 0}
-  _lerpDuration: 0.5
 --- !u!65 &3293775610055011344
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -609,7 +409,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1206572796573357573}
-  - component: {fileID: 3286990259383803416}
   - component: {fileID: 2502874686690919080}
   - component: {fileID: 701299118439174564}
   m_Layer: 0
@@ -635,54 +434,6 @@ Transform:
   - {fileID: 9112993628881495223}
   m_Father: {fileID: 7109415938782664531}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: -10}
---- !u!114 &3286990259383803416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7422970537387494638}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60523e0647cc6ab43acc73cb266a32a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactors.XRSocketInteractor
-  m_InteractionManager: {fileID: 0}
-  m_InteractionLayers:
-    m_Bits: 4294967295
-  m_Handedness: 0
-  m_AttachTransform: {fileID: 9112993628881495223}
-  m_KeepSelectedTargetValid: 1
-  m_DisableVisualsWhenBlockedInGroup: 1
-  m_StartingSelectedInteractable: {fileID: 0}
-  m_StartingTargetFilter: {fileID: 0}
-  m_AutoFindParentInteractableInHierarchy: 0
-  m_ParentInteractableObject: {fileID: 0}
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_StartingHoverFilters: []
-  m_StartingSelectFilters: []
-  m_ShowInteractableHoverMeshes: 0
-  m_InteractableHoverMeshMaterial: {fileID: 0}
-  m_InteractableCantHoverMeshMaterial: {fileID: 0}
-  m_SocketActive: 1
-  m_InteractableHoverScale: 1
-  m_RecycleDelayTime: 1
-  m_HoverSocketSnapping: 0
-  m_SocketSnappingRadius: 1.1
-  m_SocketScaleMode: 1
-  m_FixedScale: {x: 1, y: 1, z: 1}
-  m_TargetBoundsSize: {x: 1, y: 1, z: 1}
 --- !u!114 &2502874686690919080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -697,7 +448,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SocketSnapHandler
   _expectedPiece: {fileID: 0}
   _puzzleCompleted: {fileID: 0}
-  _lerpDuration: 0.5
 --- !u!65 &701299118439174564
 BoxCollider:
   m_ObjectHideFlags: 0
